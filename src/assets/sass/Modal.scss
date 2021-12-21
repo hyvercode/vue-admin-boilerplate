@@ -1,0 +1,31 @@
+.modal {
+  box-shadow: 0px 30px 60px rgba(0, 0, 0, 0.15);
+  overflow-x: auto;
+  background-color: rgba(0, 0, 0, 0.3);
+  display: inline;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.modal-dialog {
+  height: auto;
+  padding-top: 1%;
+}
+
+.modal-content {
+  background-color: #FFFFFF;
+  opacity: 0.98;
+  border-radius: 20px;
+  height: 100% !important;
+  overflow: visible;
+}
+
+.crud-event form .form-control {
+  border-radius: 10px;
+  background-color: #FFFFFF;
+  height: 50px;
+  font-size: 16px;
+  box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.48), 0px 0px 4px rgba(0, 0, 0, 0.12);
+}
