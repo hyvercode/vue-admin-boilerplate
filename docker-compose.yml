@@ -1,0 +1,8 @@
+version: '3.5'
+
+services:
+  vue:
+    ports:
+      - "7000:7000"
+    build: .
+    restart: always
