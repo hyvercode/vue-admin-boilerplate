@@ -1,4 +1,4 @@
-# cms-pickers
+# web-admin
 
 ## Project setup
 ```

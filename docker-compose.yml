@@ -1,8 +1,15 @@
-version: '3.5'
+version: '3.7'
 
 services:
-  vue:
+  gmot-admin:
+    container_name: gmot-admin
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - '.:/app'
+      - '/app/node_modules'
     ports:
-      - "7000:7000"
-    build: .
-    restart: always
+      - '4000:3000'
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
