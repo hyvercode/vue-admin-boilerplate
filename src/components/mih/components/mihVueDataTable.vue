@@ -314,7 +314,7 @@ import '../styles.css';
 import Fuse from 'fuse.js';
 import locales from '../index';
 import {TbSkeleton} from 'tb-skeleton';
-import Utils from "../../../helpers/Utils";
+import Utils from "../../../helpers/Util";
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable';
 import draggable from 'vuedraggable'
