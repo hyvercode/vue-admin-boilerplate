@@ -1,61 +1,96 @@
-import AuthService from '../services/auth.service';
-
-const user = JSON.parse(localStorage.getItem('ADMGM_SESSION'));
-const initialState = user
-    ? { status: { loggedIn: true }, user }
-    : { status: { loggedIn: false }, user: null };
+import AuthService from "../services/auth.service";
+import VueCookies from "vue-cookies";
+const authUser = JSON.parse(
+    JSON.stringify(VueCookies.get("_PICKERSSESSIONID"))
+);
+const initialState = authUser
+    ? { status: { loggedIn: true }, auth: authUser }
+    : { status: { loggedIn: false }, auth: null };
 
 export const auth = {
     namespaced: true,
+    authLogin: null,
     state: initialState,
     actions: {
         login({ commit }, user) {
             return AuthService.login(user).then(
-                user => {
-                    commit('loginSuccess', user);
+                (user) => {
+                    commit("loginSuccess", user);
                     return Promise.resolve(user);
                 },
-                error => {
-                    commit('loginFailure');
+                (error) => {
+                    commit("loginFailure");
                     return Promise.reject(error);
                 }
             );
         },
+
+        refresh({ commit }) {
+            return AuthService.refreshToken().then(
+                (user) => {
+                    commit("loginSuccess", user);
+                    return Promise.resolve(user);
+                },
+                (error) => {
+                    commit("loginFailure");
+                    return Promise.reject(error);
+                }
+            );
+        },
+
         logout({ commit }) {
             AuthService.logout();
-            commit('logout');
+            commit("logoutSuccess");
         },
-        register({ commit }, user) {
-            return AuthService.register(user).then(
-                response => {
-                    commit('registerSuccess');
-                    return Promise.resolve(response.data);
+
+        otp({ commit }, username) {
+            return AuthService.postVerifikaiOtp(username).then(
+                (username) => {
+                    commit("loginSuccess", username);
+                    return Promise.resolve(username);
                 },
-                error => {
-                    commit('registerFailure');
+                (error) => {
+                    commit("loginFailure");
                     return Promise.reject(error);
                 }
             );
-        }
+        },
+        refreshOtp({ commit }, username) {
+            return AuthService.RefreshOtp(username).then(
+                (username) => {
+                    commit("loginSuccess", username);
+                    return Promise.resolve(username);
+                },
+                (error) => {
+                    commit("loginFailure");
+                    return Promise.reject(error);
+                }
+            );
+        },
     },
     mutations: {
+        otpSuccess(state, user) {
+            state.status.loggedIn = false;
+            state.authLogin = user.data;
+        },
+        otpFailure(state) {
+            state.status.loggedIn = false;
+            state.authLogin = null;
+        },
+
         loginSuccess(state, user) {
             state.status.loggedIn = true;
-            state.user = user.data;
+            state.authLogin = user.data;
         },
+
         loginFailure(state) {
             state.status.loggedIn = false;
-            state.user = null;
+            state.authLogin = null;
         },
-        logout(state) {
+
+        logoutSuccess(state) {
             state.status.loggedIn = false;
-            state.user = null;
+            state.authLogin = null;
         },
-        registerSuccess(state) {
-            state.status.loggedIn = false;
-        },
-        registerFailure(state) {
-            state.status.loggedIn = false;
-        }
-    }
+    },
 };

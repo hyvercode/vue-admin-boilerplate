@@ -4,6 +4,8 @@ import Dashboard from "@/views/Dashboard";
 import Login from "@/views/Login";
 import Index from "../views/Index";
 import Pages from "../helpers/Pages";
+import VueCookies from "vue-cookies";
+import Password from "../views/Password";
 
 Vue.use(VueRouter);
 const routes = [
@@ -11,6 +13,28 @@ const routes = [
         path: Pages.LOGIN,
         name: 'Login',
         component: Login
+    },
+    {
+        path: "password",
+        name: "Password",
+        component: Password,
+        children: [
+            {
+                path: Pages.PASSWORD_FORGOT,
+                name: "ForgotPassword",
+                component: () => import("../components/password/ForgotPassword"),
+            },
+            {
+                path: Pages.PASSWORD_OTP,
+                name: "Otp",
+                component: () => import("../components/password/Otp.vue"),
+            },
+            {
+                path: Pages.PASSWORD_RESET,
+                name: "ResetPassword",
+                component: () => import("../components/password/ResetPassword.vue"),
+            },
+        ],
     },
     {
         path: '/',
@@ -39,9 +63,14 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-    const publicPages = [Pages.LOGIN];
+    const publicPages = [
+        Pages.LOGIN,
+        Pages.PASSWORD_FORGOT,
+        Pages.PASSWORD_OTP,
+        Pages.PASSWORD_RESET,
+    ];
     const authRequired = !publicPages.includes(to.path);
-    const loggedIn = localStorage.getItem('ADMGM_SESSION');
+    const loggedIn = VueCookies.get("__PMS__SSESSIONID__");
 
     if (authRequired && !loggedIn) {
         next(Pages.LOGIN);
