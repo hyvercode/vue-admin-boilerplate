@@ -5,8 +5,8 @@
       <div class="user-card d-flex d-md-none align-items-center justify-content-between justify-content-md-center pb-4">
         <div class="d-flex align-items-center">
           <div class="avatar-lg me-4">
-            <img src="~@/assets/images/icons/logo.png" class="card-img-top rounded-circle border-white"
-                 alt="Bonnie Green">
+            <img alt="Image placeholder" v-if="user.avatar" :src="user.avatar" class="avatar-md rounded">
+            <avatar v-else username="S I P" size=60 class="me-2 mt-2" style="margin-left: 5px!important;"></avatar>
           </div>
           <div class="d-block">
             <h2 class="h5 mb-3 text-white">Hi, Jane</h2>
@@ -247,18 +247,32 @@
 </template>
 
 <script>
+import avatar from 'vue-avatar'
+import VueCookies from "vue-cookies";
+import Util from "../../helpers/Util";
+
 export default {
   name: "SideBar",
+  components: {
+    avatar
+  },
+  data() {
+    return {
+      user: null
+    }
+  },
   computed: {
     isLogin() {
       return this.$store.state.auth.status.loggedIn;
     },
-    user() {
-      return this.$store.state.auth.user.user;
-    },
     toggle() {
       return this.$store.state.nav.toggle;
     }
-  }
+  },
+  created() {
+    this.user = Util.jwtDecode(
+        JSON.parse(JSON.stringify(VueCookies.get("__PMS__SSESSIONID__"))).access_token
+    );
+  },
 };
 </script>

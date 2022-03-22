@@ -3,52 +3,49 @@
     <main class="d-flex align-items-center min-vh-100 py-md-0">
       <div class="container">
         <div class="card login-card d-flex">
-          <div class="row no-gutters">
-            <div class="col-md-12">
-              <div class="card-body text-center">
-                <div class="text-center">
-                  <router-link
-                      to="/"
-                  >
-                    <img src="~@/assets/images/icons/GrosirMotor.png" width="200" class="mb-3"/>
-                  </router-link>
-                  <p class="login-card-description h6">Forgot Password</p>
-                  <h6 class="m-3">
-                    Please input your mail or phone number
-                  </h6>
-                </div>
-                <form role="form" @submit.prevent="onSubmit">
-                  <div class="form-group">
-                    <div class="col-4">
-                      <em>
-                        <img
-                            src="~@/assets/images/icons/mail.png"
-                            style="position: absolute; margin: 8px 0px 8px -110px"
-                        />
-                      </em>
-                    </div>
-                    <div class="col-12 input-email">
-                      <input
-                          type="text"
-                          class="form-control"
-                          v-model="username"
-                          placeholder="example@sitama.co.id"
-                          required
-                      />
-                    </div>
-                  </div>
-                  <div class="container mt-4">
-                    <input
-                        class="btn btn-block login-btn mb-4 mt-4"
-                        type="submit"
-                        value="Submit"
-                    />
-                  </div>
-                </form>
-              </div>
+          <div class="card-body text-center">
+            <div class="text-center">
+              <router-link
+                  to="/"
+              >
+                <img src="~@/assets/images/icons/GrosirMotor.png" width="200" class="mb-3"/>
+              </router-link>
+              <p class="login-card-description h6">Forgot Password</p>
+              <h6 class="m-3">
+                Please input your mail or phone number
+              </h6>
             </div>
+            <form role="form" @submit.prevent="onSubmit">
+              <div class="form-group">
+                <div class="col-4">
+                  <em>
+                    <img
+                        src="~@/assets/images/icons/mail.png"
+                        style="position: absolute; margin: 8px 0px 8px -110px"
+                    />
+                  </em>
+                </div>
+                <div class="col-12">
+                  <input
+                      type="text"
+                      class="form-control form-control-sm"
+                      v-model="username"
+                      placeholder="person@example.com"
+                      required
+                  />
+                </div>
+              </div>
+              <div class="container mt-4">
+                <input
+                    class="btn btn-block login-btn"
+                    type="submit"
+                    value="Submit"
+                />
+              </div>
+            </form>
           </div>
         </div>
+        <autor />
       </div>
     </main>
   </div>
@@ -56,9 +53,11 @@
 <script>
 import router from "@/router";
 import pages from "../../helpers/Pages";
+import Autor from "../navigation/Autor";
 
 export default {
   name: "ForgotPassword",
+  components: {Autor},
   data() {
     return {
       username: "",
@@ -96,12 +95,8 @@ export default {
 }
 
 .card {
-  max-width: 700px;
+  max-width: 550px;
   margin: auto;
-}
-
-.brand-wrapper .logo {
-  height: 37px;
 }
 
 .login-card {

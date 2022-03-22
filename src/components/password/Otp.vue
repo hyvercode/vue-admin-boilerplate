@@ -3,98 +3,95 @@
     <main class="d-flex align-items-center min-vh-100 py-3 py-md-0">
       <div class="container">
         <div class="card login-card d-flex">
-          <div class="row no-gutters">
-            <div class="col-md-12">
-              <div class="card-body text-center">
-                <div class="text-center">
-                  <router-link
-                      to="/"
-                  >
-                    <img src="~@/assets/images/icons/GrosirMotor.png" width="200" class="mb-3"/>
-                  </router-link>
-                  <p class="login-card-description h6">OTP Verification</p>
-                  <h6 class="m-4">
-                    Input your OTP Code
-                  </h6>
-                </div>
-                <form
-                    class="digit-group"
-                    @submit.prevent="handleVerify($event)"
-                >
-                  <input
-                      type="text"
-                      oninput="this.value=this.value.replace(/[^0-9]/g,'');"
-                      @keypress="isNumber($event)"
-                      v-model="otp.code1"
-                      v-on:keyup="$event.target.nextElementSibling.focus()"
-                      placeholder="0"
-                      maxlength="1"
-                      required
-                  />
-                  <input
-                      type="text"
-                      oninput="this.value=this.value.replace(/[^0-9]/g,'');"
-                      @keypress="isNumber($event)"
-                      v-model="otp.code2"
-                      v-on:keyup="$event.target.nextElementSibling.focus()"
-                      placeholder="0"
-                      maxlength="1"
-                      required
-                  />
-                  <input
-                      type="text"
-                      oninput="this.value=this.value.replace(/[^0-9]/g,'');"
-                      @keypress="isNumber($event)"
-                      v-model="otp.code3"
-                      v-on:keyup="$event.target.nextElementSibling.focus()"
-                      placeholder="0"
-                      maxlength="1"
-                      required
-                  />
-                  <input
-                      type="text"
-                      oninput="this.value=this.value.replace(/[^0-9]/g,'');"
-                      @keypress="isNumber($event)"
-                      v-model="otp.code4"
-                      v-on:keyup="$event.target.nextElementSibling.focus()"
-                      placeholder="0"
-                      maxlength="1"
-                      required
-                  />
-                  <input
-                      type="text"
-                      oninput="this.value=this.value.replace(/[^0-9]/g,'');"
-                      @keypress="isNumber($event)"
-                      v-model="otp.code5"
-                      v-on:keyup="$event.target.nextElementSibling.focus()"
-                      placeholder="0"
-                      maxlength="1"
-                      required
-                  />
-                  <input
-                      type="text"
-                      oninput="this.value=this.value.replace(/[^0-9]/g,'');"
-                      @keypress="isNumber($event)"
-                      v-model="otp.code6"
-                      v-on:keyup="$event.target.nextElementSibling.focus()"
-                      placeholder="0"
-                      maxlength="1"
-                      required
-                  />
-                  <div class="resend-otp">
-                    <a v-on:click.prevent="handleResendOTP($event)"
-                    >Resend OTP Code</a
-                    >
-                  </div>
-                  <div class="container mb-4">
-                    <button class="btn login-btn" type="submit">
-                      Verification
-                    </button>
-                  </div>
-                </form>
-              </div>
+          <div class="card-body text-center">
+            <div class="text-center">
+              <router-link
+                  to="/"
+              >
+                <img src="~@/assets/images/icons/GrosirMotor.png" width="200" class="mb-3"/>
+              </router-link>
+              <p class="login-card-description h6">OTP Verification</p>
+              <h6 class="m-4">
+                Input your OTP Code
+              </h6>
             </div>
+            <form
+                class="digit-group"
+                @submit.prevent="handleVerify($event)"
+            >
+              <input
+                  type="text"
+                  oninput="this.value=this.value.replace(/[^0-9]/g,'');"
+                  @keypress="isNumber($event)"
+                  v-model="otp.code1"
+                  v-on:keyup="$event.target.nextElementSibling.focus()"
+                  placeholder="0"
+                  maxlength="1"
+                  required
+              />
+              <input
+                  type="text"
+                  oninput="this.value=this.value.replace(/[^0-9]/g,'');"
+                  @keypress="isNumber($event)"
+                  v-model="otp.code2"
+                  v-on:keyup="$event.target.nextElementSibling.focus()"
+                  placeholder="0"
+                  maxlength="1"
+                  required
+              />
+              <input
+                  type="text"
+                  oninput="this.value=this.value.replace(/[^0-9]/g,'');"
+                  @keypress="isNumber($event)"
+                  v-model="otp.code3"
+                  v-on:keyup="$event.target.nextElementSibling.focus()"
+                  placeholder="0"
+                  maxlength="1"
+                  required
+              />
+              <input
+                  type="text"
+                  oninput="this.value=this.value.replace(/[^0-9]/g,'');"
+                  @keypress="isNumber($event)"
+                  v-model="otp.code4"
+                  v-on:keyup="$event.target.nextElementSibling.focus()"
+                  placeholder="0"
+                  maxlength="1"
+                  required
+              />
+              <input
+                  type="text"
+                  oninput="this.value=this.value.replace(/[^0-9]/g,'');"
+                  @keypress="isNumber($event)"
+                  v-model="otp.code5"
+                  v-on:keyup="$event.target.nextElementSibling.focus()"
+                  placeholder="0"
+                  maxlength="1"
+                  required
+              />
+              <input
+                  type="text"
+                  oninput="this.value=this.value.replace(/[^0-9]/g,'');"
+                  @keypress="isNumber($event)"
+                  v-model="otp.code6"
+                  v-on:keyup="$event.target.nextElementSibling.focus()"
+                  placeholder="0"
+                  maxlength="1"
+                  required
+              />
+              <div class="resend-otp">
+                <a v-on:click.prevent="handleResendOTP($event)"
+                >Resend OTP Code</a
+                >
+              </div>
+              <div class="container">
+                <button class="btn login-btn" type="submit">
+                  Verification
+                </button>
+              </div>
+            </form>
           </div>
+          <autor/>
         </div>
       </div>
     </main>
@@ -104,9 +101,11 @@
 import OTP from "../../services/auth.service";
 import router from "@/router";
 import pages from "../../helpers/Pages";
+import Autor from "../navigation/Autor";
 
 export default {
   name: "otp",
+  components: {Autor},
   props: {
     nextPage: String,
   },
@@ -213,12 +212,8 @@ export default {
 }
 
 .card {
-  max-width: 700px;
+  max-width: 550px;
   margin: auto;
-}
-
-.brand-wrapper .logo {
-  height: 37px;
 }
 
 .login-card {
