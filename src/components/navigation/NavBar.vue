@@ -48,7 +48,7 @@
                     <div class="col-auto">
                       <!-- Avatar -->
                       <img alt="Image placeholder" v-if="user.avatar" :src="user.avatar" class="avatar-md rounded">
-                      <avatar v-else username="S I P" size=30></avatar>
+                      <avatar v-else username="S I P" :size="size"></avatar>
                     </div>
                     <div class="col ps-0 ms-2">
                       <div class="d-flex justify-content-between align-items-center">
@@ -82,7 +82,7 @@
                aria-expanded="false">
               <div class="media d-flex align-items-center">
                 <img alt="Image placeholder" v-if="user.avatar" :src="user.avatar" class="avatar-md rounded">
-                <avatar v-else username="S I P" size="30"></avatar>
+                <avatar v-else username="S I P" :size="size"></avatar>
                 <div class="media-body ms-2 text-dark align-items-center d-none d-lg-block">
                   <span class="mb-0 font-small fw-bold text-gray-900">Bonnie Green</span>
                 </div>
@@ -169,7 +169,8 @@ export default {
     return {
       sidebar: this.$store.state.nav.toggle,
       interval: '',
-      user: null
+      user: null,
+      size:30
     }
   },
   computed: {
