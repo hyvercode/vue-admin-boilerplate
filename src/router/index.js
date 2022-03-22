@@ -3,23 +3,23 @@ import VueRouter from 'vue-router'
 import Dashboard from "@/views/Dashboard";
 import Login from "@/views/Login";
 import Index from "../views/Index";
-
+import Pages from "../helpers/Pages";
 
 Vue.use(VueRouter);
 const routes = [
     {
-        path: '/login',
+        path: Pages.LOGIN,
         name: 'Login',
         component: Login
     },
     {
         path: '/',
-        redirect: '/dashboard',
+        redirect: Pages.DASHBOARD,
         name: 'Index',
         component: Index,
         children: [
             {
-                path: '/dashboard',
+                path: Pages.DASHBOARD,
                 name: 'Dashboard',
                 component: Dashboard
             }
@@ -39,12 +39,12 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-    const publicPages = ['/login'];
+    const publicPages = [Pages.LOGIN];
     const authRequired = !publicPages.includes(to.path);
     const loggedIn = localStorage.getItem('ADMGM_SESSION');
 
     if (authRequired && !loggedIn) {
-        next('/login');
+        next(Pages.LOGIN);
     } else {
         next();
     }
