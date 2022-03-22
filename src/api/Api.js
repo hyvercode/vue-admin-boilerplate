@@ -1,9 +1,9 @@
 import axios from "axios";
-import authHeader from "@/api/auth-header";
-import AuthService from "@/services/auth.service";
+import authHeader from "./header";
+import AuthService from "../services/auth.service";
 
 class Api {
-    doPost(url, params) {
+    async doPost(url, params) {
         return axios({
             method: 'POST',
             url: url,
@@ -12,56 +12,75 @@ class Api {
         }).then(response => {
             return response.data;
         }).catch(error => {
-            if (error.response.data.code === 403) {
+            if (error.response.status === 401) {
                 AuthService.refreshToken();
             }
+
+            if (error.response.data.code === 403) {
+                AuthService.logout();
+            }
+
             return error.response.data;
         });
     }
 
-    doGet(url, params) {
+    async doGet(url, params) {
         return axios.get(url, {
             params,
             headers: authHeader()
         }).then(response => {
             return response.data;
         }).catch(error => {
-            if (error.response.data.code === 403) {
+            if (error.response.status === 401) {
                 AuthService.refreshToken();
             }
+
+            if (error.response.data.code === 403) {
+                AuthService.logout();
+            }
+
             return error.response.data;
         });
     }
 
-    doPut(url, params) {
+    async doPut(url, params) {
         return axios.put(url, {
             params,
             headers: authHeader()
         }).then(response => {
             return response.data;
         }).catch(error => {
-            if (error.response.data.code === 403) {
+            if (error.response.status === 401) {
                 AuthService.refreshToken();
+            }
+
+            if (error.response.data.code === 403) {
+                AuthService.logout();
             }
             return error.response.data;
         });
     }
 
-    doDelete(url, params) {
+    async doDelete(url, params) {
         return axios.delete(url, {
             params,
             headers: authHeader()
         }).then(response => {
             return response.data;
         }).catch(error => {
-            if (error.response.data.code === 403) {
+            if (error.response.status === 401) {
                 AuthService.refreshToken();
             }
+
+            if (error.response.data.code === 403) {
+                AuthService.logout();
+            }
+
             return error.response.data;
         });
     }
 
-    doGetBlob(url, params) {
+    async doGetBlob(url, params) {
         return axios.get(url, {
             params,
             responseType: 'arraybuffer',
@@ -69,14 +88,19 @@ class Api {
         }).then(response => {
             return response.data;
         }).catch(error => {
-            if (error.response.data.code === 403) {
+            if (error.response.data.code === 401) {
                 AuthService.refreshToken();
             }
+
+            if (error.response.data.code === 403) {
+                AuthService.logout();
+            }
+
             return error.response.data;
         });
     }
 
-    doPostMultipart(url, params) {
+    async doPostMultipart(url, params) {
         let header = authHeader();
         header['Content-Type'] = 'multipart/form-data'
         return axios({
@@ -87,9 +111,27 @@ class Api {
         }).then(response => {
             return response.data;
         }).catch(error => {
-            if (error.response.data.code === 403) {
+            if (error.response.data.code === 401) {
                 AuthService.refreshToken();
             }
+
+            if (error.response.data.code === 403) {
+                AuthService.logout();
+            }
+
+            return error.response.data;
+        });
+    }
+
+    async doPostOut(url, params) {
+        return axios({
+            method: 'POST',
+            url: url,
+            headers: authHeader(),
+            data: params
+        }).then(response => {
+            return response.data;
+        }).catch(error => {
             return error.response.data;
         });
     }

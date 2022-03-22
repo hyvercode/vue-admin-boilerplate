@@ -1,121 +1,252 @@
 <template>
-  <div class="home">
-    <div class="container gm-box-shadow py-5">
-      <div class="container gm-brand">
-        <router-link to="/">
-          <img
-              src="~@/assets/images/icons/GrosirMotor.png"
-              alt=""
-              width="auto"
-              height="30"
-          />
-        </router-link>
-      </div>
-      <div class="row">
-        <div class="col-12 text-center">
-          <h5>LOGIN</h5>
-          <form role="form" @submit.prevent="submit" class="py-3">
-            <div class="input-container m-2">
-              <input
-                  type="text"
-                  class="gm-form-control"
-                  v-model="user.username"
-                  placeholder="Username"
-              />
-            </div>
-            <div class="input-container m-2">
-              <input
-                  type="password"
-                  class="gm-form-control"
-                  v-model="user.password"
-                  placeholder="Password"
-              />
-            </div>
-            <div class="input-container m-2">
-              <div style="margin-left:90px;text-align: center!important;">
-                <vue-recaptcha
-                    ref="invisibleRecaptcha"
-                    @verify="onCaptchaVerified"
-                    @expired="onCaptchaExpired"
-                    sitekey="6Ld2oGwaAAAAAL8VTnsiup9d7ThwyyHBya009Q3q"
-                ></vue-recaptcha>
+  <div class="body">
+    <main class="d-flex align-items-center min-vh-100 py-3 py-md-0">
+      <div class="container">
+        <div class="card login-card">
+          <div class="row no-gutters">
+            <div class="col-md-12">
+              <div class="card-body">
+                <div class="text-center">
+                  <img src="~@/assets/images/icons/GrosirMotor.png" width="200"/>
+                  <br/>
+                </div>
+                <form @submit.prevent="submit" class="mt-4">
+                  <div class="form-group">
+                    <label for="username" class="sr-only">Username</label>
+                    <input
+                        id="username"
+                        v-model="login.username"
+                        type="text"
+                        name="username"
+                        class="form-control form-control-sm"
+                        placeholder="Input NIK / RequestLogin ID"
+                        required
+                    />
+                  </div>
+                  <div class="form-group mb-3">
+                    <label for="password" class="sr-only">Password</label>
+                    <VuePassword
+                        v-model="login.password"
+                        id="password"
+                        type="password"
+                        :disableStrength="true"
+                    >
+                    </VuePassword>
+                  </div>
+                  <div class="form-group mb-1 text-center">
+                    <div class="re-captcha text-center">
+                      <vue-recaptcha
+                          ref="invisibleRecaptcha"
+                          @verify="onCaptchaVerified"
+                          @expired="onCaptchaExpired"
+                          sitekey="6Lemm2keAAAAALJLVgk5LmmzQetQZ91G19Knn9ES"
+                      >
+                      </vue-recaptcha>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="form-check">
+                      <input
+                          class="form-check-input"
+                          v-model="login.remember_me"
+                          type="checkbox"
+                          value="true"
+                          id="remember"
+                      />
+                      <label class="form-check-label" for="remember">
+                        Remember Me
+                      </label>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <input
+                        id="login"
+                        name="login"
+                        class="btn btn-primary login-btn"
+                        type="submit"
+                        value="Sign In"
+                    />
+                  </div>
+                </form>
+                <div class="text-center">
+                  <a
+                      :href="pages.PASSWORD_FORGOT"
+                      class="forgot-password-link"
+                      style="color: #4790d9 !important"
+                  >Forgot password ?
+                  </a>
+                </div>
               </div>
             </div>
-            <div class="input-container p-4">
-              <input
-                  type="submit"
-                  class="btn btn-primary gm-btn-rounded w-75"
-                  value="Masuk"
-              />
-            </div>
-          </form>
+          </div>
         </div>
       </div>
-    </div>
+    </main>
   </div>
 </template>
 <script>
-import User from "../model/user";
 import VueRecaptcha from "vue-recaptcha";
+import Pages from "../helpers/Pages";
+import VuePassword from "vue-password";
+import PAGES from "../helpers/Pages";
+import User from "../model/user";
 
 export default {
   name: "Login",
   components: {
     VueRecaptcha,
+    VuePassword,
   },
   data() {
     return {
-      user: new User("", ""),
-      loading: false,
-      message: "",
-      robot: false
+      strength: 0,
+      login: new User(),
+      pages: PAGES,
     };
   },
   computed: {
-    loggedIn() {
+    isLogin() {
       return this.$store.state.auth.status.loggedIn;
     },
   },
   created() {
-    if (this.loggedIn) {
-      this.$router.push("/dashboard");
+    if (this.isLogin) {
+      this.$router.push(Pages.DASHBOARD);
     }
   },
   methods: {
-    handleLogin() {
+    onCaptchaVerified(response) {
+      if (response) this.robot = true;
+    },
+    onLogin() {
       let loading = this.$loading.show();
-      this.$store.dispatch("auth/login", this.user).then(
-          () => {
+      this.$store.dispatch("auth/login", this.login).then(
+          (response) => {
             loading.hide();
-            this.$router.push("/dashboard");
+            if (response.code === 200) {
+              this.$router.push(Pages.DASHBOARD);
+            } else {
+              this.$swal.fire("Error", "Invalid NIK or password!", "error");
+            }
           },
           (error) => {
             loading.hide();
-            this.$swal.fire({
-              icon: "error",
-              title: "Oops...",
-              text: "Invalid username or password !",
-            });
-            this.message =
-                (error.response && error.response.data) ||
-                error.message ||
-                error.toString();
+            this.$swal.fire(
+                "Error",
+                "Error network connection! <br>" + error,
+                "error"
+            );
           }
       );
     },
     submit: function () {
       if (this.robot) {
-        this.handleLogin();
+        this.onLogin();
       }
     },
     onCaptchaExpired: function () {
-      this.$refs.recaptcha.reset() // Direct call reset method
-    },
-    onCaptchaVerified(response) {
-      if (response) this.robot = true;
+      this.$refs.recaptcha.reset(); // Direct call password method
     },
   },
 };
 </script>
 <style scoped>
+
+.body {
+  font-family: "Open Sans", sans-serif;
+  background: linear-gradient(180deg, #4790d9 50%, #074887 100%) !important;
+  min-height: 10vh;
+}
+
+
+@media (min-width: 991.98px) {
+  .login-card {
+    margin: auto;
+    width: 450px !important;
+  }
+}
+
+.login-card {
+  border: 0;
+  border-radius: 27.5px;
+  box-shadow: 0 10px 30px 0 rgba(172, 168, 168, 0.43);
+  overflow: hidden;
+}
+
+.login-card .card-body {
+  padding: 40px 60px 60px;
+}
+
+@media (max-width: 422px) {
+  .login-card .card-body {
+    padding: 35px 24px;
+    margin-left: 0px !important;
+  }
+}
+
+.login-card form {
+  max-width: 326px;
+}
+
+.login-card .form-control {
+  width: 100% !important;
+  height: 0px !important;
+  border: 1px solid #d5dae2;
+  padding: 15px 25px;
+  margin-bottom: 20px;
+  min-height: 45px;
+  font-size: 13px;
+  line-height: 15;
+  font-weight: normal;
+}
+
+.login-card .form-control::-webkit-input-placeholder {
+  color: #919aa3;
+}
+
+.login-card .form-control::-moz-placeholder {
+  color: #919aa3;
+}
+
+.login-card .form-control:-ms-input-placeholder {
+  color: #919aa3;
+}
+
+.login-card .form-control::-ms-input-placeholder {
+  color: #919aa3;
+}
+
+.login-card .form-control::placeholder {
+  color: #919aa3;
+}
+
+.login-card .login-btn {
+  background: linear-gradient(180deg, #4790d9 10%, #054686 100%);
+  width: 100%;
+  border-radius: 12px;
+  border: none;
+  font-family: "Open Sans", sans-serif;
+  font-size: 17px;
+  line-height: 30px;
+  color: #fff;
+  margin-bottom: 24px;
+}
+
+.login-card .login-btn:hover {
+  border: none;
+  background-color: transparent;
+  color: linear-gradient(180deg, #074887 0%, #074887 10%);
+}
+
+.login-card .forgot-password-link {
+  font-size: 14px;
+  color: #0400f8;
+}
+
+.login-card-footer-nav a {
+  font-size: 14px;
+  color: #0881fa;
+}
+
+/*# sourceMappingURL=login.css.map */
 </style>
