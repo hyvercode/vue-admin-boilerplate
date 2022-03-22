@@ -3,83 +3,80 @@
     <main class="d-flex align-items-center min-vh-100 py-3 py-md-0">
       <div class="container">
         <div class="card login-card">
-          <div class="row no-gutters">
-            <div class="col-md-12">
-              <div class="card-body">
-                <div class="text-center">
-                  <img src="~@/assets/images/icons/GrosirMotor.png" width="200"/>
-                  <br/>
-                </div>
-                <form @submit.prevent="submit" class="mt-4">
-                  <div class="form-group">
-                    <label for="username" class="sr-only">Username</label>
-                    <input
-                        id="username"
-                        v-model="login.username"
-                        type="text"
-                        name="username"
-                        class="form-control form-control-sm"
-                        placeholder="Input NIK / RequestLogin ID"
-                        required
-                    />
-                  </div>
-                  <div class="form-group mb-3">
-                    <label for="password" class="sr-only">Password</label>
-                    <VuePassword
-                        v-model="login.password"
-                        id="password"
-                        type="password"
-                        :disableStrength="true"
-                    >
-                    </VuePassword>
-                  </div>
-                  <div class="form-group mb-1 text-center">
-                    <div class="re-captcha text-center">
-                      <vue-recaptcha
-                          ref="invisibleRecaptcha"
-                          @verify="onCaptchaVerified"
-                          @expired="onCaptchaExpired"
-                          sitekey="6Lemm2keAAAAALJLVgk5LmmzQetQZ91G19Knn9ES"
-                      >
-                      </vue-recaptcha>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <div class="form-check">
-                      <input
-                          class="form-check-input"
-                          v-model="login.remember_me"
-                          type="checkbox"
-                          value="true"
-                          id="remember"
-                      />
-                      <label class="form-check-label" for="remember">
-                        Remember Me
-                      </label>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <input
-                        id="login"
-                        name="login"
-                        class="btn btn-primary login-btn"
-                        type="submit"
-                        value="Sign In"
-                    />
-                  </div>
-                </form>
-                <div class="text-center">
-                  <a
-                      :href="pages.PASSWORD_FORGOT"
-                      class="forgot-password-link"
-                      style="color: #4790d9 !important"
-                  >Forgot password ?
-                  </a>
+          <div class="card-body">
+            <div class="text-center">
+              <img src="~@/assets/images/icons/GrosirMotor.png" width="200"/>
+              <br/>
+            </div>
+            <form @submit.prevent="submit" class="mt-4">
+              <div class="form-group">
+                <label for="username" class="sr-only">Username</label>
+                <input
+                    id="username"
+                    v-model="login.username"
+                    type="text"
+                    name="username"
+                    class="form-control form-control-sm"
+                    placeholder="Input NIK / RequestLogin ID"
+                    required
+                />
+              </div>
+              <div class="form-group mb-3">
+                <label for="password" class="sr-only">Password</label>
+                <VuePassword
+                    v-model="login.password"
+                    id="password"
+                    type="password"
+                    :disableStrength="true"
+                >
+                </VuePassword>
+              </div>
+              <div class="form-group mb-1 text-center">
+                <div class="re-captcha text-center">
+                  <vue-recaptcha
+                      ref="invisibleRecaptcha"
+                      @verify="onCaptchaVerified"
+                      @expired="onCaptchaExpired"
+                      sitekey="6Lemm2keAAAAALJLVgk5LmmzQetQZ91G19Knn9ES"
+                  >
+                  </vue-recaptcha>
                 </div>
               </div>
+              <div class="form-group">
+                <div class="form-check">
+                  <input
+                      class="form-check-input"
+                      v-model="login.remember_me"
+                      type="checkbox"
+                      value="true"
+                      id="remember"
+                  />
+                  <label class="form-check-label" for="remember">
+                    Remember Me
+                  </label>
+                </div>
+              </div>
+              <div class="form-group">
+                <input
+                    id="login"
+                    name="login"
+                    class="btn btn-primary login-btn"
+                    type="submit"
+                    value="Sign In"
+                />
+              </div>
+            </form>
+            <div class="text-center">
+              <a
+                  :href="pages.PASSWORD_FORGOT"
+                  class="forgot-password-link"
+                  style="color: #4790d9 !important"
+              >Forgot password ?
+              </a>
             </div>
           </div>
         </div>
+        <Autor ></Autor>
       </div>
     </main>
   </div>
@@ -90,10 +87,12 @@ import Pages from "../helpers/Pages";
 import VuePassword from "vue-password";
 import PAGES from "../helpers/Pages";
 import User from "../model/user";
+import Autor from "../components/navigation/Autor";
 
 export default {
   name: "Login",
   components: {
+    Autor,
     VueRecaptcha,
     VuePassword,
   },

@@ -3,73 +3,70 @@
     <main class="d-flex align-items-center min-vh-100 py-3 py-md-0">
       <div class="container">
         <div class="card login-card d-flex">
-          <div class="row no-gutters">
-            <div class="col-md-12">
-              <div class="card-body text-center">
-                <div class="text-center">
-                  <router-link
-                      to="/"
-                  ><img src="~@/assets/images/icons/GrosirMotor.png" width="200" class="mb-3"/>
-                  </router-link>
-                  <p class="login-card-description h5">Reset Password</p>
-                  <h6 class="m-4">
-                    Input new password
-                  </h6>
-                </div>
-                <form role="form" @submit.prevent="onSubmit">
-                  <div class="form-group mb-2">
-                    <div class="col-4">
-                      <em>
-                        <img
-                            src="~@/assets/images/icons/password.png"
-                            style="
+          <div class="card-body text-center">
+            <div class="text-center">
+              <router-link
+                  to="/"
+              ><img src="~@/assets/images/icons/GrosirMotor.png" width="200" class="mb-3"/>
+              </router-link>
+              <p class="login-card-description h5">Reset Password</p>
+              <h6 class="m-4">
+                Input new password
+              </h6>
+            </div>
+            <form role="form" @submit.prevent="onSubmit">
+              <div class="form-group mb-2">
+                <div class="col-4">
+                  <em>
+                    <img
+                        src="~@/assets/images/icons/password.png"
+                        style="
                             position: absolute;
                             margin: -10px 0px 0px -120px;
                           "
-                        />
-                      </em>
-                    </div>
-                    <div class="col-12 input-email">
-                      <input
-                          type="password"
-                          class="form-control"
-                          v-model="user.new_password"
-                          placeholder="******"
-                      />
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <div class="col-4">
-                      <em>
-                        <img
-                            src="~@/assets/images/icons/password.png"
-                            style="
+                    />
+                  </em>
+                </div>
+                <div class="col-12 input-email">
+                  <input
+                      type="password"
+                      class="form-control form-control-sm"
+                      v-model="user.new_password"
+                      placeholder="******"
+                  />
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-4">
+                  <em>
+                    <img
+                        src="~@/assets/images/icons/password.png"
+                        style="
                             position: absolute;
                             margin: -10px 0px 28px -120px;
                           "
-                        />
-                      </em>
-                    </div>
-                    <div class="col-12 input-email">
-                      <input
-                          type="password"
-                          class="form-control"
-                          v-model="user.password_confirmation"
-                          placeholder="******"
-                      />
-                    </div>
-                  </div>
-                  <div class="container mt-4">
-                    <input
-                        class="btn login-btn"
-                        type="submit"
-                        value="Submit"
                     />
-                  </div>
-                </form>
+                  </em>
+                </div>
+                <div class="col-12 input-email">
+                  <input
+                      type="password"
+                      class="form-control form-control-sm"
+                      v-model="user.password_confirmation"
+                      placeholder="******"
+                  />
+                </div>
               </div>
-            </div>
+              <div class="container mt-4">
+                <input
+                    class="btn login-btn"
+                    type="submit"
+                    value="Submit"
+                />
+              </div>
+            </form>
           </div>
+          <autor />
         </div>
       </div>
     </main>
@@ -78,9 +75,11 @@
 <script>
 import AuthService from "@/services/auth.service";
 import Pages from "../../helpers/Pages";
+import Autor from "../navigation/Autor";
 
 export default {
   name: "ResetPassword",
+  components: {Autor},
   data() {
     return {
       user: {
@@ -141,7 +140,7 @@ export default {
 }
 
 .card {
-  max-width: 700px;
+  max-width: 550px;
   margin: auto;
 }
 
