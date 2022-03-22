@@ -1,23 +1,29 @@
 const pages = {
-    LOGIN: '/login',
-    HOME: '/home',
-    DASHBOARD: '/dashboard',
-    TRANSACTIONS: '/transactions',
-    ORDERS: '/transactions/orders',
-    INVOICE: '/transactions/invoice',
-    INVOICE_DETAIL: '/transactions/invoice/detail',
-    MASTERS: '/masters',
-    USERS: '/masters/users',
-    USERS_CREATE: '/masters/user',
-    USERS_UPDATE: '/masters/user/',
-    COMPANIES: "/masters/companies",
-    COMPANY_CREATE: '/masters/company',
-    COMPANY_UPDATE: '/masters/company/',
-    EMPLOYEES: "/masters/employees",
-    EMPLOYEE_CREATE: '/masters/employee',
-    EMPLOYEE_UPDATE: '/masters/employee/',
-    BRANCH: "/masters/branch",
-    REPORTS: "/reports",
-}
+    /**
+     * Auth
+     */
+    LOGIN: "/login",
+    PASSWORD_FORGOT: "/password/forgot",
+    PASSWORD_RESET: "/password/reset",
+    PASSWORD_OTP: "/password/otp",
+
+    /**
+     * Master & Setup
+     */
+    HOME: "/home",
+    PROFILE: "/profile",
+    DASHBOARD: "/dashboard",
+    MASTERS: "/masters",
+    USERS: "/masters/users",
+    USERS_CREATE: "/masters/user",
+    USERS_UPDATE: "/masters/user/update",
+    MENU: "/masters/menu",
+    MENU_LIST: "/masters/menu/list",
+    MENU_ROLE: "/masters/menu/role",
+    NOTIFICATIONS: "/notifications",
+    NOTIFICATION_READ: "/notification/read",
+    BANNER: "/masters/banner",
+
+};
 
 export default pages;

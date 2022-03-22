@@ -1,13 +1,22 @@
-# build stage
-FROM node:lts-alpine as build-stage
+# base image
+FROM node:16.4.0-alpine
+
+# pasang (install) server http sederhana untuk menjalankan static content
+RUN npm install -g http-server
+
+# buat folder 'app' pada direktori yang sedang dikerjakan
 WORKDIR /app
+
+# salin 'package.json' dan 'package-lock.json' (jika ada)
 COPY package*.json ./
+
+# pasang dependecy proyek
 RUN npm install
+
+# salin berkas-berkas proyek serta folder-foldernya ke direktori yang sedang dikerjakan (misal. folder 'app)
 COPY . .
+
+# bangun aplikasi untuk produksi dengan minifikasi
 RUN npm run build
 
-# production stage
-FROM nginx:stable-alpine as production-stage
-COPY --from=build-stage /app/dist /usr/share/nginx/html
-
-CMD ["nginx", "-g", "daemon off;"]
+CMD [ "http-server", "dist" ]
