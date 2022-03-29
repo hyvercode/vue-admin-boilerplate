@@ -6,10 +6,10 @@
         <div class="d-flex align-items-center">
           <div class="avatar-lg me-4">
             <img alt="Image placeholder" v-if="user.avatar" :src="user.avatar" class="avatar-md rounded">
-            <avatar v-else username="S I P" :size="size" class="me-2 mt-2" style="margin-left: 5px!important;"></avatar>
+            <avatar v-else :username="user.name" :size="size" class="me-2 mt-2" style="margin-left: 5px!important;"></avatar>
           </div>
           <div class="d-block">
-            <h2 class="h5 mb-3 text-white">Hi, Jane</h2>
+            <h2 class="h5 mb-3 text-white">{{user.name}}</h2>
             <a href="/" class="btn btn-secondary btn-sm d-inline-flex align-items-center">
               <svg class="icon icon-xxs me-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                    xmlns="http://www.w3.org/2000/svg">

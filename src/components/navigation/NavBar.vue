@@ -44,25 +44,30 @@
               <div class="list-group list-group-flush">
                 <a href="#" class="text-center text-primary fw-bold border-bottom border-light py-3">Notifications</a>
                 <a href="#" class="list-group-item list-group-item-action border-bottom">
-                  <div class="row align-items-center">
-                    <div class="col-auto">
-                      <!-- Avatar -->
-                      <img alt="Image placeholder" v-if="user.avatar" :src="user.avatar" class="avatar-md rounded">
-                      <avatar v-else username="S I P" :size="size"></avatar>
-                    </div>
-                    <div class="col ps-0 ms-2">
-                      <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                          <h4 class="h6 mb-0 text-small">Jose Leos</h4>
+                  <ul class="list-group" v-for="(inbox,index) in notification.data" :key="inbox.id"
+                      @click.prevent="handleNotification(inbox)">
+                    <li :class="index.id % 2===0?'list-group-item list-group-item-primary':'list-group-item list-group-item-dark'">
+                      <div class="row">
+                        <div class="col-auto">
+                          <!-- Avatar -->
+                          <img alt="Image placeholder" v-if="inbox.avatar" :src="inbox.avatar"
+                               class="avatar-md rounded">
+                          <avatar v-else :username="inbox.name" :size="size"></avatar>
                         </div>
-                        <div class="text-end">
-                          <small class="text-danger">a few moments ago</small>
+                        <div class="col ps-0 ms-2">
+                          <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                              <h4 class="h6 mb-0 text-small">{{ inbox.name }}</h4>
+                            </div>
+                            <div class="text-end">
+                              <small class="text-danger">{{ inbox.created_at | moment("DD MMMM YYYY HH:mm") }}</small>
+                            </div>
+                          </div>
+                          <p class="font-small mt-1 mb-0"><span v-html="inbox.body.substring(0,20)"></span></p>
                         </div>
                       </div>
-                      <p class="font-small mt-1 mb-0">Added you to an event "Project stand-up" tomorrow at 12:30
-                        AM.</p>
-                    </div>
-                  </div>
+                    </li>
+                  </ul>
                 </a>
                 <a href="/notification" class="dropdown-item text-center fw-bold rounded-bottom py-3">
                   <svg class="icon icon-xxs text-gray-400 me-1" fill="currentColor" viewBox="0 0 20 20"
@@ -82,9 +87,9 @@
                aria-expanded="false">
               <div class="media d-flex align-items-center">
                 <img alt="Image placeholder" v-if="user.avatar" :src="user.avatar" class="avatar-md rounded">
-                <avatar v-else username="S I P" :size="size"></avatar>
+                <avatar v-else :username="user.name" :size="size"></avatar>
                 <div class="media-body ms-2 text-dark align-items-center d-none d-lg-block">
-                  <span class="mb-0 font-small fw-bold text-gray-900">Bonnie Green</span>
+                  <span class="mb-0 font-small fw-bold text-gray-900">{{ user.name }}</span>
                 </div>
               </div>
             </a>
@@ -170,21 +175,38 @@ export default {
       sidebar: this.$store.state.nav.toggle,
       interval: '',
       user: null,
-      size:30
+      size: 30,
+      pagination: {
+        searchBy: 'id',
+        searchParam: "",
+        page: 1,
+        limit: 10,
+        sortBy: 'created_at',
+        sort: 'DESC'
+      },
     }
   },
   computed: {
     isLogin() {
       return this.$store.state.auth.status.loggedIn;
-    }
+    },
+    notification() {
+      return this.$store.state.notification.inboxs;
+    },
+  },
+  mounted() {
+    this.$store.dispatch("notification/getInboxs", this.pagination)
   },
   created() {
     this.user = Util.jwtDecode(
         JSON.parse(JSON.stringify(VueCookies.get("__PMS__SSESSIONID__"))).access_token
     );
-    this.interval = window.setInterval(() => this.$store.dispatch("notification/getCounts"), 6000000);
+    this.interval = window.setInterval(() => this.$store.dispatch("notification/getInboxs", this.pagination), 6000000);
   },
   methods: {
+    handleNotification(props) {
+      alert(props.id)
+    },
     handleLogout() {
       this.$swal
           .fire({
