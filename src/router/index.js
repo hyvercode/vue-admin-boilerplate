@@ -6,6 +6,8 @@ import Index from "../views/Index";
 import Pages from "../helpers/Pages";
 import VueCookies from "vue-cookies";
 import Password from "../views/Password";
+import Users from "../views/Users";
+import UserIndex from "../components/users/UserIndex";
 
 Vue.use(VueRouter);
 const routes = [
@@ -46,7 +48,24 @@ const routes = [
                 path: Pages.DASHBOARD,
                 name: 'Dashboard',
                 component: Dashboard
-            }
+            },
+            {
+                path: Pages.USERS,
+                name: 'Users',
+                component: Users,
+                children: [
+                    {
+                        path: "",
+                        name: "Index",
+                        component: UserIndex
+                    },
+                    {
+                        path: Pages.USERS_CREATE,
+                        name: 'UsersCreate',
+                        component: Dashboard
+                    }
+                ]
+            },
         ]
     },
     {

@@ -91,166 +91,166 @@
       </div>
     </div>
     <!--    End Table Filter-->
-    <!--    Table Content-->
-    <table ref="table" v-if="columns && list">
-      <thead>
-      <draggable v-model="columns" :disabled="draggingAble" tag="tr">
-        <!--        Dragable-->
-        <th v-if="draggingAble" style="width: 10px!important;">
-          <i class="material-icons">app_registration</i>
-        </th>
-        <!--        Number-->
-        <th style="width: 5px!important;">No</th>
-        <!--        CheckBox-->
-        <th v-if="commandCheckbox" style="width: 2px!important;">
-          <input class="form-check-input" type="checkbox" id="flexCheckAll" v-model="selectAll"
-                 @click.prevent="onSelectAll">
-        </th>
-        <!--        Rows-->
-        <th v-for="(column, index) in columns"
-            :key="index"
-            :class="(sortable && !column.hidden? 'sorting ' : '')
+    <div class="table-responsive">
+      <!--    Table Content-->
+      <table class="table" ref="table" v-if="columns && list">
+        <thead class="thead-light">
+        <draggable v-model="columns" :disabled="draggingAble" tag="tr">
+          <!--        Dragable-->
+          <th v-if="draggingAble" style="width: 10px!important;">
+            <i class="material-icons">app_registration</i>
+          </th>
+          <!--        Number-->
+          <th style="width: 5px!important;">No</th>
+          <!--        CheckBox-->
+          <th v-if="commandCheckbox" style="width: 2px!important;">
+            <input class="form-check-input" type="checkbox" id="flexCheckAll" v-model="selectAll"
+                   @click.prevent="onSelectAll">
+          </th>
+          <!--        Rows-->
+          <th v-for="(column, index) in columns"
+              :key="index"
+              :class="(sortable && !column.hidden? 'sorting ' : '')
 							+ (sortColumn === index ?
 								(sortType === 'desc' ? 'sorting-desc' : 'sorting-asc')
 								: '')
 							+ (column.numeric ? ' numeric' : '')"
-            :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none':''}"
-            @click="sort(index)"
-        >
-          <span v-if="!column.hidden">{{ column.label }}</span>
-        </th>
-        <slot name="thead-tr"/>
-      </draggable>
-      </thead>
-      <draggable
-          :list="rows"
-          :move="onDragAble"
-          ghost-class="ghost"
-          tag="tbody">
-        <tr v-for="(row, index) in paginated"
-            :key="index"
-            :class="{ clickable : clickable }"
-            @click.prevent="onRowClick(row)"
-        >
-          <td v-if="draggingAble" style="cursor: move !important;">
-            <i class="material-icons">drag_indicator</i>
-          </td>
-          <td> {{
-              currentPerPage * (currentPage - 1) +
-              index +
-              1
-            }}
-          </td>
-          <td v-if="commandCheckbox">
-            <input class="form-check-input" type="checkbox" :value="row" v-model="selected" @change="onSelect">
-          </td>
-          <td v-for="(column, columnIndex) in columns"
-              :key="columnIndex"
               :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none':''}"
+              @click="sort(index)"
           >
-            <!--            Normal Content-->
-            <span
-                v-if="!column.html && !column.currency && !column.image && column.field !=='active' && !column.badge && !column.hidden"
-                :style="{width: column.width ? 'auto':column.width,display:column.hidden?'none !important;':''}">
-              {{ collect(row, column.field) }} <span v-if="column.concat"> {{collect(row, column.concatWith) }}</span>
-            </span>
-            <!--            Boolean Content-->
-            <div v-if="!column.html && !column.currency && column.field ==='active' && !column.badge && !column.hidden"
-                 :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none !important;':''}">
-                          <span :class="collect(row, column.field) ? 'badge bg-success' : 'badge bg-secondary'">{{
-                              collect(row, column.field) ? 'Active' : 'Non Active'
-                            }}</span>
-            </div>
-            <!--            Currency Content-->
-            <div v-if="!column.html && column.currency"
-                 v-html="isCurrency(collect(row, column.field)) && !column.badge && !column.hidden"
-                 :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none !important;':''}"/>
-            <!--            HTML Content-->
-            <div v-if="column.html && !column.hidden" v-html="collect(row, column.field)"
-                 :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none !important;':''}"/>
-            <!--              Image Content-->
-            <div v-if="column.image && !column.hidden"
-                 :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none !important;':''}">
-              <img v-if="collect(row, column.field)" :src="collect(row, column.field)" class="mih tbl-mih-img"
-                   :alt="index"/>
-              <i v-else class="material-icons">photo</i>
-            </div>
-            <!--            Badge Content-->
-            <div v-if="column.badge && !column.hidden"
-                 :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none !important;':''}">
-              <span :class="column.badgeClass? column.badgeClass : 'badge bg-primary'">{{
-                  collect(row, column.field)
-                }}</span>
-            </div>
-          </td>
-          <slot name="tbody-tr" :row="row"/>
-        </tr>
-        <template v-if="rows.length === 0 && loadingAnimation === true">
-          <tr v-for="n in (currentPerPage === -1 ? 10 : currentPerPage)"
-              :key="n"
+            <span v-if="!column.hidden">{{ column.label }}</span>
+          </th>
+          <slot name="thead-tr"/>
+        </draggable>
+        </thead class="thead-light">
+        <draggable
+            :list="rows"
+            :move="onDragAble"
+            ghost-class="ghost"
+            tag="tbody">
+          <tr v-for="(row, index) in paginated"
+              :key="index"
+              :class="{ clickable : clickable }"
+              @click.prevent="onRowClick(row)"
           >
-            <td :colspan="columns.length">
-              <tb-skeleton :height="15" theme="opacity" bg-color="#dcdbdc" shape="radius"/>
+            <td v-if="draggingAble" style="cursor: move !important;">
+              <i class="material-icons">drag_indicator</i>
             </td>
-          </tr>
-        </template>
-      </draggable>
-    </table>
-    <!--    End Table Content-->
-    <!--    Kanban Content-->
-    <div v-else class="box">
-      <div v-if="kanban" class="row">
-        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12"
-             v-for="(row, index) in paginated"
-             :key="index"
-             :class="{ clickable : clickable }"
-        >
-          <div class="box-part text-center">
-            <div v-for="(column, columnIndex) in columnsKanban"
-                 :key="columnIndex"
-                 :class="{ numeric : column.numeric }">
-
+            <td> {{
+                currentPerPage * (currentPage - 1) +
+                index +
+                1
+              }}
+            </td>
+            <td v-if="commandCheckbox">
+              <input class="form-check-input" type="checkbox" :value="row" v-model="selected" @change="onSelect">
+            </td>
+            <td v-for="(column, columnIndex) in columns"
+                :key="columnIndex"
+                :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none':''}"
+            >
               <!--            Normal Content-->
-              <div class="kanban-text"
-                   v-if="!column.html && !column.currency && !column.image && column.field !=='active' && !column.badge && !column.hidden && !column.email"
-                   :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none':''}">
-                {{ collect(row, column.field) }} <span v-if="column.concat"> {{collect(row, column.concatWith) }}</span>
-              </div>
+              <span
+                  v-if="!column.html && !column.currency && !column.image && column.field !=='active' && !column.badge && !column.hidden"
+                  :style="{width: column.width ? 'auto':column.width,display:column.hidden?'none !important;':''}">
+              {{ collect(row, column.field) }} <span v-if="column.concat"> {{ collect(row, column.concatWith) }}</span>
+            </span>
               <!--            Boolean Content-->
               <div
-                  v-if="!column.html && !column.currency && column.field ==='active' && !column.badge && !column.hidden && !column.email"
-                  :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none':''}">
+                  v-if="!column.html && !column.currency && column.field ==='active' && !column.badge && !column.hidden"
+                  :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none !important;':''}">
                           <span :class="collect(row, column.field) ? 'badge bg-success' : 'badge bg-secondary'">{{
                               collect(row, column.field) ? 'Active' : 'Non Active'
                             }}</span>
               </div>
+              <!--            Currency Content-->
+              <div v-if="!column.html && column.currency"
+                   v-html="isCurrency(collect(row, column.field)) && !column.badge && !column.hidden"
+                   :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none !important;':''}"/>
+              <!--            HTML Content-->
+              <div v-if="column.html && !column.hidden" v-html="collect(row, column.field)"
+                   :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none !important;':''}"/>
               <!--              Image Content-->
-              <div v-if="column.image && !column.hidden && !column.email"
-                   :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none':''}">
-                <img v-if="collect(row, column.field)" :src="collect(row, column.field)" class="mih kanban-mih-img"
+              <div v-if="column.image && !column.hidden"
+                   :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none !important;':''}">
+                <img v-if="collect(row, column.field)" :src="collect(row, column.field)" class="mih tbl-mih-img"
                      :alt="index"/>
-                <i v-else class="material-icons">photo</i>
+                <avatar v-else :username="collect(row, column.name)" :size="column.size"></avatar>
               </div>
               <!--            Badge Content-->
-              <div v-if="column.badge && !column.hidden && !column.email"
-                   :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none':''}">
+              <div v-if="column.badge && !column.hidden"
+                   :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none !important;':''}">
               <span :class="column.badgeClass? column.badgeClass : 'badge bg-primary'">{{
                   collect(row, column.field)
                 }}</span>
               </div>
+            </td>
+            <slot name="tbody-tr" :row="row"/>
+          </tr>
+          <template v-if="rows.length === 0">
+            <p class="text-center">No Records</p>
+          </template>
+        </draggable>
+      </table>
+      <!--    End Table Content-->
 
-              <!--              Mail Content-->
-              <div v-if="column.email && !column.hidden"
-                   :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none':''}">
-                <a :href="'mailto:'+collect(row, column.field)" class="kanban-a">{{ collect(row, column.field) }}</a>
+      <!--    Kanban Content-->
+      <div v-else class="box">
+        <div v-if="kanban" class="row">
+          <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12"
+               v-for="(row, index) in paginated"
+               :key="index"
+               :class="{ clickable : clickable }"
+          >
+            <div class="box-part text-center">
+              <div v-for="(column, columnIndex) in columnsKanban"
+                   :key="columnIndex"
+                   :class="{ numeric : column.numeric }">
+
+                <!--            Normal Content-->
+                <div class="kanban-text"
+                     v-if="!column.html && !column.currency && !column.image && column.field !=='active' && !column.badge && !column.hidden && !column.email"
+                     :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none':''}">
+                  {{ collect(row, column.field) }} <span v-if="column.concat"> {{
+                    collect(row, column.concatWith)
+                  }}</span>
+                </div>
+                <!--            Boolean Content-->
+                <div
+                    v-if="!column.html && !column.currency && column.field ==='active' && !column.badge && !column.hidden && !column.email"
+                    :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none':''}">
+                          <span :class="collect(row, column.field) ? 'badge bg-success' : 'badge bg-secondary'">{{
+                              collect(row, column.field) ? 'Active' : 'Non Active'
+                            }}</span>
+                </div>
+                <!--              Image Content-->
+                <div v-if="column.image && !column.hidden && !column.email"
+                     :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none':''}">
+                  <img v-if="collect(row, column.field)" :src="collect(row, column.field)" class="mih kanban-mih-img"
+                       :alt="index"/>
+                  <i v-else class="material-icons">photo</i>
+                </div>
+                <!--            Badge Content-->
+                <div v-if="column.badge && !column.hidden && !column.email"
+                     :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none':''}">
+              <span :class="column.badgeClass? column.badgeClass : 'badge bg-primary'">{{
+                  collect(row, column.field)
+                }}</span>
+                </div>
+
+                <!--              Mail Content-->
+                <div v-if="column.email && !column.hidden"
+                     :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none':''}">
+                  <a :href="'mailto:'+collect(row, column.field)" class="kanban-a">{{ collect(row, column.field) }}</a>
+                </div>
               </div>
+              <a @click.prevent="onRowClick(row)" class="kanban-a align-text-bottom">View More</a>
             </div>
-            <a @click.prevent="onRowClick(row)" class="kanban-a align-text-bottom">View More</a>
           </div>
         </div>
       </div>
+      <!--    End Content-->
     </div>
-    <!--    End Content-->
 
     <!--    Table Footer-->
     <div v-if="paginate" class="table-footer">
@@ -310,19 +310,17 @@
 </template>
 
 <script>
-import '../styles.css';
-import Fuse from 'fuse.js';
 import locales from '../index';
-import {TbSkeleton} from 'tb-skeleton';
 import Utils from "../../../helpers/Util";
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable';
 import draggable from 'vuedraggable'
+import avatar from 'vue-avatar'
 
 export default {
   components: {
-    TbSkeleton,
     draggable,
+    avatar
   },
 
   props: {
@@ -993,7 +991,6 @@ tr.clickable {
   -ms-flex-align: center;
   align-items: center;
   display: flex;
-  -webkit-display: flex;
   border-bottom: solid 1px #DDDDDD;
 }
 
@@ -1113,8 +1110,6 @@ tr.clickable {
 }
 
 table tr td {
-  padding: 0 0 0 56px;
-  height: 48px;
   font-size: 13px;
   color: rgba(0, 0, 0, 0.87);
   border-bottom: solid 1px #DDDDDD;
@@ -1135,8 +1130,10 @@ table tr td a i {
   color: rgba(0, 0, 0, 0.54);
 }
 
-table tr {
+table tbody tr{
   font-size: 12px;
+  white-space: nowrap;
+  vertical-align: middle;
 }
 
 table th {
@@ -1145,8 +1142,7 @@ table th {
   color: #757575;
   cursor: pointer;
   white-space: nowrap;
-  height: 56px;
-  padding: 0 0 0 56px;
+  height: 30px;
   vertical-align: middle;
   outline: none !important;
   overflow: hidden;

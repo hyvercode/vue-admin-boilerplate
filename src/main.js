@@ -12,23 +12,18 @@ import retina from "retinajs";
 import VueRetina from "vue-retina";
 import Popper from "vue-popperjs";
 import "vue-popperjs/dist/vue-popper.css";
-import BootstrapVue, {BootstrapVueIcons,IconsPlugin} from "bootstrap-vue";
+import BootstrapVue, {BootstrapVueIcons, IconsPlugin} from "bootstrap-vue";
 import VueMoment from "vue-moment";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
 import VueSweetalert2 from "vue-sweetalert2";
+import 'sweetalert2/dist/sweetalert2.min.css';
 import Notify from "vue-notifyjs";
 import moment from "moment-timezone";
 import VueCookies from "vue-cookies";
 import VueJwtDecode from "vue-jwt-decode";
 import "material-design-icons-iconfont/dist/material-design-icons.css";
 import CKEditor from "@ckeditor/ckeditor5-vue2";
-import 'sweetalert2/dist/sweetalert2.min.css';
-import 'vue-loading-overlay/dist/vue-loading.css';
-import 'bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
-import './app.scss'
 import 'vuelendar/scss/vuelendar.scss';
 import VueGoogleCharts from 'vue-google-charts';
 import 'viewerjs/dist/viewer.css'
@@ -51,7 +46,7 @@ Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
 window.$ = $;
 Vue.use(Popper);
-Vue.use(VueRetina, { retina });
+Vue.use(VueRetina, {retina});
 Vue.config.productionTip = false;
 
 
@@ -59,7 +54,7 @@ Vue.use(
     Loading,
     {
         // props
-        color:"#074887",
+        color: "#074887",
         height: 70,
         zIndex: 999999999,
     },
@@ -73,6 +68,7 @@ Vue.use(VueMoment, {
 });
 
 moment.locale("id");
+
 function getLocation() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(showPosition);
