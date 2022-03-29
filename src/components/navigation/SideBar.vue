@@ -6,10 +6,11 @@
         <div class="d-flex align-items-center">
           <div class="avatar-lg me-4">
             <img alt="Image placeholder" v-if="user.avatar" :src="user.avatar" class="avatar-md rounded">
-            <avatar v-else :username="user.name" :size="size" class="me-2 mt-2" style="margin-left: 5px!important;"></avatar>
+            <avatar v-else :username="user.name" :size="size" class="me-2 mt-2"
+                    style="margin-left: 5px!important;"></avatar>
           </div>
           <div class="d-block">
-            <h2 class="h5 mb-3 text-white">{{user.name}}</h2>
+            <h2 class="h5 mb-3 text-white">{{ user.name }}</h2>
             <a href="/" class="btn btn-secondary btn-sm d-inline-flex align-items-center">
               <svg class="icon icon-xxs me-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                    xmlns="http://www.w3.org/2000/svg">
@@ -90,7 +91,7 @@
                   d="M5 4a3 3 0 00-3 3v6a3 3 0 003 3h10a3 3 0 003-3V7a3 3 0 00-3-3H5zm-1 9v-1h5v2H5a1 1 0 01-1-1zm7 1h4a1 1 0 001-1v-1h-5v2zm0-4h5V8h-5v2zM9 8H4v2h5V8z"
                   clip-rule="evenodd"></path></svg>
             </span>
-            <span class="sidebar-text">Tables</span>
+            <span class="sidebar-text">Masters</span>
           </span>
           <span class="link-arrow">
             <svg class="icon icon-sm" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path
@@ -103,8 +104,8 @@
                role="list" id="submenu-app" aria-expanded="false">
             <ul class="flex-column nav">
               <li class="nav-item @@if (context.page === 'tables') { active }">
-                <a class="nav-link" href="/">
-                  <span class="sidebar-text">Bootstrap Tables</span>
+                <a class="nav-link" :href="PAGES.USERS">
+                  <span class="sidebar-text">Users</span>
                 </a>
               </li>
             </ul>
@@ -250,16 +251,18 @@
 import avatar from 'vue-avatar'
 import VueCookies from "vue-cookies";
 import Util from "../../helpers/Util";
+import pages from "../../helpers/Pages";
 
 export default {
   name: "SideBar",
   components: {
-    avatar
+    avatar,
   },
   data() {
     return {
       user: null,
-      size:60
+      size: 60,
+      PAGES: pages
     }
   },
   computed: {

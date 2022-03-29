@@ -8,7 +8,7 @@
               <img src="~@/assets/images/icons/GrosirMotor.png" width="200"/>
               <br/>
             </div>
-            <form @submit.prevent="submit" class="mt-4">
+            <form @submit.prevent="submit" class="mt-5">
               <div class="form-group">
                 <label for="username" class="sr-only">Email</label>
                 <input
@@ -17,7 +17,7 @@
                     type="text"
                     name="username"
                     class="form-control form-control-sm"
-                    placeholder="Input NIK / RequestLogin ID"
+                    placeholder="Email"
                     required
                 />
               </div>
@@ -27,6 +27,7 @@
                     v-model="login.password"
                     id="password"
                     type="password"
+                    aria-placeholder="Password"
                     :disableStrength="true"
                 >
                 </VuePassword>
