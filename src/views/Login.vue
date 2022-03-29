@@ -10,10 +10,10 @@
             </div>
             <form @submit.prevent="submit" class="mt-4">
               <div class="form-group">
-                <label for="username" class="sr-only">Username</label>
+                <label for="username" class="sr-only">Email</label>
                 <input
                     id="username"
-                    v-model="login.username"
+                    v-model="login.email"
                     type="text"
                     name="username"
                     class="form-control form-control-sm"
@@ -125,7 +125,7 @@ export default {
             if (response.code === 200) {
               this.$router.push(Pages.DASHBOARD);
             } else {
-              this.$swal.fire("Error", "Invalid NIK or password!", "error");
+              this.$swal.fire("Error", "Invalid email or password!", "error");
             }
           },
           (error) => {
