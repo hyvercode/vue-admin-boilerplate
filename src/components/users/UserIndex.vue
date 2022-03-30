@@ -7,8 +7,23 @@
         :clickable="true"
         :sortable="true"
         :paginate="true"
+        :rows-per-page="rowPerPage"
+        :pagination="paginate"
         :create-button="true"
         create-button-title="Add New"
+        :printable="true"
+        :exportable="true"
+        :searchable="true"
+        :filter="true"
+        :refreshable="true"
+        :filter-date="true"
+        :filter-month="true"
+        :upload-button="true"
+        upload-button-title="Upload"
+        @onRefresh="doRefresh"
+        @onPreviousPage="doPrevPage"
+        @onNextPage="doNextPage"
+        @onChangeRowPage="doChangePerPage"
     >
       <th
           id="delete"
@@ -24,13 +39,13 @@
               class="btn btn-flat nopadding"
               @click="(e) => handleUpdate(props.row, e)"
           >
-            <i class="material-icons white-text">edit</i>
+            <i class="material-icons tbl-material-icons  white-text">edit</i>
           </button>
           <button
               class="btn btn-flat nopadding"
               @click="(e) => handleDelete(props.row, e)"
           >
-            <i class="material-icons white-text">delete</i>
+            <i class="material-icons tbl-material-icons white-text">delete</i>
           </button>
         </td>
       </template>
@@ -58,8 +73,8 @@ export default {
         {
           label: "avatar",
           field: "avatar",
-          name:"name",
-          size:30,
+          name: "name",
+          size: 30,
           numeric: false,
           html: false,
           image: true
@@ -101,7 +116,7 @@ export default {
         },
       ],
       records: [],
-      recordsPerPage: [5, 10, 50, 100, 500, 1000],
+      rowPerPage: [5, 10, 50, 100, 500, 1000],
       pagination: {
         perPage: 10,
         currentPage: 1,
@@ -115,6 +130,11 @@ export default {
         sort: 'DESC'
       },
     }
+  },
+  computed: {
+    paginate() {
+      return this.pagination;
+    },
   },
   mounted() {
     this.getRecordPaginate()
@@ -131,7 +151,11 @@ export default {
             lastPage: response.data.last_page,
             prevPageUrl: response.data.prev_page_url,
             nextPageUrl: response.data.next_page_url,
-            total: response.data.total
+            total: response.data.total,
+            searchBy: 'id',
+            searchParam: '',
+            sortBy: 'created_at',
+            sort: 'DESC'
           };
           loading.hide();
         } else {
@@ -139,6 +163,61 @@ export default {
           this.$swal.fire("Error!", response.message, "error");
         }
       });
+    },
+    doRefresh() {
+      this.getRecordPaginate();
+    },
+    doFilterSelected(pagination) {
+      this.searchBy = pagination[0];
+      if (this.searchBy === "All") {
+        this.searchBy = "id";
+        this.searchParam = "";
+        this.getPaginate(
+            this.dateFrom,
+            this.dateTo,
+            this.searchBy,
+            this.searchParam,
+            pagination[1],
+            pagination[2]
+        );
+      }
+    },
+    doFilterDate(selectedDate) {
+      this.dateFrom = selectedDate[0];
+      this.dateFrom = selectedDate[1];
+    },
+    doSearch(props) {
+      this.searchParam = props[0];
+      this.getPaginate(
+          this.dateFrom,
+          this.dateTo,
+          this.searchBy,
+          props[0],
+          props[1],
+          props[2]
+      );
+    },
+    //Prev Pagination
+    doPrevPage(props) {
+      this.pagination.perPage = props[0];
+      this.pagination.currentPage = props[1];
+      this.getRecordPaginate();
+    },
+    //Next Pagination
+    doNextPage(props) {
+      this.pagination.perPage = props[0];
+      this.pagination.currentPage = props[1];
+      this.getRecordPaginate();
+    },
+    //Search Record
+    handleSearch(limit) {
+      this.getPaginate(this.searchBy, this.searchParam, limit[0], limit[1]);
+    },
+
+    doChangePerPage(props) {
+      this.pagination.perPage = props[0];
+      this.pagination.currentPage = props[1];
+      this.getRecordPaginate();
     },
   }
 }

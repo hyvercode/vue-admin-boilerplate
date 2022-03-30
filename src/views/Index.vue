@@ -11,18 +11,16 @@
         </main>
       </div>
     </div>
-    <autor />
   </div>
 </template>
 
 <script>
 import SideBar from "../components/navigation/SideBar";
 import NavBar from "../components/navigation/NavBar";
-import Autor from "../components/navigation/Autor";
 
 export default {
   name: "Index",
-  components: {Autor, NavBar, SideBar},
+  components: {NavBar, SideBar},
   computed: {
     nav() {
       return this.$store.state.nav.toggle;

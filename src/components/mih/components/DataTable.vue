@@ -24,7 +24,7 @@
             <input type="date" v-model="month" @change="onChangeMonth" class="form-control form-control-sm">
       </div>
       </span>
-      <span v-if="filterDate">
+      <span v-if="filterDate" class="mx-2">
         <div class="input-group">
           <span class="input-group-text">Date</span>
           <input type="date" v-model="dateFrom" class="form-control form-control-sm">
@@ -33,7 +33,7 @@
                  class="form-control form-control-sm">
       </div>
       </span>
-      <span v-if="filter">
+      <span v-if="filter" class="mx-2">
         <div class="input-group">
           <span class="input-group-text"><i class="material-icons">filter_list</i></span>
           <select class="form-select form-select-sm" v-model="filterBy" v-on:change="onChangeFilter"
@@ -54,21 +54,21 @@
       <div class="actions">
         <a v-if="refreshable"
            href="javascript:undefined"
-           class="waves-effect btn-flat nopadding mt-1"
+           class="waves-effect btn-flat nopadding mt-2"
            @click.prevent="onRefresh"
         >
           <i class="material-icons">refresh</i>
         </a>
         <a v-if="printable"
            href="javascript:undefined"
-           class="waves-effect btn-flat nopadding mt-1"
+           class="waves-effect btn-flat nopadding mt-2"
            @click.prevent="onPrint"
         >
           <i class="material-icons">print</i>
         </a>
         <a v-if="exportable"
            href="javascript:undefined"
-           class="waves-effect btn-flat nopadding mt-1"
+           class="waves-effect btn-flat nopadding mt-2"
            @click.prevent="onExportExcel"
         >
           <i class="material-icons">description</i>
@@ -122,7 +122,7 @@
           </th>
           <slot name="thead-tr"/>
         </draggable>
-        </thead class="thead-light">
+        </thead>
         <draggable
             :list="rows"
             :move="onDragAble"
@@ -137,7 +137,7 @@
               <i class="material-icons">drag_indicator</i>
             </td>
             <td> {{
-                currentPerPage * (currentPage - 1) +
+                pagination.perPage * (pagination.currentPage - 1) +
                 index +
                 1
               }}
@@ -254,17 +254,17 @@
 
     <!--    Table Footer-->
     <div v-if="paginate" class="table-footer">
-      <div class="d-flex justify-content-start">
-        <label><span>{{ lang['total_record'] }} : {{ totalRecords }}</span></label>
+      <div class="d-flex justify-content-start mt-2">
+        <label><span>{{ lang['total_record'] }} : {{ pagination.total }} </span></label>
       </div>
       <div :class="{'datatable-length': true, 'rtl': lang.__is_rtl}">
-        <label>
-          <span>{{ lang['rows_per_page'] }}:</span>
+        <label class="mt-2 px-4">
+          <span> {{ lang['rows_per_page'] }}:</span>
           <select class="browser-default" v-model="limit" @change="onChangeRowPage">
             <option v-for="(option, index) in rowsPerPage"
                     :key="index"
                     :value="option"
-                    :selected="option === currentPerPage"
+                    :selected="option === pagination.currentPage"
             >
               {{ option === -1 ? lang['10'] : option }}
             </option>
@@ -273,13 +273,13 @@
       </div>
       <div :class="{'datatable-info': true, 'rtl': lang.__is_rtl}">
 				<span>
-          {{ currentPage }}
+          {{ pagination.currentPage }}
 				</span>
         <span>
 					{{ lang['out_of_pages'] }}
 				</span>
         <span>
-					{{ lastPage }}
+					{{ pagination.lastPage }}
 				</span>
       </div>
       <div>
@@ -310,6 +310,7 @@
 </template>
 
 <script>
+import Fuse from 'fuse.js';
 import locales from '../index';
 import Utils from "../../../helpers/Util";
 import jsPDF from 'jspdf'
@@ -404,52 +405,27 @@ export default {
       default: () => [],
     },
 
+    pagination: {
+      type: Object,
+      required: false,
+      default: {
+        perPage: 10,
+        currentPage: 1,
+        lastPage: 1,
+        nextPageUrl: null,
+        prevPageUrl: null,
+        total: 0,
+        searchBy: 'id',
+        searchParam: '',
+        sortBy: 'created_at',
+        sort: 'DESC'
+      }
+    },
+
     rowsPerPage: {
       type: Array,
       required: false,
       default: () => [5, 10, 50, 100, 500, 1000],
-    },
-
-    defaultPerPage: {
-      type: Number,
-      required: false,
-      default: 10,
-    },
-
-    currentPage: {
-      type: Number,
-      required: false,
-      default: 1,
-    },
-
-    lastPage: {
-      type: Number,
-      required: false,
-      default: 1,
-    },
-
-    currentPerPage: {
-      type: Number,
-      required: false,
-      default: 10,
-    },
-
-    prevPageUrl: {
-      type: String,
-      required: false,
-      default: null,
-    },
-
-    nextPageUrl: {
-      type: String,
-      required: false,
-      default: null,
-    },
-
-    totalRecords: {
-      type: Number,
-      required: false,
-      default: 0,
     },
 
     sortable: {
@@ -672,22 +648,22 @@ export default {
     },
 
     onNextPage() {
-      if (this.nextPageUrl) {
-        ++this.currentPage;
-        this.$emit("onNextPage", [this.limit, this.currentPage])
+      if (this.pagination.nextPageUrl) {
+        ++this.pagination.currentPage;
+        this.$emit("onNextPage", [this.limit, this.pagination.currentPage])
       }
     },
 
     onPreviousPage() {
-      if (this.prevPageUrl) {
-        this.currentPage--;
-        this.$emit("onPreviousPage", [this.limit, this.currentPage])
+      if (this.pagination.prevPageUrl) {
+        this.pagination.currentPage--;
+        this.$emit("onPreviousPage", [this.limit, this.pagination.currentPage])
       }
     },
 
     onChangeRowPage(e) {
-      this.currentPerPage = parseInt(e.target.value);
-      this.$emit("onChangeRowPage", [this.limit, this.currentPage])
+      this.pagination.currentPerPage = parseInt(e.target.value);
+      this.$emit("onChangeRowPage", [this.limit, this.pagination.currentPage])
     },
 
     isCurrency(value) {
@@ -723,7 +699,7 @@ export default {
       const html = this.renderTable().replace(/ /g, '%20');
 
       // eslint-disable-next-line eqeqeq
-      const documentPrefix = this.title != '' ? this.title.replace(/ /g, '-') : 'Sheet';
+      const documentPrefix = this.title !== '' ? this.title.replace(/ /g, '-') : 'Sheet';
       const d = new Date();
 
       const dummy = document.createElement('a');
@@ -751,14 +727,18 @@ export default {
       column.push('No');
       const data = [];
       for (let index in this.columns) {
-        column.push(this.columns[index].label);
+        if (!this.columns[index].hidden) {
+          column.push(this.columns[index].label);
+        }
       }
 
       for (let key in this.rows) {
         let rows = [];
         rows.push(parseInt(key) + 1);
         for (let index in this.columns) {
-          rows.push(this.collect(this.rows[key], this.columns[index].field));
+          if (!this.columns[index].hidden) {
+            rows.push(this.collect(this.rows[key], this.columns[index].field));
+          }
         }
         data.push(rows);
       }
@@ -775,46 +755,42 @@ export default {
 
     renderTable() {
       let table = '<table><thead>';
-
       table += '<tr>';
       for (let i = 0; i < this.columns.length; i++) {
         const column = this.columns[i];
-        table += '<th>';
-        table += column.label;
-        table += '</th>';
+        if (!column.hidden) {
+          table += '<th>';
+          table += column.label;
+          table += '</th>';
+        }
       }
       table += '</tr>';
-
       table += '</thead><tbody>';
-
       for (let i = 0; i < this.rows.length; i++) {
         const row = this.rows[i];
         table += '<tr>';
         for (let j = 0; j < this.columns.length; j++) {
           const column = this.columns[j];
-          table += '<td>';
-          table += this.collect(row, column.field);
-          table += '</td>';
+          if (!column.hidden) {
+            table += '<td>';
+            table += this.collect(row, column.field);
+            table += '</td>';
+          }
         }
         table += '</tr>';
       }
-
       table += '</tbody></table>';
-
       return table;
     },
 
     dig(obj, selector) {
       let result = obj;
       const splitter = selector.split('.');
-
       for (let i = 0; i < splitter.length; i++) {
-        if (result == undefined)
+        if (result === undefined)
           return undefined;
-
         result = result[splitter[i]];
       }
-
       return result;
     },
 
@@ -827,18 +803,12 @@ export default {
         return undefined;
     },
 
-    /* https://codebottle.io/s/31b70f5391
-     *
-     * @author: Luigi D'Amico (www.8bitplatoon.com)
-     */
     synchronizeCssStyles(src, destination, recursively) {
       destination.style.cssText = this.getComputedStyleCssText(src);
-
       if (recursively) {
         const vSrcElements = src.getElementsByTagName('*');
         const vDstElements = destination.getElementsByTagName('*');
-
-        for (var i = vSrcElements.length; i--;) {
+        for (let i = vSrcElements.length; i--;) {
           const vSrcElement = vSrcElements[i];
           const vDstElement = vDstElements[i];
           vDstElement.style.cssText = this.getComputedStyleCssText(vSrcElement);
@@ -846,23 +816,17 @@ export default {
       }
     },
 
-    // https://gist.github.com/johnkpaul/1754808
-    //
-    // Please delete Firefox.
     getComputedStyleCssText(element) {
       const cssObject = window.getComputedStyle(element);
       const cssAccumulator = [];
-
       if (cssObject.cssText !== '') {
         return cssObject.cssText;
       }
-
       for (let prop in cssObject) {
         if (typeof cssObject[prop] === 'string') {
           cssAccumulator.push(prop + ' : ' + cssObject[prop]);
         }
       }
-
       return cssAccumulator.join('; ');
     },
   },
@@ -871,10 +835,10 @@ export default {
     perPageOptions(newOptions) {
       // If defaultPerPage is provided and it's a valid option, set as current per page
       if (newOptions.indexOf(this.defaultPerPage) > -1) {
-        this.currentPerPage = parseInt(this.defaultPerPage);
+        this.pagination.currentPerPage = parseInt(this.defaultPerPage);
       } else {
         // Set current page to first value
-        this.currentPerPage = newOptions[0];
+        this.pagination.currentPerPage = newOptions[0];
       }
     },
 
@@ -886,7 +850,7 @@ export default {
     rows(newRows, oldRows) {
       // If the number of rows change, password the currentPage to 1
       if (newRows !== oldRows)
-        this.currentPage = 1;
+        this.pagination.currentPage = 1;
     },
   },
 
@@ -906,34 +870,25 @@ export default {
             }
             return x;
           };
-
           x = cook(x);
           y = cook(y);
-
           return (x < y ? -1 : (x > y ? 1 : 0)) * (this.sortType === 'desc' ? -1 : 1);
         });
-
       if (this.searching && !this.serverSearch && this.searchInput) {
         const searchConfig = {keys: this.columns.map(c => c.field)};
-
-        // Enable searching of numbers (non-string)
-        // Temporary fix of https://github.com/krisk/Fuse/issues/144
         searchConfig.getFn = (obj, path) => {
           const property = this.dig(obj, path);
           if (Number.isInteger(property))
             return JSON.stringify(property);
           return property;
         };
-
         if (this.exactSearch) {
           //return only exact matches
           searchConfig.threshold = 0,
               searchConfig.distance = 0;
         }
-
         computedRows = (new Fuse(computedRows, searchConfig)).search(this.searchInput);
       }
-
       return computedRows;
     },
     paginated() {
@@ -973,7 +928,6 @@ export default {
 </script>
 
 <style scoped>
-
 tr.clickable {
   cursor: pointer;
 }
@@ -1130,7 +1084,7 @@ table tr td a i {
   color: rgba(0, 0, 0, 0.54);
 }
 
-table tbody tr{
+table tbody tr {
   font-size: 12px;
   white-space: nowrap;
   vertical-align: middle;
