@@ -1,6 +1,6 @@
 <template>
  <div class="container">
-   <div class="fixed-bottom text-center text-gray-900">
+   <div class="fixed-bottom text-center text-white">
      <p>Copyright © 2022 mih. All Rights Reserved. </p>
    </div>
  </div>
