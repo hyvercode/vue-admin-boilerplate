@@ -53,6 +53,10 @@ body {
   min-height: calc(100vh - 0px);
 }
 
+.sidebar-text-title{
+  color: #F1F1F1 !important;
+  opacity: 60%;
+}
 /* Smartphones (portrait and landscape) ----------- */
 @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
   #layoutSidenav #layoutSidenav_nav {

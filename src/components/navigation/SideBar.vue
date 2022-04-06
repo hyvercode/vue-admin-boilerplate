@@ -36,180 +36,68 @@
           </a>
         </div>
       </div>
-      <!--      End Sidebar Header-->
-      <!--      Desktop Sidebar-->
+      <!--        Dynamic-->
       <ul class="nav flex-column pt-3 pt-md-2 mt-2">
-        <li class="nav-item @@if (context.page === 'overview') { active }">
-          <a href="/" class="nav-link">
-             <span class="sidebar-icon">
-              <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path
-                  d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+        <!--title-menu-->
+        <li v-for="(items,index) in menu" :key="index" v-if="items.slug === 'title'" class="nav-item px-3 mt-2">-->
+          <span class="sidebar-text-group sidebar-text-title">{{ items.name }}</span>
+        </li>
+        <!--end title-menu-->
+        <!--menu-menu-->
+        <li v-for="(items,index) in menu" :key="index" v-if="items.slug === 'link'" class="nav-item">
+          <router-link :to="items.href" class="nav-link">
+               <span class="sidebar-icon">
+              <i v-if="items.isIcon" class="material-icons">{{ items.icon }}</i>
+              <img v-else :src="items.icon" :alt="index"/>
             </span>
-            <span class="ms-1 sidebar-text">Home</span>
-          </a>
+            <span class="sidebar-text">{{ items.name }}</span>
+          </router-link>
         </li>
-        <li class="nav-item @@if (context.page === 'overview') { active }">
-          <a href="/" class="nav-link">
-          <span class="sidebar-icon">
-           <i class="material-icons">pie_chart</i>
-          </span>
-            <span class="sidebar-text">Dashboard</span>
-          </a>
-        </li>
-        <li class="nav-item @@if (context.page === 'transactions') { active }">
-          <a href="/" class="nav-link">
-          <span class="sidebar-icon">
-            <i class="material-icons">compare_arrows</i>
-          </span>
-            <span class="sidebar-text">Transactions</span>
-          </a>
-        </li>
-        <li class="nav-item">
-        <span
-            class="nav-link @@if (context.page !== 'datatables' && context.page !== 'tables') { collapsed } d-flex justify-content-between align-items-center"
-            data-bs-toggle="collapse" data-bs-target="#inventory-app">
-          <span>
-            <span class="sidebar-icon">
-            <i class="material-icons">inventory</i>
+        <!--end menu-menu-->
+        <!--dropdown-menu-->
+        <li v-for="(items,index) in menu" :key="index" v-if="items.slug ==='dropdown'" class="nav-item">
+            <span
+                class="nav-link collapsed d-flex justify-content-between align-items-center"
+                v-bind:href="'#collapse'+replaceSpace(items.name)"
+                data-bs-toggle="collapse" aria-expanded="false"
+            >
+              <span>
+                <span class="sidebar-icon">
+                   <i v-if="items.isIcon" class="material-icons">{{ items.icon }}</i>
+                  <img v-else :src="items.icon" :alt="index"/>
+                </span>
+                <span class="sidebar-text">{{ items.name }}</span>
+              </span>
+              <span class="link-arrow">
+                <svg
+                    class="icon icon-sm"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                      fill-rule="evenodd"
+                      d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                      clip-rule="evenodd"
+                  ></path>
+                </svg>
+              </span>
             </span>
-            <span class="sidebar-text">Inventory</span>
-          </span>
-          <span class="link-arrow">
-            <svg class="icon icon-sm" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path
-                fill-rule="evenodd"
-                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                clip-rule="evenodd"></path></svg>
-          </span>
-        </span>
-          <div class="multi-level collapse"
-               role="list" id="inventory-app" aria-expanded="false">
-            <ul class="flex-column nav">
-              <li class="nav-item @@if (context.page === 'tables') { active }">
-                <a class="nav-link" :href="PAGES.USERS">
-                  <span class="sidebar-text">Asset Receive</span>
-                </a>
-              </li>
-              <li class="nav-item @@if (context.page === 'tables') { active }">
-                <a class="nav-link" :href="PAGES.USERS">
-                  <span class="sidebar-text">Asset Grading</span>
-                </a>
+          <div
+              v-bind:id="'collapse'+replaceSpace(items.name)" class="multi-level collapse"
+              role="list"
+              aria-expanded="false"
+          >
+            <ul v-for="(element, index ) in items.elements" :key="index" class="flex-column nav">
+              <li class="nav-item">
+                <router-link class="nav-link" :to="element.href">
+                  <span class="sidebar-text">{{ element.name }}</span>
+                </router-link>
               </li>
             </ul>
           </div>
         </li>
-        <li class="nav-item">
-        <span
-            class="nav-link @@if (context.page !== 'datatables' && context.page !== 'tables') { collapsed } d-flex justify-content-between align-items-center"
-            data-bs-toggle="collapse" data-bs-target="#selling-app">
-          <span>
-            <span class="sidebar-icon">
-            <i class="material-icons">sell</i>
-            </span>
-            <span class="sidebar-text">Selling Apps</span>
-          </span>
-          <span class="link-arrow">
-            <svg class="icon icon-sm" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path
-                fill-rule="evenodd"
-                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                clip-rule="evenodd"></path></svg>
-          </span>
-        </span>
-          <div class="multi-level collapse"
-               role="list" id="selling-app" aria-expanded="false">
-            <ul class="flex-column nav">
-              <li class="nav-item @@if (context.page === 'tables') { active }">
-                <a class="nav-link" :href="PAGES.USERS">
-                  <span class="sidebar-text">Online Shop</span>
-                </a>
-              </li>
-              <li class="nav-item @@if (context.page === 'tables') { active }">
-                <a class="nav-link" :href="PAGES.USERS">
-                  <span class="sidebar-text">Online Bidding</span>
-                </a>
-              </li>
-            </ul>
-          </div>
-        </li>
-        <li class="nav-item">
-        <span
-            class="nav-link @@if (context.page !== 'datatables' && context.page !== 'tables') { collapsed } d-flex justify-content-between align-items-center"
-            data-bs-toggle="collapse" data-bs-target="#warehouse-app">
-          <span>
-            <span class="sidebar-icon">
-             <i class="material-icons">warehouse</i>
-            </span>
-            <span class="sidebar-text">Warehouse</span>
-          </span>
-          <span class="link-arrow">
-            <svg class="icon icon-sm" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path
-                fill-rule="evenodd"
-                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                clip-rule="evenodd"></path></svg>
-          </span>
-        </span>
-          <div class="multi-level collapse"
-               role="list" id="warehouse-app" aria-expanded="false">
-            <ul class="flex-column nav">
-              <li class="nav-item @@if (context.page === 'tables') { active }">
-                <a class="nav-link" :href="PAGES.USERS">
-                  <span class="sidebar-text">Regions</span>
-                </a>
-              </li>
-              <li class="nav-item @@if (context.page === 'tables') { active }">
-                <a class="nav-link" :href="PAGES.USERS">
-                  <span class="sidebar-text">Warehouse</span>
-                </a>
-              </li>
-            </ul>
-          </div>
-        </li>
-        <li class="nav-item">
-        <span
-            class="nav-link @@if (context.page !== 'datatables' && context.page !== 'tables') { collapsed } d-flex justify-content-between align-items-center"
-            data-bs-toggle="collapse" data-bs-target="#submenu-app">
-          <span>
-            <span class="sidebar-icon">
-              <i class="material-icons">ballot</i>
-            </span>
-            <span class="sidebar-text">Masters</span>
-          </span>
-          <span class="link-arrow">
-            <svg class="icon icon-sm" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path
-                fill-rule="evenodd"
-                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                clip-rule="evenodd"></path></svg>
-          </span>
-        </span>
-          <div class="multi-level collapse"
-               role="list" id="submenu-app" aria-expanded="false">
-            <ul class="flex-column nav">
-              <li class="nav-item @@if (context.page === 'tables') { active }">
-                <a class="nav-link" :href="PAGES.USERS">
-                  <span class="sidebar-text">Company</span>
-                </a>
-              </li>
-              <li class="nav-item @@if (context.page === 'tables') { active }">
-                <a class="nav-link" :href="PAGES.USERS">
-                  <span class="sidebar-text">Branch</span>
-                </a>
-              </li>
-              <li class="nav-item @@if (context.page === 'tables') { active }">
-                <a class="nav-link" :href="PAGES.USERS">
-                  <span class="sidebar-text">Users</span>
-                </a>
-              </li>
-            </ul>
-          </div>
-        </li>
-        <li role="separator" class="dropdown-divider mt-4 mb-3 border-gray-900"></li>
-        <li class="nav-item @@if (context.page === 'settings') { active }">
-          <a href="/" class="nav-link">
-          <span class="sidebar-icon">
-           <i class="material-icons">settings</i>
-          </span>
-            <span class="sidebar-text">Settings</span>
-          </a>
-        </li>
+        <!--dropdown-menu-->
       </ul>
     </div>
   </nav>
@@ -239,12 +127,20 @@ export default {
     },
     toggle() {
       return this.$store.state.nav.toggle;
-    }
+    },
+    menu() {
+      return this.$store.state.menu.menus;
+    },
   },
   created() {
     this.user = Util.jwtDecode(
         JSON.parse(JSON.stringify(VueCookies.get("__PMS__SSESSIONID__"))).access_token
     );
   },
+  methods: {
+    replaceSpace(value) {
+      return value ? value.replaceAll(" ", "_") : "";
+    },
+  }
 };
 </script>
