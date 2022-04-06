@@ -33,6 +33,7 @@
                @onNextPage="doNextPage"
                @onChangeRowPage="doChangePerPage"
                @onCheckToggle="doCheckToggle"
+               @onSelectAll="doSelectAll"
                @onSelect="doSelect"
     >
       <th
@@ -263,7 +264,7 @@ export default {
      * @param props
      */
     doSelect(props){
-      console.log(props)
+      // console.log(props)
     }
   }
 }

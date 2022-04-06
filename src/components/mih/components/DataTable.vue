@@ -105,7 +105,7 @@
           <!--        CheckBox-->
           <th v-if="commandCheckbox" style="width: 2px!important;">
             <input class="form-check-input" type="checkbox" id="all" v-model="selectAll"
-                   @change="onSelectAll">
+                   @change="onSelectAll"><span class="m-2">All</span>
           </th>
           <!--        Rows-->
           <th v-for="(column, index) in columns"
@@ -143,8 +143,9 @@
               }}
             </td>
             <td v-if="commandCheckbox">
-              <input class="form-check-input" type="checkbox" :value="row" v-model="selected" @change="onSelect"
-                     :key="index" :id="index">
+              <input v-if="row" class="form-check-input" type="checkbox" :value="row"
+                     v-model="selected" @change="onSelect(row)"
+                     :key="index" id="checkbox">
             </td>
             <td v-for="(column, columnIndex) in columns"
                 :key="columnIndex"
@@ -670,7 +671,7 @@ export default {
           this.selected.push(this.rows[i]);
         }
       }
-      this.$emit("onSelect", this.selected)
+      this.$emit("onSelectAll", this.selected)
     },
     /**
      * Checkbox
