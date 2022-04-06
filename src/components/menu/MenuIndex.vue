@@ -118,24 +118,16 @@ export default {
           html: false,
           hidden: false,
         },
-        // {
-        //   label: "status",
-        //   field: "active",
-        //   numeric: false,
-        //   html: false,
-        //   hidden: false,
-        //   boolean: true,
-        //   booleanDesc: [
-        //     "Active", "NonActive"
-        //   ]
-        // },
         {
           label: "status",
           field: "active",
           numeric: false,
           html: false,
           hidden: false,
-          buttonToggle: true
+          buttonToggle: true,
+          buttonToggleDesc: [
+              "Active", "Inactive"
+            ]
         },
       ],
       records: [],

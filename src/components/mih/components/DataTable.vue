@@ -192,7 +192,7 @@
                 }}</span>
               </div>
 
-              <!--        toogle button-->
+              <!--        Toogle button-->
               <div v-if="column.buttonToggle && !column.hidden"
                    :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none !important;':''}">
                 <div class="form-check form-switch">
@@ -201,7 +201,9 @@
                          @click="onCheckToggle(row)"
                          :key="index"
                   >
-                  <label class="form-check-label" for="user-notification-2"></label>
+                  <small>{{
+                      collect(row, column.field) ? column.buttonToggleDesc[0] : column.buttonToggleDesc[1]
+                    }}</small>
                 </div>
               </div>
 
