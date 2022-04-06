@@ -104,8 +104,8 @@
           <th style="width: 5px!important;">No</th>
           <!--        CheckBox-->
           <th v-if="commandCheckbox" style="width: 2px!important;">
-            <input class="form-check-input" type="checkbox" id="flexCheckAll" v-model="selectAll"
-                   @click.prevent="onSelectAll">
+            <input class="form-check-input" type="checkbox" id="all" v-model="selectAll"
+                   @change="onSelectAll">
           </th>
           <!--        Rows-->
           <th v-for="(column, index) in columns"
@@ -143,7 +143,8 @@
               }}
             </td>
             <td v-if="commandCheckbox">
-              <input class="form-check-input" type="checkbox" :value="row" v-model="selected" @change="onSelect">
+              <input class="form-check-input" type="checkbox" :value="row" v-model="selected" @change="onSelect"
+                     :key="index" :id="index">
             </td>
             <td v-for="(column, columnIndex) in columns"
                 :key="columnIndex"
@@ -629,48 +630,84 @@ export default {
   }),
 
   methods: {
-    onCheckToggle(props) {
-      this.$emit("onCheckToggle", props)
-    },
+    /**
+     * On View Table Mode
+     */
     onView(mode) {
       this.list = mode === 'list';
     },
+
+    /**
+     * On Dragable
+     */
     onDragAble() {
       this.$emit("onDragAble", this.draggingRows)
     },
 
+    /**
+     * On Create
+     */
     onCreate() {
       this.$emit("onCreate")
     },
 
+    /**
+     * On Create Toggle Button
+     */
+    onCheckToggle(props) {
+      this.$emit("onCheckToggle", props)
+    },
+
+    /**
+     * Checkbox All
+     */
     onSelectAll() {
       this.selected = [];
-      if (!this.selectAll) {
+      if (this.selectAll) {
         for (let i in this.rows) {
           this.selected.push(this.rows[i]);
         }
       }
       this.$emit("onSelect", this.selected)
     },
+    /**
+     * Checkbox
+     */
     onSelect() {
       this.$emit("onSelect", this.selected)
     },
+
+    /**
+     * On Upload
+     */
     onUpload() {
       this.$emit("onUpload")
     },
 
+    /**
+     * On Refresh
+     */
     onRefresh() {
       this.$emit("onRefresh", [this.filterBy, this.limit, this.currentPage])
     },
 
+    /**
+     * On Change Filter By
+     */
     onChangeFilter() {
       this.$emit("onChangeFilter", [this.filterBy, this.limit, this.currentPage])
     },
 
+    /**
+     * On Chane Month
+     */
     onChangeMonth() {
       this.$emit("onChangeMonth", this.month)
     },
 
+    /**
+     * On Change Date
+     */
     onChangeDate() {
       if (this.dateFrom < this.dateTo) {
         this.$emit("onChangeDate", [this.dateFrom, this.dateTo])
@@ -679,6 +716,9 @@ export default {
       }
     },
 
+    /**
+     * On Change Search
+     */
     onChangeSearch() {
       if (this.dateFrom < this.dateTo) {
         this.$emit("onChangeSearch", [this.searchInput, this.limit, this.currentPage])
@@ -687,6 +727,9 @@ export default {
       }
     },
 
+    /**
+     * On Enter Search
+     */
     onEnterSearch() {
       if (this.dateFrom < this.dateTo) {
         this.$emit("onEnterSearch", [this.searchInput, this.limit, this.currentPage])
@@ -695,6 +738,9 @@ export default {
       }
     },
 
+    /**
+     * On Next Page
+     */
     onNextPage() {
       if (this.nextPageUrl) {
         ++this.currentPage;
@@ -702,6 +748,9 @@ export default {
       }
     },
 
+    /**
+     * On Prev Page
+     */
     onPreviousPage() {
       if (this.prevPageUrl) {
         this.currentPage--;
@@ -709,15 +758,24 @@ export default {
       }
     },
 
+    /**
+     * On Change Perpage
+     */
     onChangeRowPage(e) {
       this.currentPerPage = parseInt(e.target.value);
       this.$emit("onChangeRowPage", [this.limit, this.currentPage])
     },
 
+    /**
+     * On Change Currency
+     */
     isCurrency(value) {
       return Utils.currencyRp(value);
     },
 
+    /**
+     * Sorting
+     */
     sort(index) {
       if (!this.sortable)
         return;
@@ -729,19 +787,22 @@ export default {
       }
     },
 
+    /**
+     * On Row Click
+     */
     onRowClick(row) {
       if (!this.clickable) {
         return;
       }
-
       if (getSelection().toString()) {
-        // Return if some text is selected instead of firing the row-click event.
         return;
       }
-
       this.$emit('onRowClick', row);
     },
 
+    /**
+     * On Export to excel
+     */
     onExportExcel() {
       const mimeType = 'data:application/vnd.ms-excel';
       const html = this.renderTable().replace(/ /g, '%20');
@@ -760,6 +821,9 @@ export default {
       dummy.click();
     },
 
+    /**
+     * On Print to PDF
+     */
     onPrint() {
       const pdf = new jsPDF({
         orientation: this.pdfOrientation,
@@ -851,10 +915,6 @@ export default {
         return undefined;
     },
 
-    /* https://codebottle.io/s/31b70f5391
-     *
-     * @author: Luigi D'Amico (www.8bitplatoon.com)
-     */
     synchronizeCssStyles(src, destination, recursively) {
       destination.style.cssText = this.getComputedStyleCssText(src);
 
@@ -870,9 +930,6 @@ export default {
       }
     },
 
-    // https://gist.github.com/johnkpaul/1754808
-    //
-    // Please delete Firefox.
     getComputedStyleCssText(element) {
       const cssObject = window.getComputedStyle(element);
       const cssAccumulator = [];
@@ -941,7 +998,6 @@ export default {
         const searchConfig = {keys: this.columns.map(c => c.field)};
 
         // Enable searching of numbers (non-string)
-        // Temporary fix of https://github.com/krisk/Fuse/issues/144
         searchConfig.getFn = (obj, path) => {
           const property = this.dig(obj, path);
           if (Number.isInteger(property))

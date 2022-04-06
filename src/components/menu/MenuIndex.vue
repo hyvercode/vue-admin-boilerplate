@@ -15,6 +15,7 @@
                :default-per-page="paginate.perPage"
                :next-page-url="paginate.nextPageUrl"
                :prev-page-url="paginate.prevPageUrl"
+               :command-checkbox="true"
                :create-button="true"
                create-button-title="Add New"
                :printable="true"
@@ -32,6 +33,7 @@
                @onNextPage="doNextPage"
                @onChangeRowPage="doChangePerPage"
                @onCheckToggle="doCheckToggle"
+               @onSelect="doSelect"
     >
       <th
           id="delete"
@@ -256,6 +258,20 @@ export default {
           this.$swal.fire("Error!", response.message, "error");
         }
       });
+    },
+    /**
+     * Select Records
+     * @param props
+     */
+    doSelectAll(props){
+      console.log(props)
+    },
+    /**
+     * Select Record
+     * @param props
+     */
+    doSelect(props){
+      console.log(props)
     }
   }
 }
