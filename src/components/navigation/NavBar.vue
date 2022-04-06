@@ -4,7 +4,7 @@
       <div class="d-flex justify-content-between w-100" style="margin-top: -10px;" id="navbarSupportedContent">
         <div class="d-flex align-items-center">
           <router-link class="navbar-brand ml-2" to="/dashboard">
-            <em><img src="~@/assets/images/icons/GrosirMotor.png"></em>
+            <em><img src="~@/assets/images/icons/brand.png"></em>
           </router-link>
           <!-- Sidebar Toggle-->
           <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0 " id="sidebarToggle"
@@ -147,7 +147,7 @@
     <!--    Mobile Nav-->
     <nav class="navbar navbar-dark navbar-theme-primary px-4 col-12 d-lg-none">
       <a class="navbar-brand me-lg-5" href="@@path/index.html">
-        <img class="navbar-brand-dark" src="~@/assets/images/icons/GrosirMotor.png" alt="logo"/>
+        <img class="navbar-brand-dark" src="~@/assets/images/icons/brand.png" alt="logo"/>
       </a>
       <div class="d-flex align-items-center">
         <button class="navbar-toggler d-lg-none collapsed" type="button" data-bs-toggle="collapse"

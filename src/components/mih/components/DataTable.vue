@@ -137,7 +137,7 @@
               <i class="material-icons">drag_indicator</i>
             </td>
             <td> {{
-                pagination.perPage * (pagination.currentPage - 1) +
+                currentPerPage * (currentPage - 1) +
                 index +
                 1
               }}
@@ -187,9 +187,9 @@
             </td>
             <slot name="tbody-tr" :row="row"/>
           </tr>
-          <template v-if="rows.length === 0">
-            <p class="text-center">No Records</p>
-          </template>
+          <tr v-if="rows.length === 0">
+            <td class="text-center" :colspan="columns.length+1">Oops..! No records found</td>
+          </tr>
         </draggable>
       </table>
       <!--    End Table Content-->
@@ -255,7 +255,7 @@
     <!--    Table Footer-->
     <div v-if="paginate" class="table-footer">
       <div class="d-flex justify-content-start mt-2">
-        <label><span>{{ lang['total_record'] }} : {{ pagination.total }} </span></label>
+        <label><span>{{ lang['total_record'] }} : {{ totalRecords }} </span></label>
       </div>
       <div :class="{'datatable-length': true, 'rtl': lang.__is_rtl}">
         <label class="mt-2 px-4">
@@ -264,7 +264,7 @@
             <option v-for="(option, index) in rowsPerPage"
                     :key="index"
                     :value="option"
-                    :selected="option === pagination.currentPage"
+                    :selected="option === currentPerPage"
             >
               {{ option === -1 ? lang['10'] : option }}
             </option>
@@ -273,13 +273,13 @@
       </div>
       <div :class="{'datatable-info': true, 'rtl': lang.__is_rtl}">
 				<span>
-          {{ pagination.currentPage }}
+          {{ currentPage }}
 				</span>
         <span>
 					{{ lang['out_of_pages'] }}
 				</span>
         <span>
-					{{ pagination.lastPage }}
+					{{ lastPage }}
 				</span>
       </div>
       <div>
@@ -405,27 +405,52 @@ export default {
       default: () => [],
     },
 
-    pagination: {
-      type: Object,
-      required: false,
-      default: {
-        perPage: 10,
-        currentPage: 1,
-        lastPage: 1,
-        nextPageUrl: null,
-        prevPageUrl: null,
-        total: 0,
-        searchBy: 'id',
-        searchParam: '',
-        sortBy: 'created_at',
-        sort: 'DESC'
-      }
-    },
-
     rowsPerPage: {
       type: Array,
       required: false,
-      default: () => [5, 10, 50, 100, 500, 1000],
+      default: () => [5, 10, 50, 100, 500, 1000, 5000, 10000],
+    },
+
+    defaultPerPage: {
+      type: Number,
+      required: false,
+      default: 10,
+    },
+
+    currentPage: {
+      type: Number,
+      required: false,
+      default: 1,
+    },
+
+    lastPage: {
+      type: Number,
+      required: false,
+      default: 1,
+    },
+
+    currentPerPage: {
+      type: Number,
+      required: false,
+      default: 10,
+    },
+
+    prevPageUrl: {
+      type: String,
+      required: false,
+      default: null,
+    },
+
+    nextPageUrl: {
+      type: String,
+      required: false,
+      default: null,
+    },
+
+    totalRecords: {
+      type: Number,
+      required: false,
+      default: 0,
     },
 
     sortable: {
@@ -648,22 +673,22 @@ export default {
     },
 
     onNextPage() {
-      if (this.pagination.nextPageUrl) {
-        ++this.pagination.currentPage;
-        this.$emit("onNextPage", [this.limit, this.pagination.currentPage])
+      if (this.nextPageUrl) {
+        ++this.currentPage;
+        this.$emit("onNextPage", [this.limit, this.currentPage])
       }
     },
 
     onPreviousPage() {
-      if (this.pagination.prevPageUrl) {
-        this.pagination.currentPage--;
-        this.$emit("onPreviousPage", [this.limit, this.pagination.currentPage])
+      if (this.prevPageUrl) {
+        this.currentPage--;
+        this.$emit("onPreviousPage", [this.limit, this.currentPage])
       }
     },
 
     onChangeRowPage(e) {
-      this.pagination.currentPerPage = parseInt(e.target.value);
-      this.$emit("onChangeRowPage", [this.limit, this.pagination.currentPage])
+      this.currentPerPage = parseInt(e.target.value);
+      this.$emit("onChangeRowPage", [this.limit, this.currentPage])
     },
 
     isCurrency(value) {
@@ -699,7 +724,7 @@ export default {
       const html = this.renderTable().replace(/ /g, '%20');
 
       // eslint-disable-next-line eqeqeq
-      const documentPrefix = this.title !== '' ? this.title.replace(/ /g, '-') : 'Sheet';
+      const documentPrefix = this.title != '' ? this.title.replace(/ /g, '-') : 'Sheet';
       const d = new Date();
 
       const dummy = document.createElement('a');
@@ -727,18 +752,14 @@ export default {
       column.push('No');
       const data = [];
       for (let index in this.columns) {
-        if (!this.columns[index].hidden) {
-          column.push(this.columns[index].label);
-        }
+        column.push(this.columns[index].label);
       }
 
       for (let key in this.rows) {
         let rows = [];
         rows.push(parseInt(key) + 1);
         for (let index in this.columns) {
-          if (!this.columns[index].hidden) {
-            rows.push(this.collect(this.rows[key], this.columns[index].field));
-          }
+          rows.push(this.collect(this.rows[key], this.columns[index].field));
         }
         data.push(rows);
       }
@@ -755,42 +776,46 @@ export default {
 
     renderTable() {
       let table = '<table><thead>';
+
       table += '<tr>';
       for (let i = 0; i < this.columns.length; i++) {
         const column = this.columns[i];
-        if (!column.hidden) {
-          table += '<th>';
-          table += column.label;
-          table += '</th>';
-        }
+        table += '<th>';
+        table += column.label;
+        table += '</th>';
       }
       table += '</tr>';
+
       table += '</thead><tbody>';
+
       for (let i = 0; i < this.rows.length; i++) {
         const row = this.rows[i];
         table += '<tr>';
         for (let j = 0; j < this.columns.length; j++) {
           const column = this.columns[j];
-          if (!column.hidden) {
-            table += '<td>';
-            table += this.collect(row, column.field);
-            table += '</td>';
-          }
+          table += '<td>';
+          table += this.collect(row, column.field);
+          table += '</td>';
         }
         table += '</tr>';
       }
+
       table += '</tbody></table>';
+
       return table;
     },
 
     dig(obj, selector) {
       let result = obj;
       const splitter = selector.split('.');
+
       for (let i = 0; i < splitter.length; i++) {
-        if (result === undefined)
+        if (result == undefined)
           return undefined;
+
         result = result[splitter[i]];
       }
+
       return result;
     },
 
@@ -803,12 +828,18 @@ export default {
         return undefined;
     },
 
+    /* https://codebottle.io/s/31b70f5391
+     *
+     * @author: Luigi D'Amico (www.8bitplatoon.com)
+     */
     synchronizeCssStyles(src, destination, recursively) {
       destination.style.cssText = this.getComputedStyleCssText(src);
+
       if (recursively) {
         const vSrcElements = src.getElementsByTagName('*');
         const vDstElements = destination.getElementsByTagName('*');
-        for (let i = vSrcElements.length; i--;) {
+
+        for (var i = vSrcElements.length; i--;) {
           const vSrcElement = vSrcElements[i];
           const vDstElement = vDstElements[i];
           vDstElement.style.cssText = this.getComputedStyleCssText(vSrcElement);
@@ -816,17 +847,23 @@ export default {
       }
     },
 
+    // https://gist.github.com/johnkpaul/1754808
+    //
+    // Please delete Firefox.
     getComputedStyleCssText(element) {
       const cssObject = window.getComputedStyle(element);
       const cssAccumulator = [];
+
       if (cssObject.cssText !== '') {
         return cssObject.cssText;
       }
+
       for (let prop in cssObject) {
         if (typeof cssObject[prop] === 'string') {
           cssAccumulator.push(prop + ' : ' + cssObject[prop]);
         }
       }
+
       return cssAccumulator.join('; ');
     },
   },
@@ -835,10 +872,10 @@ export default {
     perPageOptions(newOptions) {
       // If defaultPerPage is provided and it's a valid option, set as current per page
       if (newOptions.indexOf(this.defaultPerPage) > -1) {
-        this.pagination.currentPerPage = parseInt(this.defaultPerPage);
+        this.currentPerPage = parseInt(this.defaultPerPage);
       } else {
         // Set current page to first value
-        this.pagination.currentPerPage = newOptions[0];
+        this.currentPerPage = newOptions[0];
       }
     },
 
@@ -850,7 +887,7 @@ export default {
     rows(newRows, oldRows) {
       // If the number of rows change, password the currentPage to 1
       if (newRows !== oldRows)
-        this.pagination.currentPage = 1;
+        this.currentPage = 1;
     },
   },
 
@@ -870,25 +907,34 @@ export default {
             }
             return x;
           };
+
           x = cook(x);
           y = cook(y);
+
           return (x < y ? -1 : (x > y ? 1 : 0)) * (this.sortType === 'desc' ? -1 : 1);
         });
+
       if (this.searching && !this.serverSearch && this.searchInput) {
         const searchConfig = {keys: this.columns.map(c => c.field)};
+
+        // Enable searching of numbers (non-string)
+        // Temporary fix of https://github.com/krisk/Fuse/issues/144
         searchConfig.getFn = (obj, path) => {
           const property = this.dig(obj, path);
           if (Number.isInteger(property))
             return JSON.stringify(property);
           return property;
         };
+
         if (this.exactSearch) {
           //return only exact matches
           searchConfig.threshold = 0,
               searchConfig.distance = 0;
         }
+
         computedRows = (new Fuse(computedRows, searchConfig)).search(this.searchInput);
       }
+
       return computedRows;
     },
     paginated() {

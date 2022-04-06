@@ -5,7 +5,7 @@
         <div class="card login-card">
           <div class="card-body">
             <div class="text-center">
-              <img src="~@/assets/images/icons/GrosirMotor.png" width="200"/>
+              <img src="~@/assets/images/icons/brand.png" width="200"/>
               <br/>
             </div>
             <form @submit.prevent="submit" class="mt-5">

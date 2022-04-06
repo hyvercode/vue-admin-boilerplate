@@ -1,29 +1,36 @@
 <template>
   <div class="container-fluid">
-    <DataTable
-        title="Users"
-        :columns="columns"
-        :rows="records"
-        :clickable="true"
-        :sortable="true"
-        :paginate="true"
-        :rows-per-page="rowPerPage"
-        :pagination="paginate"
-        :create-button="true"
-        create-button-title="Add New"
-        :printable="true"
-        :exportable="true"
-        :searchable="true"
-        :filter="true"
-        :refreshable="true"
-        :filter-date="true"
-        :filter-month="true"
-        :upload-button="true"
-        upload-button-title="Upload"
-        @onRefresh="doRefresh"
-        @onPreviousPage="doPrevPage"
-        @onNextPage="doNextPage"
-        @onChangeRowPage="doChangePerPage"
+    <DataTable v-if="pagination" :key="pagination.currentPage"
+               title="Users"
+               :columns="columns"
+               :rows="records"
+               :clickable="true"
+               :sortable="true"
+               :paginate="true"
+               :pagination="paginate"
+               :rows-per-page="paginate.recordsPerPage"
+               :current-page="paginate.currentPage"
+               :last-page="paginate.lastPage"
+               :total-records="paginate.total"
+               :default-per-page="paginate.perPage"
+               :next-page-url="paginate.nextPageUrl"
+               :prev-page-url="paginate.prevPageUrl"
+               :create-button="true"
+               create-button-title="Add New"
+               :printable="true"
+               :exportable="true"
+               :searchable="true"
+               :filter="true"
+               :refreshable="true"
+               :filter-date="true"
+               :filter-month="true"
+               :upload-button="true"
+               upload-button-title="Upload"
+               @onEnterSearch="doSearch"
+               @onRefresh="doRefresh"
+               @onPreviousPage="doPrevPage"
+               @onNextPage="doNextPage"
+               @onChangeRowPage="doChangePerPage"
     >
       <th
           id="delete"
@@ -116,33 +123,43 @@ export default {
         },
       ],
       records: [],
-      rowPerPage: [5, 10, 50, 100, 500, 1000],
+      searchBy: 'id',
+      searchParam: '',
+      sortBy: 'created_at',
+      sort: 'DESC',
       pagination: {
+        recordsPerPage: [5, 10, 50, 100, 500, 1000, 5000, 10000],
         perPage: 10,
         currentPage: 1,
         lastPage: 1,
         nextPageUrl: "",
         prevPageUrl: "",
         total: 0,
-        searchBy: 'id',
-        searchParam: '',
-        sortBy: 'created_at',
-        sort: 'DESC'
       },
     }
   },
   computed: {
     paginate() {
       return this.pagination;
-    },
+    }
   },
   mounted() {
-    this.getRecordPaginate()
+    this.getRecordPaginate(this.dateFrom, this.dateTo, this.searchBy, this.searchParam, this.pagination.perPage, this.pagination.currentPage, this.sortBy, this.sort)
   },
   methods: {
-    getRecordPaginate() {
+    getRecordPaginate(dateFrom, dateTo, searchBy, searchParam, perPage, currentPage, sortBy, sort) {
       let loading = this.$loading.show();
-      UserService.getPaginate(this.pagination).then((response) => {
+      let payload = {
+        dateFrom: dateFrom,
+        dateTo: dateTo,
+        perPage: perPage,
+        currentPage: currentPage,
+        searchBy: searchBy,
+        searchParam: searchParam,
+        sortBy: sortBy,
+        sort: sort,
+      }
+      UserService.getPaginate(payload).then((response) => {
         if (response.code === 200) {
           this.records = response.data.data;
           this.pagination = {
@@ -151,11 +168,7 @@ export default {
             lastPage: response.data.last_page,
             prevPageUrl: response.data.prev_page_url,
             nextPageUrl: response.data.next_page_url,
-            total: response.data.total,
-            searchBy: 'id',
-            searchParam: '',
-            sortBy: 'created_at',
-            sort: 'DESC'
+            total: response.data.total
           };
           loading.hide();
         } else {
@@ -164,15 +177,17 @@ export default {
         }
       });
     },
+
     doRefresh() {
-      this.getRecordPaginate();
+      this.getRecordPaginate(this.dateFrom, this.dateTo, this.searchBy, this.searchParam, this.pagination.perPage, this.pagination.currentPage, this.sortBy, this.sort)
     },
+
     doFilterSelected(pagination) {
       this.searchBy = pagination[0];
       if (this.searchBy === "All") {
         this.searchBy = "id";
         this.searchParam = "";
-        this.getPaginate(
+        this.getRecordPaginate(
             this.dateFrom,
             this.dateTo,
             this.searchBy,
@@ -185,44 +200,30 @@ export default {
     doFilterDate(selectedDate) {
       this.dateFrom = selectedDate[0];
       this.dateFrom = selectedDate[1];
+      this.getRecordPaginate(this.dateFrom, this.dateTo, this.searchBy, this.searchParam, this.pagination.perPage, this.pagination.currentPage, this.sortBy, this.sort);
     },
+
     doSearch(props) {
       this.searchParam = props[0];
-      this.getPaginate(
-          this.dateFrom,
-          this.dateTo,
-          this.searchBy,
-          props[0],
-          props[1],
-          props[2]
-      );
+      this.getRecordPaginate(this.dateFrom, this.dateTo, this.searchBy, this.searchParam, props[1], props[2], this.sortBy, this.sort);
     },
     //Prev Pagination
     doPrevPage(props) {
-      this.pagination.perPage = props[0];
-      this.pagination.currentPage = props[1];
-      this.getRecordPaginate();
+      this.getRecordPaginate(this.dateFrom, this.dateTo, this.searchBy, this.searchParam, props[0], props[1], this.sortBy, this.sort);
     },
     //Next Pagination
     doNextPage(props) {
-      this.pagination.perPage = props[0];
-      this.pagination.currentPage = props[1];
-      this.getRecordPaginate();
+      this.getRecordPaginate(this.dateFrom, this.dateTo, this.searchBy, this.searchParam, props[0], props[1], this.sortBy, this.sort);
     },
+
     //Search Record
     handleSearch(limit) {
-      this.getPaginate(this.searchBy, this.searchParam, limit[0], limit[1]);
+      this.getRecordPaginate(this.dateFrom, this.dateTo, this.searchBy, this.searchParam, props[0], props[1], this.sortBy, this.sort);
     },
 
     doChangePerPage(props) {
-      this.pagination.perPage = props[0];
-      this.pagination.currentPage = props[1];
-      this.getRecordPaginate();
+      this.getRecordPaginate(this.dateFrom, this.dateTo, this.searchBy, this.searchParam, props[0], props[1], this.sortBy, this.sort);
     },
   }
 }
 </script>
-
-<style scoped>
-
-</style>
