@@ -149,27 +149,32 @@
                 :key="columnIndex"
                 :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none':''}"
             >
+
               <!--            Normal Content-->
               <span
                   v-if="!column.html && !column.currency && !column.image && column.field !=='active' && !column.badge && !column.hidden"
                   :style="{width: column.width ? 'auto':column.width,display:column.hidden?'none !important;':''}">
               {{ collect(row, column.field) }} <span v-if="column.concat"> {{ collect(row, column.concatWith) }}</span>
             </span>
+
               <!--            Boolean Content-->
               <div
-                  v-if="!column.html && !column.currency && column.field ==='active' && !column.badge && !column.hidden"
+                  v-if="column.boolean && !column.html && !column.currency && column.field ==='active' && !column.badge && !column.hidden"
                   :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none !important;':''}">
                           <span :class="collect(row, column.field) ? 'badge bg-success' : 'badge bg-secondary'">{{
-                              collect(row, column.field) ? 'Active' : 'Non Active'
+                              collect(row, column.field) ? column.booleanDesc[0] : column.booleanDesc[1]
                             }}</span>
               </div>
+
               <!--            Currency Content-->
               <div v-if="!column.html && column.currency"
                    v-html="isCurrency(collect(row, column.field)) && !column.badge && !column.hidden"
                    :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none !important;':''}"/>
+
               <!--            HTML Content-->
               <div v-if="column.html && !column.hidden" v-html="collect(row, column.field)"
                    :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none !important;':''}"/>
+
               <!--              Image Content-->
               <div v-if="column.image && !column.hidden"
                    :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none !important;':''}">
@@ -177,6 +182,7 @@
                      :alt="index"/>
                 <avatar v-else :username="collect(row, column.name)" :size="column.size"></avatar>
               </div>
+
               <!--            Badge Content-->
               <div v-if="column.badge && !column.hidden"
                    :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none !important;':''}">
@@ -184,6 +190,20 @@
                   collect(row, column.field)
                 }}</span>
               </div>
+
+              <!--        toogle button-->
+              <div v-if="column.buttonToggle && !column.hidden"
+                   :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none !important;':''}">
+                <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" id="user-notification-2"
+                         :checked="collect(row, column.field)"
+                         @click="onCheckToggle(row)"
+                         :key="index"
+                  >
+                  <label class="form-check-label" for="user-notification-2"></label>
+                </div>
+              </div>
+
             </td>
             <slot name="tbody-tr" :row="row"/>
           </tr>
@@ -609,6 +629,9 @@ export default {
   }),
 
   methods: {
+    onCheckToggle(props) {
+      this.$emit("onCheckToggle", props)
+    },
     onView(mode) {
       this.list = mode === 'list';
     },

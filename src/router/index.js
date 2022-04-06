@@ -8,6 +8,8 @@ import VueCookies from "vue-cookies";
 import Password from "../views/Password";
 import Users from "../views/Users";
 import UserIndex from "../components/users/UserIndex";
+import Menu from "../views/Menu";
+import MenuIndex from "../components/menu/MenuIndex";
 
 Vue.use(VueRouter);
 const routes = [
@@ -63,6 +65,18 @@ const routes = [
                         path: Pages.USERS_CREATE,
                         name: 'UsersCreate',
                         component: Dashboard
+                    }
+                ]
+            },
+            {
+                path: Pages.MENU,
+                name: 'Menu',
+                component: Menu,
+                children: [
+                    {
+                        path: "",
+                        name: "Index",
+                        component: MenuIndex
                     }
                 ]
             },
