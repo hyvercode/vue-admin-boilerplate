@@ -336,8 +336,10 @@
 </template>
 
 <script>
+// import "./assets/css/theme.css"
 import pages from "../helpers/Pages";
 import "./assets/js/theme"
+import "./assets/js/bootstrap-navbar";
 
 export default {
   name: "index",

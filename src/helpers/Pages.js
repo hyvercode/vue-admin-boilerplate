@@ -1,5 +1,15 @@
 const pages = {
+    /**
+     * Auth
+     */
     INDEX: "/",
+    CONTACT: "/contact",
+    ABOUT: "/about",
+    BLOG: "/blog",
+    BLOG_SLUG: "/blog/slug",
+    BLOG_POST: "/blog/post",
+    BLOG_ARCHIVE: "/blog/archive",
+    BLOG_CATEGORY: "/blog/category",
     /**
      * Auth
      */

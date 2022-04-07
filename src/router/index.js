@@ -11,6 +11,7 @@ import UserIndex from "../components/users/UserIndex";
 import Menu from "../views/Menu";
 import MenuIndex from "../components/menu/MenuIndex";
 import Home from "../views/Home";
+import routeLandingPage from "../theme/routePage";
 
 Vue.use(VueRouter);
 const routes = [
@@ -18,13 +19,7 @@ const routes = [
         path: "/",
         name: 'Index',
         component: Index,
-        children: [
-            {
-                path: "",
-                name: "Index",
-                component: () => import("../theme/index.vue"),
-            },
-        ],
+        children: routeLandingPage
     },
     {
         path: Pages.LOGIN,
@@ -111,13 +106,18 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
     const publicPages = [
         Pages.INDEX,
+        Pages.BLOG,
+        Pages.BLOG_SLUG,
+        Pages.BLOG_POST,
+        Pages.BLOG_ARCHIVE,
+        Pages.BLOG_CATEGORY,
         Pages.LOGIN,
         Pages.PASSWORD_FORGOT,
         Pages.PASSWORD_OTP,
         Pages.PASSWORD_RESET,
     ];
     const authRequired = !publicPages.includes(to.path);
-    const loggedIn = VueCookies.get("__PMS__SSESSIONID__");
+    const loggedIn = VueCookies.get("__MIH__BASE__SESSIONID__");
 
     if (authRequired && !loggedIn) {
         next(Pages.INDEX);

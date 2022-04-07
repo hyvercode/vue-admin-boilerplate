@@ -3,7 +3,7 @@
     <nav class="sb-topnav navbar navbar-expand navbar-light bg-light fixed-top d-none d-sm-block">
       <div class="d-flex justify-content-between w-100" style="margin-top: -10px;" id="navbarSupportedContent">
         <div class="d-flex align-items-center">
-          <router-link class="navbar-brand ml-2" to="/dashboard">
+          <router-link class="navbar-brand ml-2" to="/home">
             <em><img src="~@/assets/images/icons/brand.png"></em>
           </router-link>
           <!-- Sidebar Toggle-->
@@ -139,9 +139,9 @@
     </nav>
     <!--    Mobile Nav-->
     <nav class="navbar navbar-dark navbar-theme-primary px-4 col-12 d-lg-none">
-      <a class="navbar-brand me-lg-5" href="@@path/index.html">
+      <router-link class="navbar-brand me-lg-5" to="/home">
         <img class="navbar-brand-dark" src="~@/assets/images/icons/brand.png" alt="logo"/>
-      </a>
+      </router-link>
       <div class="d-flex align-items-center">
         <button class="navbar-toggler d-lg-none collapsed" type="button" data-bs-toggle="collapse"
                 data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false"
@@ -193,7 +193,7 @@ export default {
   },
   created() {
     this.user = Util.jwtDecode(
-        JSON.parse(JSON.stringify(VueCookies.get("__PMS__SSESSIONID__"))).access_token
+        JSON.parse(JSON.stringify(VueCookies.get("__MIH__BASE__SESSIONID__"))).access_token
     );
     this.interval = window.setInterval(() => this.$store.dispatch("notification/getInboxs", this.pagination), 6000000);
   },
@@ -213,7 +213,7 @@ export default {
           .then((result) => {
             if (result.isConfirmed) {
               this.$store.dispatch("auth/logout");
-              this.$router.push("/login");
+              this.$router.push("/");
             }
           });
     },

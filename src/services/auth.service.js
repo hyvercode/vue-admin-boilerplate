@@ -9,7 +9,7 @@ class AuthService {
         return Api.doPostOut(Host.API_V1 + "/auth/login", user).then((response) => {
             if (response.code === 200 && response.data.access_token) {
                 VueCookies.set(
-                    "__PMS__SSESSIONID__",
+                    "__MIH__BASE__SESSIONID__",
                     JSON.stringify(response.data),
                     Math.floor(response.data.expires_in / 1440) + "d",
                     "/",
@@ -23,16 +23,16 @@ class AuthService {
     }
 
     logout() {
-        VueCookies.remove("__PMS__SSESSIONID__");
+        VueCookies.remove("__MIH__BASE__SESSIONID__");
         location.reload();
         return Api.doPostOut(Host.API_V1 + "/auth/logout", "").then(
             () => {
-                VueCookies.remove("__PMS__SSESSIONID__");
+                VueCookies.remove("__MIH__BASE__SESSIONID__");
                 router.push(Pages.LOGIN);
                 location.reload();
             },
             () => {
-                VueCookies.remove("__PMS__SSESSIONID__");
+                VueCookies.remove("__MIH__BASE__SESSIONID__");
                 router.push(Pages.LOGIN);
                 location.reload();
             }
@@ -44,7 +44,7 @@ class AuthService {
             (response) => {
                 if (response.code === 200 && response.data.access_token) {
                     VueCookies.set(
-                        "__PMS__SSESSIONID__",
+                        "__MIH__BASE__SESSIONID__",
                         JSON.stringify(response.data),
                         Math.floor(response.data.expires_in / 1440) + "d",
                         "/",
