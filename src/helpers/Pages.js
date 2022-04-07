@@ -1,4 +1,5 @@
 const pages = {
+    INDEX: "/",
     /**
      * Auth
      */

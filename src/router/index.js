@@ -10,9 +10,22 @@ import Users from "../views/Users";
 import UserIndex from "../components/users/UserIndex";
 import Menu from "../views/Menu";
 import MenuIndex from "../components/menu/MenuIndex";
+import Home from "../views/Home";
 
 Vue.use(VueRouter);
 const routes = [
+    {
+        path: "/",
+        name: 'Index',
+        component: Index,
+        children: [
+            {
+                path: "",
+                name: "Index",
+                component: () => import("../theme/index.vue"),
+            },
+        ],
+    },
     {
         path: Pages.LOGIN,
         name: 'Login',
@@ -41,10 +54,10 @@ const routes = [
         ],
     },
     {
-        path: '/',
+        path: Pages.HOME,
         redirect: Pages.DASHBOARD,
-        name: 'Index',
-        component: Index,
+        name: 'home',
+        component: Home,
         children: [
             {
                 path: Pages.DASHBOARD,
@@ -97,6 +110,7 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
     const publicPages = [
+        Pages.INDEX,
         Pages.LOGIN,
         Pages.PASSWORD_FORGOT,
         Pages.PASSWORD_OTP,
@@ -106,7 +120,7 @@ router.beforeEach((to, from, next) => {
     const loggedIn = VueCookies.get("__PMS__SSESSIONID__");
 
     if (authRequired && !loggedIn) {
-        next(Pages.LOGIN);
+        next(Pages.INDEX);
     } else {
         next();
     }
