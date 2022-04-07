@@ -135,7 +135,7 @@ export default {
 
 <style scoped>
 .body {
-  background: linear-gradient(180deg, #4790d9 0%, #0f75bc 100%) !important;
+  /*background: linear-gradient(180deg, #4790d9 0%, #0f75bc 100%) !important;*/
   min-height: 10vh;
 }
 

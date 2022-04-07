@@ -156,7 +156,7 @@ export default {
 
 .body {
   font-family: "Open Sans", sans-serif;
-  background: linear-gradient(180deg, #4790d9 50%, #074887 100%) !important;
+  /*background: linear-gradient(180deg, #4790d9 50%, #074887 100%) !important;*/
   min-height: 10vh;
 }
 

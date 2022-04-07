@@ -10,7 +10,7 @@
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span
             class="navbar-toggler-icon"> </span></button>
-        <div class="collapse navbar-collapse border-top border-lg-0 mt-4 mt-lg-0" id="navbarSupportedContent">
+        <div class="collapse navbar-collapse border-lg-0 mt-4 mt-lg-0" id="navbarSupportedContent">
           <ul class="navbar-nav ms-auto">
             <li class="nav-item"><a class="nav-link" aria-current="page" href="#feature">Product</a></li>
             <li class="nav-item"><a class="nav-link" aria-current="page" href="#validation">Customers</a></li>
@@ -336,7 +336,7 @@
 </template>
 
 <script>
-// import "./assets/css/theme.css"
+import "./assets/css/theme.css"
 import pages from "../helpers/Pages";
 import "./assets/js/theme"
 import "./assets/js/bootstrap-navbar";
