@@ -1,9 +1,9 @@
 <template>
   <div class="blog">
     <!-- ***** Header Area End ***** -->
-    <Navbar />
+    <Navbar/>
     <!-- ***** Breadcumb Area Start ***** -->
-    <div class="mosh-breadcumb-area" style="background-image: url(img/core-img/breadcumb.png);">
+    <div class="mt-3">
       <div class="container h-100">
         <div class="row h-100 align-items-center">
           <div class="col-12">
@@ -236,6 +236,7 @@
 
 <script>
 import Navbar from "../navigation/Navbar";
+
 export default {
   name: "Blog",
   components: {Navbar}
