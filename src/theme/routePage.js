@@ -6,8 +6,13 @@ export default [
         children: [
             {
                 path: "",
-                name: "Index",
-                component: () => import("../theme/index.vue"),
+                name: "Main",
+                component: () => import("../theme/pages/main/Main.vue"),
+            },
+            {
+                path: "blog",
+                name: "Blog",
+                component: () => import("../theme/pages/blog/Blog"),
             },
         ],
     }
