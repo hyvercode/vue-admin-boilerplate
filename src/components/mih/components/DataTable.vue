@@ -104,8 +104,8 @@
           <th style="width: 5px!important;">No</th>
           <!--        CheckBox-->
           <th v-if="commandCheckbox" style="width: 2px!important;">
-            <input class="form-check-input" type="checkbox" id="flexCheckAll" v-model="selectAll"
-                   @click.prevent="onSelectAll">
+            <input class="form-check-input" type="checkbox" id="all" v-model="selectAll"
+                   @change="onSelectAll"><span class="m-2">All</span>
           </th>
           <!--        Rows-->
           <th v-for="(column, index) in columns"
@@ -137,39 +137,46 @@
               <i class="material-icons">drag_indicator</i>
             </td>
             <td> {{
-                pagination.perPage * (pagination.currentPage - 1) +
+                currentPerPage * (currentPage - 1) +
                 index +
                 1
               }}
             </td>
             <td v-if="commandCheckbox">
-              <input class="form-check-input" type="checkbox" :value="row" v-model="selected" @change="onSelect">
+              <input v-if="row" class="form-check-input" type="checkbox" :value="row"
+                     v-model="selected" @change="onSelect(row)"
+                     :key="index" id="checkbox">
             </td>
             <td v-for="(column, columnIndex) in columns"
                 :key="columnIndex"
                 :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none':''}"
             >
+
               <!--            Normal Content-->
               <span
                   v-if="!column.html && !column.currency && !column.image && column.field !=='active' && !column.badge && !column.hidden"
                   :style="{width: column.width ? 'auto':column.width,display:column.hidden?'none !important;':''}">
               {{ collect(row, column.field) }} <span v-if="column.concat"> {{ collect(row, column.concatWith) }}</span>
             </span>
+
               <!--            Boolean Content-->
               <div
-                  v-if="!column.html && !column.currency && column.field ==='active' && !column.badge && !column.hidden"
+                  v-if="column.boolean && !column.html && !column.currency && column.field ==='active' && !column.badge && !column.hidden"
                   :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none !important;':''}">
                           <span :class="collect(row, column.field) ? 'badge bg-success' : 'badge bg-secondary'">{{
-                              collect(row, column.field) ? 'Active' : 'Non Active'
+                              collect(row, column.field) ? column.booleanDesc[0] : column.booleanDesc[1]
                             }}</span>
               </div>
+
               <!--            Currency Content-->
               <div v-if="!column.html && column.currency"
                    v-html="isCurrency(collect(row, column.field)) && !column.badge && !column.hidden"
                    :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none !important;':''}"/>
+
               <!--            HTML Content-->
               <div v-if="column.html && !column.hidden" v-html="collect(row, column.field)"
                    :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none !important;':''}"/>
+
               <!--              Image Content-->
               <div v-if="column.image && !column.hidden"
                    :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none !important;':''}">
@@ -177,6 +184,7 @@
                      :alt="index"/>
                 <avatar v-else :username="collect(row, column.name)" :size="column.size"></avatar>
               </div>
+
               <!--            Badge Content-->
               <div v-if="column.badge && !column.hidden"
                    :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none !important;':''}">
@@ -184,12 +192,28 @@
                   collect(row, column.field)
                 }}</span>
               </div>
+
+              <!--        Toogle button-->
+              <div v-if="column.buttonToggle && !column.hidden"
+                   :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none !important;':''}">
+                <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" id="user-notification-2"
+                         :checked="collect(row, column.field)"
+                         @click="onCheckToggle(row)"
+                         :key="index"
+                  >
+                  <small>{{
+                      collect(row, column.field) ? column.buttonToggleDesc[0] : column.buttonToggleDesc[1]
+                    }}</small>
+                </div>
+              </div>
+
             </td>
             <slot name="tbody-tr" :row="row"/>
           </tr>
-          <template v-if="rows.length === 0">
-            <p class="text-center">No Records</p>
-          </template>
+          <tr v-if="rows.length === 0">
+            <td class="text-center" :colspan="columns.length+1">Oops..! No records found</td>
+          </tr>
         </draggable>
       </table>
       <!--    End Table Content-->
@@ -255,7 +279,7 @@
     <!--    Table Footer-->
     <div v-if="paginate" class="table-footer">
       <div class="d-flex justify-content-start mt-2">
-        <label><span>{{ lang['total_record'] }} : {{ pagination.total }} </span></label>
+        <label><span>{{ lang['total_record'] }} : {{ totalRecords }} </span></label>
       </div>
       <div :class="{'datatable-length': true, 'rtl': lang.__is_rtl}">
         <label class="mt-2 px-4">
@@ -264,7 +288,7 @@
             <option v-for="(option, index) in rowsPerPage"
                     :key="index"
                     :value="option"
-                    :selected="option === pagination.currentPage"
+                    :selected="option === currentPerPage"
             >
               {{ option === -1 ? lang['10'] : option }}
             </option>
@@ -273,13 +297,13 @@
       </div>
       <div :class="{'datatable-info': true, 'rtl': lang.__is_rtl}">
 				<span>
-          {{ pagination.currentPage }}
+          {{ currentPage }}
 				</span>
         <span>
 					{{ lang['out_of_pages'] }}
 				</span>
         <span>
-					{{ pagination.lastPage }}
+					{{ lastPage }}
 				</span>
       </div>
       <div>
@@ -405,27 +429,52 @@ export default {
       default: () => [],
     },
 
-    pagination: {
-      type: Object,
-      required: false,
-      default: {
-        perPage: 10,
-        currentPage: 1,
-        lastPage: 1,
-        nextPageUrl: null,
-        prevPageUrl: null,
-        total: 0,
-        searchBy: 'id',
-        searchParam: '',
-        sortBy: 'created_at',
-        sort: 'DESC'
-      }
-    },
-
     rowsPerPage: {
       type: Array,
       required: false,
-      default: () => [5, 10, 50, 100, 500, 1000],
+      default: () => [5, 10, 50, 100, 500, 1000, 5000, 10000],
+    },
+
+    defaultPerPage: {
+      type: Number,
+      required: false,
+      default: 10,
+    },
+
+    currentPage: {
+      type: Number,
+      required: false,
+      default: 1,
+    },
+
+    lastPage: {
+      type: Number,
+      required: false,
+      default: 1,
+    },
+
+    currentPerPage: {
+      type: Number,
+      required: false,
+      default: 10,
+    },
+
+    prevPageUrl: {
+      type: String,
+      required: false,
+      default: null,
+    },
+
+    nextPageUrl: {
+      type: String,
+      required: false,
+      default: null,
+    },
+
+    totalRecords: {
+      type: Number,
+      required: false,
+      default: 0,
     },
 
     sortable: {
@@ -584,45 +633,84 @@ export default {
   }),
 
   methods: {
+    /**
+     * On View Table Mode
+     */
     onView(mode) {
       this.list = mode === 'list';
     },
+
+    /**
+     * On Dragable
+     */
     onDragAble() {
       this.$emit("onDragAble", this.draggingRows)
     },
 
+    /**
+     * On Create
+     */
     onCreate() {
       this.$emit("onCreate")
     },
 
+    /**
+     * On Create Toggle Button
+     */
+    onCheckToggle(props) {
+      this.$emit("onCheckToggle", props)
+    },
+
+    /**
+     * Checkbox All
+     */
     onSelectAll() {
       this.selected = [];
-      if (!this.selectAll) {
+      if (this.selectAll) {
         for (let i in this.rows) {
           this.selected.push(this.rows[i]);
         }
       }
-      this.$emit("onSelect", this.selected)
+      this.$emit("onSelectAll", this.selected)
     },
+    /**
+     * Checkbox
+     */
     onSelect() {
       this.$emit("onSelect", this.selected)
     },
+
+    /**
+     * On Upload
+     */
     onUpload() {
       this.$emit("onUpload")
     },
 
+    /**
+     * On Refresh
+     */
     onRefresh() {
       this.$emit("onRefresh", [this.filterBy, this.limit, this.currentPage])
     },
 
+    /**
+     * On Change Filter By
+     */
     onChangeFilter() {
       this.$emit("onChangeFilter", [this.filterBy, this.limit, this.currentPage])
     },
 
+    /**
+     * On Chane Month
+     */
     onChangeMonth() {
       this.$emit("onChangeMonth", this.month)
     },
 
+    /**
+     * On Change Date
+     */
     onChangeDate() {
       if (this.dateFrom < this.dateTo) {
         this.$emit("onChangeDate", [this.dateFrom, this.dateTo])
@@ -631,6 +719,9 @@ export default {
       }
     },
 
+    /**
+     * On Change Search
+     */
     onChangeSearch() {
       if (this.dateFrom < this.dateTo) {
         this.$emit("onChangeSearch", [this.searchInput, this.limit, this.currentPage])
@@ -639,6 +730,9 @@ export default {
       }
     },
 
+    /**
+     * On Enter Search
+     */
     onEnterSearch() {
       if (this.dateFrom < this.dateTo) {
         this.$emit("onEnterSearch", [this.searchInput, this.limit, this.currentPage])
@@ -647,29 +741,44 @@ export default {
       }
     },
 
+    /**
+     * On Next Page
+     */
     onNextPage() {
-      if (this.pagination.nextPageUrl) {
-        ++this.pagination.currentPage;
-        this.$emit("onNextPage", [this.limit, this.pagination.currentPage])
+      if (this.nextPageUrl) {
+        ++this.currentPage;
+        this.$emit("onNextPage", [this.limit, this.currentPage])
       }
     },
 
+    /**
+     * On Prev Page
+     */
     onPreviousPage() {
-      if (this.pagination.prevPageUrl) {
-        this.pagination.currentPage--;
-        this.$emit("onPreviousPage", [this.limit, this.pagination.currentPage])
+      if (this.prevPageUrl) {
+        this.currentPage--;
+        this.$emit("onPreviousPage", [this.limit, this.currentPage])
       }
     },
 
+    /**
+     * On Change Perpage
+     */
     onChangeRowPage(e) {
-      this.pagination.currentPerPage = parseInt(e.target.value);
-      this.$emit("onChangeRowPage", [this.limit, this.pagination.currentPage])
+      this.currentPerPage = parseInt(e.target.value);
+      this.$emit("onChangeRowPage", [this.limit, this.currentPage])
     },
 
+    /**
+     * On Change Currency
+     */
     isCurrency(value) {
       return Utils.currencyRp(value);
     },
 
+    /**
+     * Sorting
+     */
     sort(index) {
       if (!this.sortable)
         return;
@@ -681,25 +790,28 @@ export default {
       }
     },
 
+    /**
+     * On Row Click
+     */
     onRowClick(row) {
       if (!this.clickable) {
         return;
       }
-
       if (getSelection().toString()) {
-        // Return if some text is selected instead of firing the row-click event.
         return;
       }
-
       this.$emit('onRowClick', row);
     },
 
+    /**
+     * On Export to excel
+     */
     onExportExcel() {
       const mimeType = 'data:application/vnd.ms-excel';
       const html = this.renderTable().replace(/ /g, '%20');
 
       // eslint-disable-next-line eqeqeq
-      const documentPrefix = this.title !== '' ? this.title.replace(/ /g, '-') : 'Sheet';
+      const documentPrefix = this.title != '' ? this.title.replace(/ /g, '-') : 'Sheet';
       const d = new Date();
 
       const dummy = document.createElement('a');
@@ -712,6 +824,9 @@ export default {
       dummy.click();
     },
 
+    /**
+     * On Print to PDF
+     */
     onPrint() {
       const pdf = new jsPDF({
         orientation: this.pdfOrientation,
@@ -727,18 +842,14 @@ export default {
       column.push('No');
       const data = [];
       for (let index in this.columns) {
-        if (!this.columns[index].hidden) {
-          column.push(this.columns[index].label);
-        }
+        column.push(this.columns[index].label);
       }
 
       for (let key in this.rows) {
         let rows = [];
         rows.push(parseInt(key) + 1);
         for (let index in this.columns) {
-          if (!this.columns[index].hidden) {
-            rows.push(this.collect(this.rows[key], this.columns[index].field));
-          }
+          rows.push(this.collect(this.rows[key], this.columns[index].field));
         }
         data.push(rows);
       }
@@ -755,42 +866,46 @@ export default {
 
     renderTable() {
       let table = '<table><thead>';
+
       table += '<tr>';
       for (let i = 0; i < this.columns.length; i++) {
         const column = this.columns[i];
-        if (!column.hidden) {
-          table += '<th>';
-          table += column.label;
-          table += '</th>';
-        }
+        table += '<th>';
+        table += column.label;
+        table += '</th>';
       }
       table += '</tr>';
+
       table += '</thead><tbody>';
+
       for (let i = 0; i < this.rows.length; i++) {
         const row = this.rows[i];
         table += '<tr>';
         for (let j = 0; j < this.columns.length; j++) {
           const column = this.columns[j];
-          if (!column.hidden) {
-            table += '<td>';
-            table += this.collect(row, column.field);
-            table += '</td>';
-          }
+          table += '<td>';
+          table += this.collect(row, column.field);
+          table += '</td>';
         }
         table += '</tr>';
       }
+
       table += '</tbody></table>';
+
       return table;
     },
 
     dig(obj, selector) {
       let result = obj;
       const splitter = selector.split('.');
+
       for (let i = 0; i < splitter.length; i++) {
-        if (result === undefined)
+        if (result == undefined)
           return undefined;
+
         result = result[splitter[i]];
       }
+
       return result;
     },
 
@@ -805,10 +920,12 @@ export default {
 
     synchronizeCssStyles(src, destination, recursively) {
       destination.style.cssText = this.getComputedStyleCssText(src);
+
       if (recursively) {
         const vSrcElements = src.getElementsByTagName('*');
         const vDstElements = destination.getElementsByTagName('*');
-        for (let i = vSrcElements.length; i--;) {
+
+        for (var i = vSrcElements.length; i--;) {
           const vSrcElement = vSrcElements[i];
           const vDstElement = vDstElements[i];
           vDstElement.style.cssText = this.getComputedStyleCssText(vSrcElement);
@@ -819,14 +936,17 @@ export default {
     getComputedStyleCssText(element) {
       const cssObject = window.getComputedStyle(element);
       const cssAccumulator = [];
+
       if (cssObject.cssText !== '') {
         return cssObject.cssText;
       }
+
       for (let prop in cssObject) {
         if (typeof cssObject[prop] === 'string') {
           cssAccumulator.push(prop + ' : ' + cssObject[prop]);
         }
       }
+
       return cssAccumulator.join('; ');
     },
   },
@@ -835,10 +955,10 @@ export default {
     perPageOptions(newOptions) {
       // If defaultPerPage is provided and it's a valid option, set as current per page
       if (newOptions.indexOf(this.defaultPerPage) > -1) {
-        this.pagination.currentPerPage = parseInt(this.defaultPerPage);
+        this.currentPerPage = parseInt(this.defaultPerPage);
       } else {
         // Set current page to first value
-        this.pagination.currentPerPage = newOptions[0];
+        this.currentPerPage = newOptions[0];
       }
     },
 
@@ -850,7 +970,7 @@ export default {
     rows(newRows, oldRows) {
       // If the number of rows change, password the currentPage to 1
       if (newRows !== oldRows)
-        this.pagination.currentPage = 1;
+        this.currentPage = 1;
     },
   },
 
@@ -870,25 +990,33 @@ export default {
             }
             return x;
           };
+
           x = cook(x);
           y = cook(y);
+
           return (x < y ? -1 : (x > y ? 1 : 0)) * (this.sortType === 'desc' ? -1 : 1);
         });
+
       if (this.searching && !this.serverSearch && this.searchInput) {
         const searchConfig = {keys: this.columns.map(c => c.field)};
+
+        // Enable searching of numbers (non-string)
         searchConfig.getFn = (obj, path) => {
           const property = this.dig(obj, path);
           if (Number.isInteger(property))
             return JSON.stringify(property);
           return property;
         };
+
         if (this.exactSearch) {
           //return only exact matches
           searchConfig.threshold = 0,
               searchConfig.distance = 0;
         }
+
         computedRows = (new Fuse(computedRows, searchConfig)).search(this.searchInput);
       }
+
       return computedRows;
     },
     paginated() {

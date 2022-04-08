@@ -5,14 +5,12 @@ import store from "@/store";
 import "sweetalert2/dist/sweetalert2.min.css";
 import $ from "jquery";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap-vue/dist/bootstrap-vue.css";
 import "bootstrap";
 import "./app.scss";
 import retina from "retinajs";
 import VueRetina from "vue-retina";
 import Popper from "vue-popperjs";
 import "vue-popperjs/dist/vue-popper.css";
-import BootstrapVue, {BootstrapVueIcons, IconsPlugin} from "bootstrap-vue";
 import VueMoment from "vue-moment";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
@@ -28,7 +26,10 @@ import 'vuelendar/scss/vuelendar.scss';
 import VueGoogleCharts from 'vue-google-charts';
 import 'viewerjs/dist/viewer.css'
 import Viewer from 'v-viewer';
+import VModal from 'vue-js-modal'
 
+
+Vue.use(VModal)
 Vue.use(CKEditor);
 Vue.use(VueJwtDecode);
 Vue.use(VueCookies);
@@ -37,13 +38,9 @@ Vue.use(VueSweetalert2);
 Vue.use(Popper);
 window.$ = $;
 Vue.config.productionTip = false
-Vue.use(BootstrapVue)
-Vue.use(BootstrapVueIcons)
 Vue.use(VueMoment);
 Vue.use(VueGoogleCharts);
 Vue.use(Viewer);
-Vue.use(BootstrapVue);
-Vue.use(IconsPlugin);
 window.$ = $;
 Vue.use(Popper);
 Vue.use(VueRetina, {retina});

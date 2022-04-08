@@ -8,9 +8,22 @@ import VueCookies from "vue-cookies";
 import Password from "../views/Password";
 import Users from "../views/Users";
 import UserIndex from "../components/users/UserIndex";
+import Menu from "../views/Menu";
+import MenuIndex from "../components/menu/MenuIndex";
+import Home from "../views/Home";
+import routeLandingPage from "../theme/routePage";
+import MenuList from "../views/MenuList";
+import MenuListIndex from "../components/menuList/MenuListIndex";
+import MenuRoleIndex from "../components/menuRole/MenuRoleIndex";
 
 Vue.use(VueRouter);
 const routes = [
+    {
+        path: "/",
+        name: 'Index',
+        component: Index,
+        children: routeLandingPage
+    },
     {
         path: Pages.LOGIN,
         name: 'Login',
@@ -39,10 +52,10 @@ const routes = [
         ],
     },
     {
-        path: '/',
+        path: Pages.HOME,
         redirect: Pages.DASHBOARD,
-        name: 'Index',
-        component: Index,
+        name: 'home',
+        component: Home,
         children: [
             {
                 path: Pages.DASHBOARD,
@@ -66,6 +79,42 @@ const routes = [
                     }
                 ]
             },
+            {
+                path: Pages.MENU_LIST,
+                name: 'Menu',
+                component: MenuList,
+                children: [
+                    {
+                        path: "",
+                        name: "Index",
+                        component: MenuListIndex
+                    }
+                ]
+            },
+            {
+                path: Pages.MENU,
+                name: 'Menu',
+                component: Menu,
+                children: [
+                    {
+                        path: "",
+                        name: "Index",
+                        component: MenuIndex
+                    }
+                ]
+            },
+            {
+                path: Pages.MENU_ROLE,
+                name: 'Menu',
+                component: MenuList,
+                children: [
+                    {
+                        path: "",
+                        name: "Index",
+                        component: MenuRoleIndex
+                    }
+                ]
+            }
         ]
     },
     {
@@ -83,16 +132,22 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
     const publicPages = [
+        Pages.INDEX,
+        Pages.BLOG,
+        Pages.BLOG_SLUG,
+        Pages.BLOG_POST,
+        Pages.BLOG_ARCHIVE,
+        Pages.BLOG_CATEGORY,
         Pages.LOGIN,
         Pages.PASSWORD_FORGOT,
         Pages.PASSWORD_OTP,
         Pages.PASSWORD_RESET,
     ];
     const authRequired = !publicPages.includes(to.path);
-    const loggedIn = VueCookies.get("__PMS__SSESSIONID__");
+    const loggedIn = VueCookies.get("__MIH__BASE__SESSIONID__");
 
     if (authRequired && !loggedIn) {
-        next(Pages.LOGIN);
+        next(Pages.INDEX);
     } else {
         next();
     }

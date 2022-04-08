@@ -53,6 +53,10 @@ body {
   min-height: calc(100vh - 0px);
 }
 
+.sidebar-text-title{
+  color: #F1F1F1 !important;
+  opacity: 60%;
+}
 /* Smartphones (portrait and landscape) ----------- */
 @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
   #layoutSidenav #layoutSidenav_nav {
@@ -94,7 +98,7 @@ body {
 * Material Icon Custom
 */
 
-.tbl-material-icons{
+.tbl-material-icons {
   font-weight: normal;
   font-style: normal;
   font-size: 18px !important;
@@ -108,4 +112,15 @@ body {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   -moz-osx-font-smoothing: grayscale;
+}
+
+//Button
+.btn-primary {
+  background: linear-gradient(180deg, #4790d9 0%, #074887 100%) !important;
+  border: none;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(180deg, #4790d9 100%, #074887 0%) !important;
+  border: none;
 }

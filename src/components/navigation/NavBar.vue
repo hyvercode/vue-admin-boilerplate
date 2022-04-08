@@ -3,8 +3,8 @@
     <nav class="sb-topnav navbar navbar-expand navbar-light bg-light fixed-top d-none d-sm-block">
       <div class="d-flex justify-content-between w-100" style="margin-top: -10px;" id="navbarSupportedContent">
         <div class="d-flex align-items-center">
-          <router-link class="navbar-brand ml-2" to="/dashboard">
-            <em><img src="~@/assets/images/icons/GrosirMotor.png"></em>
+          <router-link class="navbar-brand ml-2" to="/home">
+            <em><img src="~@/assets/images/icons/brand.png"></em>
           </router-link>
           <!-- Sidebar Toggle-->
           <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0 " id="sidebarToggle"
@@ -12,19 +12,12 @@
             <span class="navbar-toggler-icon"></span>
           </button>
           <!-- Search form -->
-          <form class="navbar-search form-inline px-2" id="navbar-search-main">
-            <div class="input-group input-group-merge search-bar">
-              <span class="input-group-text" id="topbar-addon">
-                <svg class="icon icon-xs" x-description="Heroicon name: solid/search" xmlns="http://www.w3.org/2000/svg"
-                     viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                  <path fill-rule="evenodd"
-                        d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                        clip-rule="evenodd"></path>
-                </svg>
-              </span>
-              <input type="text" class="form-control" id="topbarInputIconLeft" placeholder="Search"
-                     aria-label="Search"
-                     aria-describedby="topbar-addon">
+          <form>
+            <div class="input-group">
+              <input class="form-control" type="search"
+                     placeholder="Please input your value">
+              <button class="input-group-text" id="addon-wrapping"><i
+                  class="material-icons">search</i></button>
             </div>
           </form>
           <!-- / Search form -->
@@ -146,9 +139,9 @@
     </nav>
     <!--    Mobile Nav-->
     <nav class="navbar navbar-dark navbar-theme-primary px-4 col-12 d-lg-none">
-      <a class="navbar-brand me-lg-5" href="@@path/index.html">
-        <img class="navbar-brand-dark" src="~@/assets/images/icons/GrosirMotor.png" alt="logo"/>
-      </a>
+      <router-link class="navbar-brand me-lg-5" to="/home">
+        <img class="navbar-brand-dark" src="~@/assets/images/icons/brand.png" alt="logo"/>
+      </router-link>
       <div class="d-flex align-items-center">
         <button class="navbar-toggler d-lg-none collapsed" type="button" data-bs-toggle="collapse"
                 data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false"
@@ -196,10 +189,11 @@ export default {
   },
   mounted() {
     this.$store.dispatch("notification/getInboxs", this.pagination)
+    this.$store.dispatch("menu/getMenu");
   },
   created() {
     this.user = Util.jwtDecode(
-        JSON.parse(JSON.stringify(VueCookies.get("__PMS__SSESSIONID__"))).access_token
+        JSON.parse(JSON.stringify(VueCookies.get("__MIH__BASE__SESSIONID__"))).access_token
     );
     this.interval = window.setInterval(() => this.$store.dispatch("notification/getInboxs", this.pagination), 6000000);
   },
@@ -219,7 +213,7 @@ export default {
           .then((result) => {
             if (result.isConfirmed) {
               this.$store.dispatch("auth/logout");
-              this.$router.push("/login");
+              this.$router.push("/");
             }
           });
     },

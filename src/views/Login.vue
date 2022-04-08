@@ -5,7 +5,9 @@
         <div class="card login-card">
           <div class="card-body">
             <div class="text-center">
-              <img src="~@/assets/images/icons/GrosirMotor.png" width="200"/>
+              <router-link :to="pages.INDEX">
+                <img src="~@/assets/images/icons/brand.png" width="200"/>
+              </router-link>
               <br/>
             </div>
             <form @submit.prevent="submit" class="mt-5">
@@ -77,7 +79,7 @@
             </div>
           </div>
         </div>
-        <Autor ></Autor>
+        <Autor></Autor>
       </div>
     </main>
   </div>
@@ -154,7 +156,7 @@ export default {
 
 .body {
   font-family: "Open Sans", sans-serif;
-  background: linear-gradient(180deg, #4790d9 50%, #074887 100%) !important;
+  /*background: linear-gradient(180deg, #4790d9 50%, #074887 100%) !important;*/
   min-height: 10vh;
 }
 

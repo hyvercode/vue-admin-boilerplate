@@ -61,7 +61,7 @@ class Utils {
         return CryptoJS.AES.encrypt(
             text.toString(),
             this.jwtDecode(
-                JSON.parse(JSON.stringify(VueCookies.get("__PMS__SSESSIONID__")))
+                JSON.parse(JSON.stringify(VueCookies.get("__MIH__BASE__SESSIONID__")))
                     .access_token
             ).login_id
         ).toString();
@@ -75,7 +75,7 @@ class Utils {
         let bytes = CryptoJS.AES.decrypt(
             text.toString(),
             this.jwtDecode(
-                JSON.parse(JSON.stringify(VueCookies.get("__PMS__SSESSIONID__")))
+                JSON.parse(JSON.stringify(VueCookies.get("__MIH__BASE__SESSIONID__")))
                     .access_token
             ).login_id
         );

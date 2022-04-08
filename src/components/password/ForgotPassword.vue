@@ -8,7 +8,7 @@
               <router-link
                   to="/"
               >
-                <img src="~@/assets/images/icons/GrosirMotor.png" width="200" class="mb-3"/>
+                <img src="~@/assets/images/icons/brand.png" width="200" class="mb-3"/>
               </router-link>
               <p class="login-card-description h6">Forgot Password</p>
               <h6 class="m-3">
@@ -90,7 +90,7 @@ export default {
 
 <style scoped>
 .body {
-  background: linear-gradient(180deg, #4790d9 50%, #074887 100%) !important;
+  /*background: linear-gradient(180deg, #4790d9 50%, #074887 100%) !important;*/
   min-height: 10vh;
 }
 
