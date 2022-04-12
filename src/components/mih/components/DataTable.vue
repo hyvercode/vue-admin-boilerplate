@@ -227,7 +227,7 @@
           >
             <div class="box-part">
               <div class="row">
-                <div class="col-md-3 col-sm-12">
+                <div class="col-md-3 col-sm-12" @click.prevent="onRowClick(row)">
                   <div v-for="(column, columnIndex) in columnsKanban"
                        :key="columnIndex"
                        :class="{ numeric : column.numeric }">
@@ -310,8 +310,26 @@
                   </table>
                 </div>
               </div>
-              <a type="button" @click.prevent="onRowClick(row)" class="kanban-a d-flex justify-content-end">View
-                More</a>
+              <div class="row" v-if="commandContact">
+                <div class="col-7">
+                  <a type="button" :href="'mailto:'+row.email" target="_blank" class="kanban-a btn-sm"><i
+                      class="material-icons" data-bs-toggle="tooltip" data-bs-placement="top"
+                      title="Send Mail">email</i></a>
+                  <a type="button" :href="'tel:'+row.phone_number" target="_blank" class="kanban-a btn-sm"
+                     data-bs-toggle="tooltip"
+                     data-bs-placement="top" title="Call"><i class="material-icons text-info">phone</i></a>
+                  <a type="button" :href="'https://wa.me/'+row.phone_number+'?text=Hei!, how are you ?'" target="_blank"
+                     class="kanban-a btn-sm"
+                     data-bs-toggle="tooltip" data-bs-placement="top" title="Chat WhatApp"><i
+                      class="material-icons text-success">chat</i></a>
+                </div>
+                <div class="col-5">
+                  <a type="button" @click.prevent="onRowClick(row)" target="_blank"
+                     class="kanban-a btn-sm d-flex justify-content-end"
+                     data-bs-toggle="tooltip" data-bs-placement="top" title="View detail">View
+                    More</a>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -658,6 +676,12 @@ export default {
       required: false,
       default: false
     },
+
+    commandContact: {
+      type: Boolean,
+      required: false,
+      default: false
+    }
 
   },
   data: () => ({

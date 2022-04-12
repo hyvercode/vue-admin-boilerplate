@@ -36,6 +36,7 @@
         :mode="true"
         :kanban="true"
         :columnsKanban="columnsKanban"
+        :commandContact="true"
         @onCheckToggle="doCheckToggle">
 
       <th id="delete" slot="thead-tr" class="text-center tbl-action-button">
@@ -45,16 +46,16 @@
         <td class="text-center">
           <button class="btn btn-flat nopadding" data-bs-toggle="tooltip" data-bs-placement="top" title="Family"
                   @click="(e) => handleViewEmployee(props.row, e)">
-            <i class="material-icons">family_restroom</i>
+            <i class="material-icons text-primary">family_restroom</i>
           </button>
           <button class="btn btn-flat nopadding" data-bs-toggle="tooltip" data-bs-placement="top"
                   title="Edit /View"
                   @click="(e) => handleUpdate(props.row, e)">
-            <i class="material-icons white-text">edit</i>
+            <i class="material-icons text-info">edit</i>
           </button>
           <button class="btn btn-flat nopadding" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"
                   @click="(e) => handleDelete(props.row, e)">
-            <i class="material-icons white-text">delete</i>
+            <i class="material-icons text-danger">delete</i>
           </button>
         </td>
       </template>
