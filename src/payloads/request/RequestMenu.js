@@ -1,4 +1,4 @@
-export default class Menu {
+export default class RequestMenu {
     constructor(id,menu_id, name, href, slug, is_icon, icon, parent_id, active) {
         this.id = id;
         this.menu_id = menu_id;
