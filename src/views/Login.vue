@@ -15,7 +15,7 @@
                 <label for="username" class="sr-only">Email</label>
                 <input
                     id="username"
-                    v-model="login.email"
+                    v-model="login.username"
                     type="text"
                     name="username"
                     class="form-control form-control-sm"
@@ -89,7 +89,7 @@ import VueRecaptcha from "vue-recaptcha";
 import Pages from "../helpers/Pages";
 import VuePassword from "vue-password";
 import PAGES from "../helpers/Pages";
-import User from "../model/user";
+import RequestUser from "../payloads/request/RequestLogin";
 import Autor from "../components/navigation/Autor";
 
 export default {
@@ -102,7 +102,7 @@ export default {
   data() {
     return {
       strength: 0,
-      login: new User(),
+      login: new RequestUser(),
       pages: PAGES,
     };
   },
