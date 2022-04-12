@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid">
     <MyDataTable
-        title="Family List"
+        title="Families"
         :columns="columns"
         :rows="records"
         :clickable="true"

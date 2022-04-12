@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid">
     <MyDataTable
-        title="List Employees"
+        title="Employees"
         :columns="columns"
         :rows="records"
         :clickable="true"
@@ -130,14 +130,8 @@ export default {
           email: true
         },
         {
-          label: "Address",
-          field: "address",
-          numeric: false,
-          html: false,
-        },
-        {
-          label: "Postal Code",
-          field: "postal_code",
+          label: "Employee Status",
+          field: "employee_status",
           numeric: false,
           html: false,
         },
@@ -148,7 +142,7 @@ export default {
           html: false,
         },
         {
-          label: "status",
+          label: "active",
           field: "active",
           numeric: false,
           html: false,
