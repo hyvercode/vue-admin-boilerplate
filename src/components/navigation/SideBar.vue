@@ -106,7 +106,7 @@
 <script>
 import avatar from 'vue-avatar'
 import VueCookies from "vue-cookies";
-import Util from "../../helpers/Util";
+import Util from "../../helpers/Utils";
 import pages from "../../helpers/Pages";
 
 export default {

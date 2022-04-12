@@ -25,6 +25,18 @@ class UserService {
     delete(id) {
         return Api.doDelete(Host.API_V1 + `/users/delete/${id}`);
     }
+
+    getProfile() {
+        return Api.doGet(Host.API_V1 + "/users/profile");
+    }
+
+    postChangePassword(payloads) {
+        return Api.doPost(Host.API_V1 + '/users/password/change', payloads);
+    }
+
+    postChangeAvatar(id,payloads) {
+        return Api.doPost(Host.API_V1 + `/users/avatar/${id}`, payloads);
+    }
 }
 
 export default new UserService();

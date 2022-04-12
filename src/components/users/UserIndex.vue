@@ -7,30 +7,36 @@
                :clickable="true"
                :sortable="true"
                :paginate="true"
-               :pagination="paginate"
+               :total-records="paginate.total"
                :rows-per-page="paginate.recordsPerPage"
                :current-page="paginate.currentPage"
                :last-page="paginate.lastPage"
-               :total-records="paginate.total"
                :default-per-page="paginate.perPage"
                :next-page-url="paginate.nextPageUrl"
                :prev-page-url="paginate.prevPageUrl"
-               :create-button="true"
-               create-button-title="Add New"
-               :printable="true"
-               :exportable="true"
-               :searchable="true"
+               v-on:onRowClick="handleClick"
+               v-on:onChangeRowPage="doChangePerPage"
+               v-on:onPreviousPage="doPrevPage"
+               v-on:onNextPage="doNextPage"
+               :searching="true"
+               v-on:onChangeSearch="doSearch"
+               v-on:onEnterSearch="doSearch"
                :filter="true"
+               :filterRecord="filterRecord"
+               v-on:onChangeFilter="doFilterSelected"
+               :filterDate="true"
+               v-on:onChangeDate="doFilterDate"
+               :exportable="true"
+               :printable="true"
+               :create-button="true"
+               v-on:onCreate="handleCreate"
                :refreshable="true"
-               :filter-date="true"
-               :filter-month="true"
-               :upload-button="true"
-               upload-button-title="Upload"
-               @onEnterSearch="doSearch"
-               @onRefresh="doRefresh"
-               @onPreviousPage="doPrevPage"
-               @onNextPage="doNextPage"
-               @onChangeRowPage="doChangePerPage"
+               v-on:onRefresh="doRefresh"
+               :loadingAnimation="false"
+               :mode="true"
+               :kanban="true"
+               :columnsKanban="columnsKanban"
+               @onCheckToggle="doCheckToggle"
     >
       <th
           id="delete"
@@ -63,6 +69,8 @@
 <script>
 import DataTable from "../mih/components/DataTable";
 import UserService from "../../services/user.service";
+import MenuService from "../../services/menu.service";
+import EmployeeService from "../../services/employee.service";
 
 export default {
   name: "UserIndex",
@@ -80,15 +88,15 @@ export default {
         {
           label: "avatar",
           field: "avatar",
-          name: "name",
+          name: "username",
           size: 30,
           numeric: false,
           html: false,
           image: true
         },
         {
-          label: "name",
-          field: "name",
+          label: "username",
+          field: "username",
           numeric: false,
           html: false,
           hidden: false,
@@ -101,13 +109,6 @@ export default {
           hidden: false,
         },
         {
-          label: "phone number",
-          field: "phone_number",
-          numeric: false,
-          html: false,
-          hidden: false,
-        },
-        {
           label: "roles",
           field: "menu_roles",
           numeric: false,
@@ -115,11 +116,61 @@ export default {
           hidden: false,
         },
         {
-          label: "status",
+          label: "Status",
           field: "active",
           numeric: false,
           html: false,
           hidden: false,
+          buttonToggle: true,
+          buttonToggleDesc: [
+            "Active", "Inactive"
+          ]
+        },
+      ],
+      columnsKanban: [
+        {
+          label: "Avatar",
+          field: "avatar",
+          name: "username",
+          size: 70,
+          numeric: false,
+          html: false,
+          image: true,
+          hidden: true
+        },
+        {
+          label: "Username",
+          field: "username",
+          numeric: false,
+          html: false,
+        },
+        {
+          label: "Email",
+          field: "email",
+          numeric: false,
+          html: false,
+        },
+        {
+          label: "Roles",
+          field: "menu_roles",
+          numeric: false,
+          html: false,
+        },
+        {
+          label: "Status",
+          field: "active",
+          numeric: false,
+          html: false,
+          hidden: false,
+          buttonToggle: true,
+          buttonToggleDesc: [
+            "Active", "Inactive"
+          ]
+        },
+        {
+          label: "ID",
+          field: "id",
+          hidden: true
         },
       ],
       records: [],
@@ -127,6 +178,11 @@ export default {
       searchParam: '',
       sortBy: 'created_at',
       sort: 'DESC',
+      filterRecord: [
+        {'id': 'id', "desc": "ID User"},
+        {'id': 'username', "desc": "Username"},
+        {'id': 'email', "desc": "Email"}
+      ],
       pagination: {
         recordsPerPage: [5, 10, 50, 100, 500, 1000, 5000, 10000],
         perPage: 10,
@@ -223,6 +279,25 @@ export default {
 
     doChangePerPage(props) {
       this.getRecordPaginate(this.dateFrom, this.dateTo, this.searchBy, this.searchParam, props[0], props[1], this.sortBy, this.sort);
+    },
+
+    /**
+     * Button Toggle
+     * @param props
+     */
+    doCheckToggle(props) {
+      let payload = props;
+      payload.active = !props.active
+      let loading = this.$loading.show();
+      UserService.postUpdate(props.id, payload).then((response) => {
+        if (response.code === 200) {
+          this.doRefresh();
+          loading.hide();
+        } else {
+          loading.hide();
+          this.$swal.fire("Error!", response.message, "error");
+        }
+      });
     },
   }
 }
