@@ -18,24 +18,8 @@ const pages = {
     PASSWORD_RESET: "/password/reset",
     PASSWORD_OTP: "/password/otp",
 
-    /**
-     * Master & Setup
-     */
     HOME: "/home",
-    PROFILE: "/profile",
     DASHBOARD: "/dashboard",
-    MASTERS: "/masters",
-    USERS: "/masters/users",
-    USERS_CREATE: "/masters/user",
-    USERS_UPDATE: "/masters/user/update",
-
-    MENU: "/masters/menu",
-    MENU_LIST: "/masters/menu/list",
-    MENU_ROLE: "/masters/menu/role",
-    NOTIFICATIONS: "/notifications",
-    NOTIFICATION_READ: "/notification/read",
-
-    BANNER: "/masters/banner",
 };
 
 export default pages;

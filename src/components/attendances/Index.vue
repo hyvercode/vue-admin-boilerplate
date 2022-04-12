@@ -39,7 +39,7 @@
               class="btn btn-flat nopadding"
               @click="(e) => onRowClick(props.row, e)"
           >
-            <i class="material-icons">article</i>
+            <i class="material-icons tbl-material-icons ">article</i>
           </button>
         </td>
       </template>

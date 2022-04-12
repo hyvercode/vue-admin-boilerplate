@@ -6,25 +6,20 @@ import Index from "../views/Index";
 import Pages from "../helpers/Pages";
 import VueCookies from "vue-cookies";
 import Password from "../views/Password";
-import Users from "../views/Users";
-import UserIndex from "../components/users/UserIndex";
-import Menu from "../views/Menu";
-import MenuIndex from "../components/menu/MenuIndex";
 import Home from "../views/Home";
 import routeLandingPage from "../theme/routePage";
-import MenuList from "../views/MenuList";
-import MenuListIndex from "../components/menuList/MenuListIndex";
-import MenuRoleIndex from "../components/menuRole/MenuRoleIndex";
-import Banner from "../views/Banner";
-import Profile from "../views/Profile";
 import PagesPerformanceManagement from "../helpers/PerformanceManagement";
 import PM from "../views/PM";
 import Pm from "./pm";
+import PagesHR from "../helpers/HR";
 import HR from "../views/HR";
 import hr from "./hr";
 import PagesLeaves from "../helpers/Leaves";
 import leaves from "./leaves";
 import Leaves from "../views/Leaves";
+import PagesMaster from "../helpers/Master";
+import master from "./master";
+import Master from "../views/Master";
 
 Vue.use(VueRouter);
 const routes = [
@@ -73,98 +68,10 @@ const routes = [
                 component: Dashboard
             },
             {
-                path: Pages.USERS,
-                name: 'Users',
-                component: Users,
-                children: [
-                    {
-                        path: "",
-                        name: "Index",
-                        component: UserIndex
-                    },
-                    {
-                        path: Pages.USERS_CREATE,
-                        name: 'UsersCreate',
-                        component: Dashboard
-                    }
-                ]
-            },
-            {
-                path: Pages.MENU_LIST,
-                name: 'Menu',
-                component: MenuList,
-                children: [
-                    {
-                        path: "",
-                        name: "Index",
-                        component: MenuListIndex
-                    }
-                ]
-            },
-            {
-                path: Pages.MENU,
-                name: 'Menu',
-                component: Menu,
-                children: [
-                    {
-                        path: "",
-                        name: "Index",
-                        component: MenuIndex
-                    }
-                ]
-            },
-            {
-                path: Pages.MENU_ROLE,
-                name: 'Menu',
-                component: MenuList,
-                children: [
-                    {
-                        path: "",
-                        name: "Index",
-                        component: MenuRoleIndex
-                    }
-                ]
-            },
-            {
-                path: Pages.BANNER,
-                name: "Banner",
-                component: Banner,
-                children: [
-                    {
-                        path: "",
-                        name: "Index",
-                        component: () => import("../components/banner/Index.vue"),
-                    },
-                ],
-            },
-            {
-                path: Pages.PROFILE,
-                name: "profile",
-                component: Profile,
-                children: [
-                    {
-                        path: "",
-                        name: "Index",
-                        component: () => import("../components/profile/Index.vue"),
-                    },
-                ],
-            },
-            {
-                path: Pages.NOTIFICATIONS,
-                name: "Notifications",
-                component: Notification,
-                children: [
-                    {
-                        path: "",
-                        name: "Index",
-                        component: () => import("../components/notifications/Index.vue"),
-                    },
-                    {
-                        path: Pages.NOTIFICATION_READ,
-                        name: "NotificationRead",
-                        component: () => import("../components/notifications/Read.vue"),
-                    },
-                ],
+                path: PagesMaster.MASTERS,
+                name: "Master",
+                component: Master,
+                children: master
             },
             {
                 path: PagesPerformanceManagement.PERFORMANCE,
@@ -173,7 +80,7 @@ const routes = [
                 children: Pm
             },
             {
-                path: Pages.MASTERS,
+                path: PagesHR.HR,
                 name: "HR",
                 component: HR,
                 children: hr
