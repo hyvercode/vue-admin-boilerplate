@@ -125,6 +125,19 @@ body {
   border: none;
 }
 
+//form-control
+.form-control:disabled{
+  font-family: inherit;
+  width: 100%;
+  border: 0 !important;
+  border-bottom: 1px solid #d2d2d2 !important;
+  outline: 0 !important;
+  font-size: 16px !important;
+  color: #212121 !important;
+  background: transparent !important;
+  transition: border-color 0.2s;
+}
+
 //Image Change
 label.label input[type="file"] {
   position: absolute;

@@ -4,15 +4,135 @@
         title="Profile"
     />
     <div class="row">
+      <div class="col-12 col-xl-8">
+        <div class="card card-body border-0 shadow mb-4">
+          <h2 class="h5 mb-4">Employee information</h2>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <img alt="No Image" v-if="employee.images" :src="employee.images"
+                   class="avatar-xl rounded-circle">
+              <avatar v-else :username="employee.first_name" :size="size"
+                      class="avatar-xl rounded-circle"></avatar>
+            </div>
+            <div class="col-md-6 mb-3">
+              <div class="row">
+                <div class="col-md-12 mb-3">
+                  <div>
+                    <label>First Name</label>
+                    <input class="form-control" type="text" v-model="employee.first_name"
+                           placeholder="Enter your first name" disabled>
+                  </div>
+                </div>
+                <div class="col-md-12 mb-3">
+                  <div>
+                    <label>Last Name</label>
+                    <input class="form-control" type="text" v-model="employee.last_name"
+                           placeholder="Enter your first name" disabled>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <div>
+                <label>Company</label>
+                <input class="form-control" type="text" v-model="employee.company_name"
+                       placeholder="Enter your first name" disabled>
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <div>
+                <label>Branch</label>
+                <input class="form-control" type="text" v-model="employee.branch"
+                       placeholder="Enter your first name" disabled>
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <div>
+                <label>NIK</label>
+                <input class="form-control" id="nik" type="text" v-model="employee.NIK"
+                       placeholder="Enter your first name" disabled>
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <div>
+                <label>Unit</label>
+                <input class="form-control" type="text" v-model="employee.unit_name"
+                       placeholder="Enter your first name" disabled>
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <div>
+                <label>Job Title</label>
+                <input class="form-control" type="text" v-model="employee.job_title_name"
+                       placeholder="Enter your first name" disabled>
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <div>
+                <label>Job Position</label>
+                <input class="form-control" type="text" v-model="employee.job_position_name" disabled>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--       end employee information-->
+        <!--       start personal information-->
+        <div class="card card-body border-0 shadow mb-4">
+          <h2 class="h5 mb-4">Personal information</h2>
+          <form>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <div>
+                  <label>Email</label>
+                  <input class="form-control" type="text" v-model="employee.email"
+                         placeholder="Enter your first name" disabled>
+                </div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <div>
+                  <label for="last_name">Phone Number</label>
+                  <input class="form-control" id="last_name" type="text" v-model="employee.phone_number"
+                         placeholder="Also your last name" disabled>
+                </div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <div>
+                  <label for="last_name">Birt Date</label>
+                  <input class="form-control" type="date" v-model="employee.birth_date"
+                         placeholder="Also your last name" disabled>
+                </div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <div>
+                  <label for="last_name">Birt Place</label>
+                  <input class="form-control" type="text" v-model="employee.birth_place"
+                         placeholder="Also your last name" disabled>
+                </div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <div>
+                  <label for="last_name">Address</label>
+                  <textarea class="form-control" rows="5" type="text" v-model="employee.address"
+                            placeholder="Also your last name" disabled></textarea>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <!--       end personal information-->
+      </div>
       <div class="col-12 col-xl-4">
         <div class="row">
           <div class="col-12 mb-4">
             <div class="card shadow border-0 text-center p-0">
-              <div class="profile-cover rounded-top" data-background="~@/assets/img/photo-bg.png"></div>
+              <div class="profile-cover rounded-top" data-background="~@/assets/images/icons/photo-bg.png"></div>
               <div class="card-body pb-5">
                 <img alt="No Image" v-if="user.avatar" :src="user.avatar"
                      class="avatar-xl rounded-circle mx-auto mt-n7 mb-4">
-                <avatar v-else :username="user.name" :size="size"></avatar>
+                <avatar v-else :username="employee.first_name" :size="size"
+                        class="avatar-xl rounded-circle mx-auto mt-n7 mb-4"></avatar>
                 <div class="container">
                   <label class="label">
                     <input
@@ -20,55 +140,63 @@
                         accept="image/*"
                         @change="onFileChange"
                     />
-                    <span>Change Photo</span>
+                    <span>Browse</span>
                   </label>
                 </div>
-                <h4 class="h3">{{ user.name }}</h4>
-                <h5 class="fw-normal">{{ user.company_name }}</h5>
-                <p class="text-gray mb-4">{{ user.branch_name }}</p>
+                <h4 class="h3 mt-3">{{ employee.nick_name }}</h4>
+                <h5 class="fw-normal">{{ employee.company_name }}</h5>
+                <p class="text-gray-60">Branch</p>
+                <p class="text-gray mb-4">{{ employee.branch_name }}</p>
                 <a class="btn btn-sm btn-gray-800 d-inline-flex align-items-center me-2"
                    :href="'mailto:'+user.email">
                   <i class="material-icons" size="20">attach_email</i>
                   Mail
                 </a>
-                <button class="btn btn-primary" @click.prevent="submit">Upload Avatar</button>
+                <button class="btn btn-primary" @click.prevent="updateAvatar">Upload Avatar</button>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="col-12 col-xl-8">
+        <!--        change password-->
         <div class="card card-body border-0 shadow mb-4">
-          <h2 class="h5 mb-4">General information</h2>
-          <form>
-            <div class="row">
-              <div class="col-md-6 mb-3">
-                <div>
-                  <label for="first_name">Name</label>
-                  <input class="form-control" id="first_name" type="text" v-model="user.name"
-                         placeholder="Enter your first name" disabled>
+          <h2 class="h5 mb-4">Change Password</h2>
+          <div>
+            <form role="form">
+              <div class="mb-3">
+                <label class="form-label">Old Password</label>
+                <div class="input-group mb-3">
+                  <input :type="type1" v-model="oldPassword" class="form-control"
+                         placeholder="Please input old password">
+                  <span class="input-group-text" id="basic-addon1" @click="showOldPassword"><i
+                      class="material-icons">{{ type1 === 'text' ? 'remove_red_eye' : 'vpn_key' }}</i></span>
                 </div>
               </div>
-              <div class="col-md-6 mb-3">
-                <div>
-                  <label for="last_name">Phone Number</label>
-                  <input class="form-control" id="last_name" type="text" v-model="user.phone_number"
-                         placeholder="Also your last name" disabled>
+              <div class="mb-3">
+                <label class="form-label">New Password</label>
+                <div class="input-group mb-3">
+                  <input :type="type2" v-model="newPassword" class="form-control"
+                         placeholder="Please input new password">
+                  <span class="input-group-text" @click="showNewPassword"><i
+                      class="material-icons">{{ type2 === 'text' ? 'remove_red_eye' : 'vpn_key' }}</i></span>
                 </div>
               </div>
-            </div>
-            <div class="row">
-              <div class="col-md-6 mb-3">
-                <div class="form-group">
-                  <label for="email">Email</label>
-                  <input class="form-control" id="email" v-model="user.email" type="email"
-                         placeholder="name@company.com" disabled>
+              <div class="mb-3">
+                <label class="form-label">Re Password</label>
+                <div class="input-group mb-3">
+                  <input type="password" v-model="rePassword" class="form-control" placeholder="******">
                 </div>
               </div>
-            </div>
-          </form>
+              <div class="mb-3  d-flex justify-content-end">
+                <button type="button" class="btn btn-primary text-white" @click.prevent="onSubmitPassword">Change
+                  Password
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
-        <div class="card card-body border-0 shadow mb-4 mb-xl-0" v-if="false">
+        <!--       end change password-->
+        <!--       alert & notification-->
+        <div class="card card-body border-0 shadow mb-4 mb-xl-0">
           <h2 class="h5 mb-4">Alerts & Notifications</h2>
           <ul class="list-group list-group-flush">
             <li class="list-group-item d-flex align-items-center justify-content-between px-0 border-bottom">
@@ -109,29 +237,31 @@
             </li>
           </ul>
         </div>
+        <!--       end alert & notification-->
       </div>
     </div>
-    <change-password title="Change Password" v-show="show" v-on:onClose="onClose"/>
   </div>
 </template>
 <script>
 import RequestEmployee from "../../payloads/request/RequestEmployee";
-import EmployeeService from "../../services/employee.service";
 import FormHeader from "../navigation/FormHeader";
-import ChangePassword from "./ChangePassword";
 import UserService from "@/services/user.service";
 import Utils from "@/helpers/Utils";
 import VueCookies from "vue-cookies";
 import avatar from 'vue-avatar';
 
 export default {
-  components: {FormHeader, ChangePassword, avatar},
+  components: {FormHeader, avatar},
   data() {
     return {
       employee: new RequestEmployee(),
-      show: false,
       user: null,
-      size: 30
+      size: 100,
+      type1: 'password',
+      type2: 'password',
+      oldPassword: null,
+      newPassword: null,
+      rePassword: null
     };
   },
   created() {
@@ -150,28 +280,10 @@ export default {
         }, 100);
       });
     },
-    submit() {
-      let loading = this.$loading.show();
-      EmployeeService.postUpdate(this.employee.id, this.employee).then(
-          (response) => {
-            if (response.code === 200) {
-              loading.hide();
-              this.$swal.fire(
-                  "Success",
-                  "Your profile has been updated",
-                  "success"
-              );
-            } else {
-              loading.hide();
-              this.$swal.fire("Alert!", response.message, "error");
-            }
-          }
-      );
-    },
     updateAvatar() {
       let loading = this.$loading.show();
       let payload = {
-        avatar: this.employee.images
+        avatar: this.user.avatar
       }
       UserService.postChangeAvatar(this.user.id, payload).then(
           (response) => {
@@ -179,7 +291,7 @@ export default {
               loading.hide();
               this.$swal.fire(
                   "Success",
-                  "Your profile has been updated",
+                  "Your avatar has been updated",
                   "success"
               );
             } else {
@@ -189,23 +301,63 @@ export default {
           }
       );
     },
+
     onFileChange(e) {
       let files = e.target.files || e.dataTransfer.files;
       if (!files.length) return;
       this.createImage(files[0]);
     },
+
     createImage(file) {
       let reader = new FileReader();
       reader.onload = (e) => {
-        this.employee.images = e.target.result;
+        this.user.avatar = e.target.result;
       };
       reader.readAsDataURL(file);
     },
-    onChangePassword() {
-      this.show = true;
+
+    showOldPassword() {
+      if (this.type1 === 'password') {
+        this.type1 = 'text'
+      } else {
+        this.type1 = 'password'
+      }
+    },
+    showNewPassword() {
+      if (this.type2 === 'password') {
+        this.type2 = 'text'
+      } else {
+        this.type2 = 'password'
+      }
     },
     onClose() {
-      this.show = false;
+      this.$emit('onClose');
+    },
+    onSubmitPassword() {
+      let payload = {
+        old_password: this.oldPassword,
+        new_password: this.newPassword,
+        password_confirmation: this.rePassword
+      }
+      let loading = this.$loading.show();
+      UserService.postChangePassword(payload).then(
+          (response) => {
+            if (response.code === 200) {
+              loading.hide();
+              this.oldPassword = null;
+              this.newPassword = null;
+              this.$swal.fire(
+                  "Success",
+                  "Your password has been updated",
+                  "success"
+              );
+              this.onClose();
+            } else {
+              loading.hide();
+              this.$swal.fire("Alert!", response.message, "error");
+            }
+          }
+      );
     }
   },
 };

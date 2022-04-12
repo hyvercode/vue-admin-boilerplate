@@ -1,5 +1,6 @@
 export default class RequestEmployee {
     constructor(id,
+                employee_id,
                 NIK,
                 branch_id,
                 first_name,
@@ -48,6 +49,7 @@ export default class RequestEmployee {
                 coordinate,
     ) {
         this.id = id;
+        this.employee_id = employee_id;
         this.NIK = NIK;
         this.branch_id = branch_id;
         this.first_name = first_name;

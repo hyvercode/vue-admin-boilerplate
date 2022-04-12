@@ -13,7 +13,7 @@ const user = {
                     commit('SET_RECORD', response.data);
                     return Promise.resolve(response.data);
                 } else {
-                    // AuthService.logout();
+                    AuthService.logout();
                 }
 
             })

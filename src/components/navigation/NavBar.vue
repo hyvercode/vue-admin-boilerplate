@@ -4,7 +4,7 @@
       <div class="d-flex justify-content-between w-100" style="margin-top: -10px;" id="navbarSupportedContent">
         <div class="d-flex align-items-center">
           <router-link class="navbar-brand ml-2" to="/home">
-            <em><img src="~@/assets/images/icons/brand.png"></em>
+            <em><img src="~@/assets/images/icons/brand.png" width="200"></em>
           </router-link>
           <!-- Sidebar Toggle-->
           <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0 " id="sidebarToggle"
@@ -79,8 +79,9 @@
             <a class="nav-link dropdown-toggle pt-1 px-0" href="#" role="button" data-bs-toggle="dropdown"
                aria-expanded="false">
               <div class="media d-flex align-items-center">
-                <img alt="Image placeholder" v-if="user.avatar" :src="user.avatar" class="avatar-md rounded">
-                <avatar v-else :username="user.name" :size="size"></avatar>
+                <img alt="Image placeholder" v-if="user.avatar" :src="user.avatar" class="avatar-sm rounded"
+                     width="100">
+                <avatar v-else :username="user.name" :size="size" class="avatar-sm rounded"></avatar>
                 <div class="media-body ms-2 text-dark align-items-center d-none d-lg-block">
                   <span class="mb-0 font-small fw-bold text-gray-900">{{ user.name }}</span>
                 </div>

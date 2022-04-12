@@ -180,10 +180,10 @@ export default {
           numeric: true,
           html: false,
           badge: true,
-          badgeClass: 'badge bg-primary'
+          badgeClass: 'badge bg-secondary'
         },
         {
-          label: "First Name",
+          label: "Fullname",
           field: "first_name",
           numeric: false,
           html: false,
@@ -191,7 +191,7 @@ export default {
           concatWith: "last_name",
         },
         {
-          label: "Phone Number",
+          label: "Phone",
           field: "phone_number",
           numeric: false,
           html: false,

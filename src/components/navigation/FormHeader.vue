@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid px-3 mt-4">
+  <div class="container-fluid px-3">
     <div class="row">
       <div class="col-6 d-flex justify-content-between ps-0">
         <div class="me-lg-3">

@@ -8,11 +8,12 @@
         <div class="row">
           <div class="col-12 mb-4">
             <div class="card shadow border-0 text-center p-0">
-              <div class="profile-cover rounded-top" data-background="~@/assets/img/photo-bg.png"></div>
+              <div class="profile-cover rounded-top" data-background="~@/assets/images/icons/photo-bg.png"></div>
               <div class="card-body pb-5">
                 <img alt="No Image" v-if="company.image" :src="company.image"
                      class="avatar-xl rounded-circle mx-auto mt-n7 mb-4">
-                <avatar v-else :username="company.company_code" :size="size"></avatar>
+                <avatar v-else :username="company.company_code" :size="size"
+                        class="avatar-xl rounded-circle mx-auto mt-n7 mb-4"></avatar>
                 <div class="container">
                   <label class="label">
                     <input
@@ -167,7 +168,7 @@ export default {
       company: new RequestCompany(),
       show: false,
       user: null,
-      size: 30
+      size: 100
     };
   },
   created() {
