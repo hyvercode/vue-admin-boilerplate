@@ -1,7 +1,7 @@
 import AuthService from "../services/auth.service";
 import VueCookies from "vue-cookies";
 const authUser = JSON.parse(
-    JSON.stringify(VueCookies.get("_PICKERSSESSIONID"))
+    JSON.stringify(VueCookies.get("__MIH__BASE__SESSIONID__"))
 );
 const initialState = authUser
     ? { status: { loggedIn: true }, auth: authUser }

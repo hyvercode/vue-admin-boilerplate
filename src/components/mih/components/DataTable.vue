@@ -161,7 +161,7 @@
 
               <!--            Boolean Content-->
               <div
-                  v-if="column.boolean && !column.html && !column.currency && column.field ==='active' && !column.badge && !column.hidden"
+                  v-if="column.boolean && !column.html && !column.currency && column.field ==='active'  &&  !column.badge && !column.hidden"
                   :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none !important;':''}">
                           <span :class="collect(row, column.field) ? 'badge bg-success' : 'badge bg-secondary'">{{
                               collect(row, column.field) ? column.booleanDesc[0] : column.booleanDesc[1]
@@ -193,11 +193,11 @@
                 }}</span>
               </div>
 
-              <!--        Toogle button-->
+              <!--        Toggle button-->
               <div v-if="column.buttonToggle && !column.hidden"
                    :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none !important;':''}">
                 <div class="form-check form-switch">
-                  <input class="form-check-input" type="checkbox" id="user-notification-2"
+                  <input class="form-check-input" type="checkbox"
                          :checked="collect(row, column.field)"
                          @click="onCheckToggle(row)"
                          :key="index"
@@ -219,56 +219,99 @@
       <!--    End Table Content-->
 
       <!--    Kanban Content-->
-      <div v-else class="box">
+      <div v-else class="box py-1">
         <div v-if="kanban" class="row">
           <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12"
                v-for="(row, index) in paginated"
                :key="index"
-               :class="{ clickable : clickable }"
           >
-            <div class="box-part text-center">
-              <div v-for="(column, columnIndex) in columnsKanban"
-                   :key="columnIndex"
-                   :class="{ numeric : column.numeric }">
+            <div class="box-part">
+              <div class="row">
+                <div class="col-md-3 col-sm-12">
+                  <div v-for="(column, columnIndex) in columnsKanban"
+                       :key="columnIndex"
+                       :class="{ numeric : column.numeric }">
 
-                <!--            Normal Content-->
-                <div class="kanban-text"
-                     v-if="!column.html && !column.currency && !column.image && column.field !=='active' && !column.badge && !column.hidden && !column.email"
-                     :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none':''}">
-                  {{ collect(row, column.field) }} <span v-if="column.concat"> {{
-                    collect(row, column.concatWith)
-                  }}</span>
+                    <!--              Image Content-->
+                    <div v-if="column.image && !column.email"
+                         :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none !important;':''}">
+                      <img v-if="collect(row, column.field)" :src="collect(row, column.field)"
+                           class="mih tbl-mih-img-kanban"
+                           :alt="index"/>
+                      <avatar v-else :username="collect(row, column.name)" :size="column.size"></avatar>
+                    </div>
+                  </div>
                 </div>
-                <!--            Boolean Content-->
-                <div
-                    v-if="!column.html && !column.currency && column.field ==='active' && !column.badge && !column.hidden && !column.email"
-                    :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none':''}">
+                <div class="col-md-9 col-sm-12">
+                  <table>
+                    <tbody>
+                    <tr v-for="(column, index) in columnsKanban"
+                        :key="index"
+                        :class="(sortable && !column.hidden? 'sorting ' : '')
+                        + (sortColumn === index ?
+                          (sortType === 'desc' ? 'sorting-desc' : 'sorting-asc')
+                          : '')
+                        + (column.numeric ? ' numeric' : '')"
+                        :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none':''}"
+                        @click="sort(index)">
+                      <th><span v-if="!column.hidden">{{ column.label }}</span></th>
+                      <th>:
+                        <!--                        Normal Content-->
+                        <span class="kanban-text"
+                              v-if="!column.html && !column.currency && !column.image && column.field !=='active' && !column.badge && !column.hidden && !column.email"
+                              :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none':''}">{{
+                            collect(row, column.field)
+                          }} <span v-if="column.concat"> {{ collect(row, column.concatWith) }}</span></span>
+
+                        <!--            Boolean Content-->
+                        <span class="kanban-text"
+                              v-if="column.boolean && !column.html && !column.currency && column.field ==='active'  &&  !column.badge && !column.hidden"
+                              :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none !important;':''}">
                           <span :class="collect(row, column.field) ? 'badge bg-success' : 'badge bg-secondary'">{{
-                              collect(row, column.field) ? 'Active' : 'Non Active'
+                              collect(row, column.field) ? column.booleanDesc[0] : column.booleanDesc[1]
                             }}</span>
-                </div>
-                <!--              Image Content-->
-                <div v-if="column.image && !column.hidden && !column.email"
-                     :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none':''}">
-                  <img v-if="collect(row, column.field)" :src="collect(row, column.field)" class="mih kanban-mih-img"
-                       :alt="index"/>
-                  <i v-else class="material-icons">photo</i>
-                </div>
-                <!--            Badge Content-->
-                <div v-if="column.badge && !column.hidden && !column.email"
-                     :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none':''}">
-              <span :class="column.badgeClass? column.badgeClass : 'badge bg-primary'">{{
-                  collect(row, column.field)
-                }}</span>
-                </div>
+                        </span>
 
-                <!--              Mail Content-->
-                <div v-if="column.email && !column.hidden"
-                     :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none':''}">
-                  <a :href="'mailto:'+collect(row, column.field)" class="kanban-a">{{ collect(row, column.field) }}</a>
+                        <!--            Currency Content-->
+                        <span class="kanban-text" v-if="!column.html && column.currency"
+                              v-html="isCurrency(collect(row, column.field)) && !column.badge && !column.hidden"
+                              :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none !important;':''}"/>
+
+                        <!--            HTML Content-->
+                        <span class="kanban-text" v-if="column.html && !column.hidden"
+                              v-html="collect(row, column.field)"
+                              :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none !important;':''}"/>
+
+                        <!--            Badge Content-->
+                        <span class="kanban-text" v-if="column.badge && !column.hidden"
+                              :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none !important;':'','margin-top':'-20px !important','margin-left':'0px'}">
+                            <span :class="column.badgeClass? column.badgeClass : 'badge bg-primary'">{{
+                                collect(row, column.field)
+                              }}</span>
+                        </span>
+
+                        <!--        Toggle button-->
+                        <div v-if="column.buttonToggle && !column.hidden"
+                             :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none !important;':'','margin-top':'-20px !important','margin-left':'10px'}">
+                          <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox"
+                                   :checked="collect(row, column.field)"
+                                   @click="onCheckToggle(row)"
+                                   :key="index"
+                            >
+                            <small>{{
+                                collect(row, column.field) ? column.buttonToggleDesc[0] : column.buttonToggleDesc[1]
+                              }}</small>
+                          </div>
+                        </div>
+                      </th>
+                    </tr>
+                    </tbody>
+                  </table>
                 </div>
               </div>
-              <a @click.prevent="onRowClick(row)" class="kanban-a align-text-bottom">View More</a>
+              <a type="button" @click.prevent="onRowClick(row)" class="kanban-a d-flex justify-content-end">View
+                More</a>
             </div>
           </div>
         </div>
@@ -336,7 +379,7 @@
 <script>
 import Fuse from 'fuse.js';
 import locales from '../index';
-import Utils from "../../../helpers/Util";
+import Utils from "../../../helpers/Utils";
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable';
 import draggable from 'vuedraggable'
@@ -1292,14 +1335,24 @@ table th:first-child, table td:first-child {
 
 .tbl-mih-img {
   border: solid 1px #F2F2F2;
-  border-radius: 5px 10px 5px;
-  margin: 2px;
-  max-width: 40px;
+  border-radius: 50%;
+  max-width: 32px;
   background-color: #F2F2F2;
   display: block;
   width: auto;
   height: auto;
 }
+
+.tbl-mih-img-kanban {
+  border: solid 1px #F2F2F2;
+  border-radius: 50%;
+  max-width: 70px;
+  background-color: #F2F2F2;
+  display: block;
+  width: auto;
+  height: auto;
+}
+
 
 /**
   Kanban Card
@@ -1325,12 +1378,13 @@ table th:first-child, table td:first-child {
   padding: 10px 10px;
   margin: 12px 0px;
   max-height: 500px;
-  min-height: 270px;
+  min-height: 170px;
 }
 
 .kanban-text {
-  margin: 1px 0px;
+  margin: 0px 0px;
 }
+
 
 .kanban-a {
   color: #0F75BC;
