@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid">
     <DataTable v-if="pagination" :key="pagination.currentPage"
-               title="RequestMenu"
+               title="Menu"
                :columns="columns"
                :rows="records"
                :filter-record="filterRecord"

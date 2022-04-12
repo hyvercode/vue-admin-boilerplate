@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid">
     <DataTable v-if="pagination" :key="pagination.currentPage"
-               title="Menu Roles"
+               title="RequestMenu Roles"
                :columns="columns"
                :rows="records"
                :filter-record="filterRecord"
@@ -83,7 +83,7 @@
               </select>
             </div>
             <div class="mb-3">
-              <label class="form-label" for="parentMenu">Menu</label>
+              <label class="form-label" for="parentMenu">RequestMenu</label>
               <select class="form-select" id="parentMenu" v-model="menu.menus_id">
                 <option value="null" disabled>Choose...</option>
                 <option v-for="item in menus" :key="item.id" :value="item.id">{{ item.name }}</option>
@@ -110,7 +110,7 @@
 import DataTable from "../mih/components/DataTable";
 import MenuRoleService from "../../services/menuRole.service";
 import RolesService from "../../services/role.service";
-import MenuRole from "../../model/menuRole";
+import RequestMenuRole from "../../payloads/request/RequestMenuRole";
 import MenuService from "../../services/menu.service";
 
 export default {
@@ -118,7 +118,7 @@ export default {
   components: {DataTable},
   data() {
     return {
-      menu: new MenuRole(),
+      menu: new RequestMenuRole(),
       columns: [
         {
           label: "ID",
@@ -160,7 +160,7 @@ export default {
       sortBy: 'created_at',
       sort: 'DESC',
       filterRecord: [
-        {'id': 'id', "desc": "ID Menu"},
+        {'id': 'id', "desc": "ID RequestMenu"},
         {'id': 'role_name', "desc": " Role Name"}
       ],
       pagination: {
@@ -329,7 +329,7 @@ export default {
       if (!this.idUpdate) {
         MenuRoleService.postCreate(this.menu).then((response) => {
           if (response.code === 200) {
-            this.menu = new MenuRole();
+            this.menu = new RequestMenuRole();
             loading.hide();
             this.$swal.fire({
               icon: "success",
@@ -346,7 +346,7 @@ export default {
       } else {
         MenuRoleService.postUpdate(this.menu.id, this.menu).then((response) => {
           if (response.code === 200) {
-            this.menu = new MenuRole();
+            this.menu = new RequestMenuRole();
             loading.hide();
             this.$swal.fire({
               icon: "success",

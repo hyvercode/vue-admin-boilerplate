@@ -156,7 +156,7 @@
 <script>
 import avatar from 'vue-avatar'
 import VueCookies from "vue-cookies";
-import Util from "../../helpers/Util";
+import Util from "../../helpers/Utils";
 
 export default {
   name: "NavBar",

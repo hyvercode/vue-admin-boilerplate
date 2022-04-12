@@ -5,7 +5,9 @@ import store from "@/store";
 import "sweetalert2/dist/sweetalert2.min.css";
 import $ from "jquery";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap-vue/dist/bootstrap-vue.css";
 import "bootstrap";
+import { BootstrapVue} from "bootstrap-vue";
 import "./app.scss";
 import retina from "retinajs";
 import VueRetina from "vue-retina";
@@ -28,7 +30,7 @@ import 'viewerjs/dist/viewer.css'
 import Viewer from 'v-viewer';
 import VModal from 'vue-js-modal'
 
-
+Vue.use(BootstrapVue);
 Vue.use(VModal)
 Vue.use(CKEditor);
 Vue.use(VueJwtDecode);

@@ -34,6 +34,8 @@ const pages = {
     MENU_ROLE: "/masters/menu/role",
     NOTIFICATIONS: "/notifications",
     NOTIFICATION_READ: "/notification/read",
+
+    BANNER: "/masters/banner",
 };
 
 export default pages;
