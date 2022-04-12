@@ -45,17 +45,17 @@
       <template slot="tbody-tr" slot-scope="props">
         <td class="text-center">
           <button class="btn btn-flat nopadding" data-bs-toggle="tooltip" data-bs-placement="top" title="Family"
-                  @click="(e) => handleViewEmployee(props.row, e)">
-            <i class="material-icons text-primary">family_restroom</i>
+                  @click.prevent="(e) => handleViewEmployee(props.row, e)">
+            <i class="material-icons tbl-material-icons text-primary">family_restroom</i>
           </button>
           <button class="btn btn-flat nopadding" data-bs-toggle="tooltip" data-bs-placement="top"
                   title="Edit /View"
-                  @click="(e) => handleUpdate(props.row, e)">
-            <i class="material-icons text-info">edit</i>
+                  @click.prevent="(e) => handleUpdate(props.row, e)">
+            <i class="material-icons tbl-material-icons text-info">edit</i>
           </button>
           <button class="btn btn-flat nopadding" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"
-                  @click="(e) => handleDelete(props.row, e)">
-            <i class="material-icons text-danger">delete</i>
+                  @click.prevent="(e) => handleDelete(props.row, e)">
+            <i class="material-icons tbl-material-icons text-danger">delete</i>
           </button>
         </td>
       </template>

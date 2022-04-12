@@ -44,15 +44,15 @@
         <td class="text-center">
           <button
               class="btn btn-flat nopadding"
-              @click="(e) => handleUpdate(props.row, e)"
+              @click.prevent="(e) => handleUpdate(props.row, e)"
           >
-            <i class="material-icons white-text">edit</i>
+            <i class="material-icons tbl-material-icons text-info">edit</i>
           </button>
           <button
               class="btn btn-flat nopadding"
-              @click="(e) => handleDelete(props.row, e)"
+              @click.prevent="(e) => handleDelete(props.row, e)"
           >
-            <i class="material-icons white-text">delete</i>
+            <i class="material-icons tbl-material-icons text-danger">delete</i>
           </button>
         </td>
       </template>
