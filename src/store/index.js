@@ -4,12 +4,14 @@ import {auth} from "./auth.module";
 import {nav} from "./nav.module";
 import notification from "./notification.module";
 import menu from "./menu.module"
+import user from "./user.module";
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
     modules: {
         menu,
+        user,
         notification,
         nav,
         auth,

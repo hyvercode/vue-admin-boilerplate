@@ -15,6 +15,16 @@ import routeLandingPage from "../theme/routePage";
 import MenuList from "../views/MenuList";
 import MenuListIndex from "../components/menuList/MenuListIndex";
 import MenuRoleIndex from "../components/menuRole/MenuRoleIndex";
+import Banner from "../views/Banner";
+import Profile from "../views/Profile";
+import PagesPerformanceManagement from "../helpers/PerformanceManagement";
+import PM from "../views/PM";
+import Pm from "./pm";
+import HR from "../views/HR";
+import hr from "./hr";
+import PagesLeaves from "../helpers/Leaves";
+import leaves from "./leaves";
+import Leaves from "../views/Leaves";
 
 Vue.use(VueRouter);
 const routes = [
@@ -114,7 +124,66 @@ const routes = [
                         component: MenuRoleIndex
                     }
                 ]
-            }
+            },
+            {
+                path: Pages.BANNER,
+                name: "Banner",
+                component: Banner,
+                children: [
+                    {
+                        path: "",
+                        name: "Index",
+                        component: () => import("../components/banner/Index.vue"),
+                    },
+                ],
+            },
+            {
+                path: Pages.PROFILE,
+                name: "profile",
+                component: Profile,
+                children: [
+                    {
+                        path: "",
+                        name: "Index",
+                        component: () => import("../components/profile/Index.vue"),
+                    },
+                ],
+            },
+            {
+                path: Pages.NOTIFICATIONS,
+                name: "Notifications",
+                component: Notification,
+                children: [
+                    {
+                        path: "",
+                        name: "Index",
+                        component: () => import("../components/notifications/Index.vue"),
+                    },
+                    {
+                        path: Pages.NOTIFICATION_READ,
+                        name: "NotificationRead",
+                        component: () => import("../components/notifications/Read.vue"),
+                    },
+                ],
+            },
+            {
+                path: PagesPerformanceManagement.PERFORMANCE,
+                name: "PerformanceManagement",
+                component: PM,
+                children: Pm
+            },
+            {
+                path: Pages.MASTERS,
+                name: "HR",
+                component: HR,
+                children: hr
+            },
+            {
+                path: PagesLeaves.LEAVE,
+                name: "Leaves",
+                component: Leaves,
+                children: leaves
+            },
         ]
     },
     {
