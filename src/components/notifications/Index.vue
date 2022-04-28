@@ -5,7 +5,7 @@
     />
     <div class="row">
       <div class="col-lg-3 col-md-12 col-sm-12 col-12">
-        <div class="card px-3 py-3">
+        <div class="card px-3 py-3" style="min-height: 1020px">
           <div v-for="item in notifications" :key="item.id" class="list-group mt-1">
             <div class="list-group-item" @click.prevent="handleRead(item)"
                  :style="[ item.read?{ 'background-color':'#FFFFFF' }:{ 'background-color':'#F2F4F6' }]">
@@ -32,7 +32,7 @@
       </div>
       <div v-if="notification" class="col-lg-9 col-md-12 col-sm-12 col-12">
         <div class="card px-3 py-3" style="min-height: 1020px">
-          <div class="row">
+          <div class="row px-3">
             <div class="col-6">
               <span class="d-flex justify-content-start">
                  <h5>{{ notification.subject }}</h5>
@@ -48,7 +48,7 @@
                   class="text-info mt-1">{{ notification.created_at | moment("DD MMMM YYYY HH:mm") }}</small></span>
             </div>
           </div>
-          <div class="row">
+          <div class="row px-3">
             <hr class="mt-2">
             <span v-html="notification.body"></span>
           </div>
