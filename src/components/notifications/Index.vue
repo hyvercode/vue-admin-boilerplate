@@ -5,10 +5,10 @@
     />
     <div class="row">
       <div class="col-lg-3 col-md-12 col-sm-12 col-12">
-        <div class="card px-3 py-3" style="min-height: 1020px">
+        <div class="card px-2 py-2" style="min-height: 1020px">
           <div v-for="item in notifications" :key="item.id" class="list-group mt-1">
             <div class="list-group-item" @click.prevent="handleRead(item)"
-                 :style="[ item.read?{ 'background-color':'#FFFFFF' }:{ 'background-color':'#F2F4F6' }]">
+                 :style="[ item.read?{ 'background-color':'#F1F1F1' }:{ 'background-color':'#F2F4F6' }]">
               <div class="row">
                 <div class="col-2">
                   <img alt="No Image" v-if="item.images" :src="item.images"
@@ -150,6 +150,11 @@ export default {
 
     async handleRead(params) {
       this.reads = params;
+      NotificationService.postRead(params.id).then(response => {
+        if (response.code === 200) {
+          this.doRefresh()
+        }
+      })
     },
 
     handleDelete(id) {
