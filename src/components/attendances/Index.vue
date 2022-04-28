@@ -14,6 +14,7 @@
         :default-per-page="paginate.perPage"
         :next-page-url="paginate.nextPageUrl"
         :prev-page-url="paginate.prevPageUrl"
+        v-on:onRowClick="onRowClick"
         v-on:onChangeRowPage="handleChangeRecords"
         v-on:onPreviousPage="prevPage"
         v-on:onNextPage="nextPage"
@@ -27,11 +28,13 @@
         v-on:onChangeDate="doFilterDate"
         :exportable="true"
         :printable="true"
-        :create-button="false"
         :refreshable="true"
         v-on:onRefresh="doRefresh"
         :loadingAnimation="false"
-        v-on:onRowClick="onRowClick">
+        :mode="true"
+        :kanban="true"
+        :command-contact="true"
+        :columnsKanban="columnsKanban">
       <th id="delete" slot="thead-tr" class="text-center tbl-action-button">Actions</th>
       <template slot="tbody-tr" slot-scope="props">
         <td class="text-center">
@@ -136,6 +139,62 @@ export default {
           numeric: false,
           html: false,
         }
+      ],
+      columnsKanban: [
+        {
+          label: "NIK",
+          field: "NIK",
+          numeric: true,
+          html: false,
+          badge: true,
+          badgeClass: 'badge bg-secondary'
+        },
+        {
+          label: "Photo",
+          field: "images",
+          name: "first_name",
+          size: 70,
+          numeric: false,
+          html: false,
+          image: true,
+          hidden: true
+        },
+        {
+          label: "Fullname",
+          field: "first_name",
+          numeric: false,
+          html: false,
+          concat: true,
+          concatWith: "last_name",
+        },
+        {
+          label: "status",
+          field: "status",
+          numeric: false,
+          html: false,
+          badge: true
+        },
+        {
+          label: "check in",
+          field: "check_in",
+          numeric: false,
+          html: false,
+          badge: true,
+          badgeClass: 'badge bg-success'
+        },
+        {
+          label: "check out",
+          field: "check_out",
+          numeric: false,
+          html: false,
+          badge: true,
+          badgeClass: 'badge bg-danger'
+        },
+        {
+          label: "ID",
+          field: "id",
+          hidden: true
+        },
       ],
       records: [],
       pagination: {

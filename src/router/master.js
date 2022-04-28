@@ -9,6 +9,7 @@ import MenuRoleIndex from "../components/menuRole/MenuRoleIndex";
 import Banner from "../views/Banner";
 import Profile from "../views/Profile";
 import Education from "../views/Education";
+import Notifications from "../views/Notification";
 
 export default [
     {
@@ -26,7 +27,7 @@ export default [
     {
         path: Pages.NOTIFICATIONS,
         name: "Notifications",
-        component: Notification,
+        component: Notifications,
         children: [
             {
                 path: "",

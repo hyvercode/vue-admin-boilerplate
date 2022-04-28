@@ -36,33 +36,35 @@
             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-center mt-2 py-0">
               <div class="list-group list-group-flush">
                 <a href="#" class="text-center text-primary fw-bold border-bottom border-light py-3">Notifications</a>
-                <a href="#" class="list-group-item list-group-item-action border-bottom">
-                  <ul class="list-group" v-for="(inbox,index) in notification.data" :key="inbox.id"
+                <div class="" style="background-color: #F2F2F2">
+                  <ul class="list-group mb-1" v-for="(inbox,index) in notification.data" :key="inbox.id"
                       @click.prevent="handleNotification(inbox)">
                     <li :class="index.id % 2===0?'list-group-item list-group-item-primary':'list-group-item list-group-item-dark'">
                       <div class="row">
                         <div class="col-auto">
                           <!-- Avatar -->
-                          <img alt="Image placeholder" v-if="inbox.avatar" :src="inbox.avatar"
+                          <img alt="Image placeholder" v-if="inbox.images" :src="inbox.images"
                                class="avatar-md rounded">
-                          <avatar v-else :username="inbox.name" :size="size"></avatar>
+                          <avatar v-else :username="inbox.images" class="avatar-md rounded" :size="size"></avatar>
                         </div>
                         <div class="col ps-0 ms-2">
                           <div class="d-flex justify-content-between align-items-center">
                             <div>
-                              <h4 class="h6 mb-0 text-small">{{ inbox.name }}</h4>
+                              <h4 class="h6 mb-0 text-small">{{ inbox.first_name }} {{ inbox.last_name }}</h4>
                             </div>
                             <div class="text-end">
-                              <small class="text-danger">{{ inbox.created_at | moment("DD MMMM YYYY HH:mm") }}</small>
+                              <small class="text-danger" style="font-size: 10px">{{
+                                  inbox.created_at | moment("DD MMMM YYYY HH:mm")
+                                }}</small>
                             </div>
                           </div>
-                          <p class="font-small mt-1 mb-0"><span v-html="inbox.body.substring(0,20)"></span></p>
+                          <p class="font-small mt-1 mb-0"><span v-html="inbox.subject"></span></p>
                         </div>
                       </div>
                     </li>
                   </ul>
-                </a>
-                <a href="/notification" class="dropdown-item text-center fw-bold rounded-bottom py-3">
+                </div>
+                <a :href="PAGES.NOTIFICATIONS" class="dropdown-item text-center fw-bold rounded-bottom py-3">
                   <svg class="icon icon-xxs text-gray-400 me-1" fill="currentColor" viewBox="0 0 20 20"
                        xmlns="http://www.w3.org/2000/svg">
                     <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
@@ -158,6 +160,8 @@
 import avatar from 'vue-avatar'
 import VueCookies from "vue-cookies";
 import Util from "../../helpers/Utils";
+import PAGES from "../../helpers/Master";
+import router from "../../router";
 
 export default {
   name: "NavBar",
@@ -170,11 +174,12 @@ export default {
       interval: '',
       user: null,
       size: 30,
+      PAGES: PAGES,
       pagination: {
         searchBy: 'id',
         searchParam: "",
         page: 1,
-        limit: 10,
+        limit: 5,
         sortBy: 'created_at',
         sort: 'DESC'
       },
@@ -200,7 +205,7 @@ export default {
   },
   methods: {
     handleNotification(props) {
-      alert(props.id)
+      router.push(PAGES.NOTIFICATIONS)
     },
     handleLogout() {
       this.$swal
