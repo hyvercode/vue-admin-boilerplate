@@ -145,7 +145,7 @@ export default {
     },
 
     subStr(str) {
-      return Utils.sunStr(str, 0, 20);
+      return Utils.sunStr(str, 0, 30);
     },
 
     async handleRead(params) {
