@@ -84,14 +84,16 @@ export default {
       dateFrom: "",
       dateTo: "",
       filterRecord: [
-        {id: 'id', desc: "Employee ID"},
         {id: 'NIK', desc: "NIK"},
         {id: 'first_name', desc: "First Name"},
         {id: 'last_name', desc: "Last Name"},
         {id: 'nick_name', desc: "Nick Name"},
         {id: 'email', desc: "Email"},
         {id: 'phone_number', desc: "Phone Number"},
-        {id: 'active', desc: "Status"}],
+        {id: 'birth_date', desc: "Birth Date (YYYY-MM-DD)"},
+        {id: 'active', desc: "Status ( Active =true /Inactive = false )"},
+        {id: 'id', desc: "Employee ID"}
+      ],
       columns: [
         {
           label: "Photo",
