@@ -44,8 +44,9 @@
                         <div class="col-auto">
                           <!-- Avatar -->
                           <img alt="Image placeholder" v-if="inbox.images" :src="inbox.images"
-                               class="avatar-md rounded">
-                          <avatar v-else :username="inbox.images" class="avatar-md rounded" :size="size"></avatar>
+                               class="avatar-md rounded rounded-circle mx-auto bg-gray-100">
+                          <avatar v-else :username="inbox.images" class="avatar-md rounded-circle mx-auto rounded "
+                                  :size="size"></avatar>
                         </div>
                         <div class="col ps-0 ms-2">
                           <div class="d-flex justify-content-between align-items-center">
@@ -81,9 +82,11 @@
             <a class="nav-link dropdown-toggle pt-1 px-0" href="#" role="button" data-bs-toggle="dropdown"
                aria-expanded="false">
               <div class="media d-flex align-items-center">
-                <img alt="Image placeholder" v-if="user.avatar" :src="user.avatar" class="avatar-sm rounded"
+                <img alt="Image placeholder" v-if="user.avatar" :src="user.avatar"
+                     class="avatar-sm rounded-circle rounded bg-gray-50"
                      width="100">
-                <avatar v-else :username="user.name" :size="size" class="avatar-sm rounded"></avatar>
+                <avatar v-else :username="user.name" :size="size"
+                        class="avatar-sm rounded-circle rounded bg-gray-50"></avatar>
                 <div class="media-body ms-2 text-dark align-items-center d-none d-lg-block">
                   <span class="mb-0 font-small fw-bold text-gray-900">{{ user.name }}</span>
                 </div>

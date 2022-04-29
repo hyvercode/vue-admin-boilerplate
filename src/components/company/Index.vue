@@ -11,9 +11,9 @@
               <div class="profile-cover rounded-top" data-background="~@/assets/images/icons/photo-bg.png"></div>
               <div class="card-body pb-5">
                 <img alt="No Image" v-if="company.image" :src="company.image"
-                     class="avatar-xl rounded-circle mx-auto mt-n7 mb-4">
+                     class="avatar-xl rounded-circle mx-auto mt-n7 mb-4 bg-gray-100">
                 <avatar v-else :username="company.company_code" :size="size"
-                        class="avatar-xl rounded-circle mx-auto mt-n7 mb-4"></avatar>
+                        class="avatar-xl rounded-circle mx-auto mt-n7 mb-4 bg-gray-100"></avatar>
                 <div class="container">
                   <label class="label">
                     <input

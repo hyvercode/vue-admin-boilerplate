@@ -10,9 +10,9 @@
           <div class="row">
             <div class="col-md-6 mb-3">
               <img alt="No Image" v-if="employee.images" :src="employee.images"
-                   class="avatar-xl rounded-circle">
+                   class="avatar-xl rounded-circle bg-gray-100">
               <avatar v-else :username="employee.first_name" :size="size"
-                      class="avatar-xl rounded-circle"></avatar>
+                      class="avatar-xl rounded-circle bg-gray-100"></avatar>
             </div>
             <div class="col-md-6 mb-3">
               <div class="row">
@@ -130,9 +130,9 @@
               <div class="profile-cover rounded-top" data-background="~@/assets/images/icons/photo-bg.png"></div>
               <div class="card-body pb-5">
                 <img alt="No Image" v-if="user.avatar" :src="user.avatar"
-                     class="avatar-xl rounded-circle mx-auto mt-n7 mb-4">
+                     class="avatar-xl rounded-circle mx-auto mt-n7 mb-4 bg-gray-100">
                 <avatar v-else :username="employee.first_name" :size="size"
-                        class="avatar-xl rounded-circle mx-auto mt-n7 mb-4"></avatar>
+                        class="avatar-xl rounded-circle mx-auto mt-n7 mb-4 bg-gray-100"></avatar>
                 <div class="container">
                   <label class="label">
                     <input

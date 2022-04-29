@@ -5,8 +5,9 @@
       <div class="user-card d-flex d-md-none align-items-center justify-content-between justify-content-md-center pb-4">
         <div class="d-flex align-items-center">
           <div class="avatar-lg me-4">
-            <img alt="Image placeholder" v-if="user.avatar" :src="user.avatar" class="avatar-md rounded">
-            <avatar v-else :username="user.name" :size="size" class="me-2 mt-2"
+            <img alt="Image placeholder" v-if="user.avatar" :src="user.avatar" class="avatar-md rounded bg-gray-50 me-2"
+                 style="margin-left: 5px!important;">
+            <avatar v-else :username="user.name" :size="size" class="avatar-md rounded bg-gray-50 me-2 mt-2"
                     style="margin-left: 5px!important;"></avatar>
           </div>
           <div class="d-block">

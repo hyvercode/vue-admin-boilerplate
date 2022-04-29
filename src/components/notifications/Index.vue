@@ -12,9 +12,9 @@
               <div class="row">
                 <div class="col-2">
                   <img alt="No Image" v-if="item.images" :src="item.images"
-                       class="avatar-xl rounded-circle mx-auto mt-n7 mb-4">
+                       class="rounded-circle mx-auto bg-gray-50">
                   <avatar v-else :username="item.first_name" :size="size"
-                          class="avatar-xl rounded-circle mx-auto mt-n7 mb-4"></avatar>
+                          class="rounded-circle mx-auto bg-gray-50"></avatar>
                 </div>
                 <div class="col-10">
                   <div class="d-flex w-100 justify-content-between">
