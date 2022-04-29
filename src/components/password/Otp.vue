@@ -136,7 +136,6 @@ export default {
           this.otp.code4 +
           this.otp.code5 +
           this.otp.code6;
-      console.log();
       let payload = {
         otp_code: otp,
         account: sessionStorage.getItem("session_id"),
@@ -160,23 +159,24 @@ export default {
     handleResendOTP(event) {
       event.preventDefault();
       let loading = this.$loading.show();
-      this.$store.dispatch("auth/otp", sessionStorage.getItem("session_username")).then(
-          (response) => {
-            sessionStorage.setItem("session_id", response.data.id);
+      this.$store.dispatch("auth/otp", sessionStorage.getItem("session_username")).then((response) => {
             loading.hide();
-            this.otp = {
-              code1: "",
-              code2: "",
-              code3: "",
-              code4: "",
-              code5: "",
-              code6: "",
-            };
-            this.$swal.fire({
-              icon: "success",
-              title: "Success",
-              text: 'OTP code has been sending',
-            });
+            if (response.code === 200) {
+              sessionStorage.setItem("session_id", response.data.id);
+              this.otp = {
+                code1: "",
+                code2: "",
+                code3: "",
+                code4: "",
+                code5: "",
+                code6: "",
+              };
+              this.$swal.fire({
+                icon: "success",
+                title: "Success",
+                text: 'OTP code has been sending',
+              });
+            }
           },
           () => {
             loading.hide();
