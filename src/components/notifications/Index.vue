@@ -5,7 +5,7 @@
     />
     <div class="row">
       <div class="col-lg-3 col-md-12 col-sm-12 col-12">
-        <div class="card px-2 py-2" style="min-height: 1020px">
+        <div class="card px-2 py-2">
           <div v-for="item in notifications" :key="item.id" class="list-group mt-1">
             <div class="list-group-item" @click.prevent="handleRead(item)"
                  :style="[ item.read?{ 'background-color':'#F1F1F1' }:{ 'background-color':'#F2F4F6' }]">
@@ -31,7 +31,7 @@
         </div>
       </div>
       <div v-if="notification" class="col-lg-9 col-md-12 col-sm-12 col-12">
-        <div class="card px-3 py-3" style="min-height: 1020px">
+        <div class="card px-3 py-3">
           <div class="row px-3">
             <div class="col-6">
               <span class="d-flex justify-content-start">
@@ -48,7 +48,7 @@
                   class="text-info mt-1">{{ notification.created_at | moment("DD MMMM YYYY HH:mm") }}</small></span>
             </div>
           </div>
-          <div class="row px-3">
+          <div class="row px-3 message">
             <hr class="mt-2">
             <span v-html="notification.body"></span>
           </div>
@@ -56,13 +56,13 @@
       </div>
     </div>
     <div class="row m-1">
-      <div class="col-lg-8 col-md-8 col-sm-6 col-6">
+      <div class="col-lg-10 col-md-10 col-sm-12 col-12">
         <div class="py-1">
           <div class="row">
-            <div class="col-md-2 mt-2">
+            <div class="col-md-1 col-sm-6 col-6 mt-2">
               <label>Records :</label>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-1 col-sm-6 col-6">
               <select class="form-select" v-model="limit" @change="handleChange">
                 <option v-for="(item,index) in records" :key="index" v-bind:value="item">{{ item }}</option>
               </select>
@@ -70,7 +70,7 @@
           </div>
         </div>
       </div>
-      <div class="col-lg-3 col-md-4 col-sm-6 col-6">
+      <div class="col-lg-2 col-md-2 col-sm-12 col-9">
         <div class="table-pagination py-1">
           <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-center">
@@ -152,7 +152,7 @@ export default {
       this.reads = params;
       NotificationService.postRead(params.id).then(response => {
         if (response.code === 200) {
-          this.doRefresh()
+          // this.doRefresh()
         }
       })
     },
@@ -190,7 +190,7 @@ export default {
       NotificationService.getPaginate(params).then(response => {
         if (response.code === 200) {
           this.notifications = response.data.data;
-          this.reads = response.data.data[0]
+          this.reads = this.notifications ? response.data.data[0] : null
           this.pagination = {
             currentPage: response.data.current_page,
             perPage: response.data.per_page,
@@ -232,3 +232,9 @@ export default {
   }
 }
 </script>
+<style>
+.message {
+  overflow-y: auto;
+  max-height: 735px;
+}
+</style>
