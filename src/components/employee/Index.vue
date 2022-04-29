@@ -140,6 +140,8 @@ export default {
           field: "birth_date",
           numeric: false,
           html: false,
+          date:true,
+          dateFormat:"DD MMMM YYYY"
         },
         {
           label: "active",

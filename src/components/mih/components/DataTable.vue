@@ -131,7 +131,8 @@
           <tr v-for="(row, index) in paginated"
               :key="index"
               :class="{ clickable : clickable }"
-              @click.prevent="onRowClick(row)"
+              data-bs-toggle="tooltip" data-bs-placement="top" title="Double click to action"
+              @dblclick.p.prevent="onRowClick(row)"
           >
             <td v-if="draggingAble" style="cursor: move !important;">
               <i class="material-icons">drag_indicator</i>
@@ -154,7 +155,7 @@
 
               <!--            Normal Content-->
               <span
-                  v-if="!column.html && !column.currency && !column.image && column.field !=='active' && !column.badge && !column.hidden"
+                  v-if="!column.html && !column.currency && !column.image && column.field !=='active' && !column.badge && !column.date && !column.hidden"
                   :style="{width: column.width ? 'auto':column.width,display:column.hidden?'none !important;':''}">
               {{ collect(row, column.field) }} <span v-if="column.concat"> {{ collect(row, column.concatWith) }}</span>
             </span>
@@ -190,6 +191,14 @@
                    :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none !important;':''}">
               <span :class="column.badgeClass? column.badgeClass : 'badge bg-primary'">{{
                   collect(row, column.field)
+                }}</span>
+              </div>
+
+              <!--            date Content-->
+              <div v-if="column.date && !column.hidden && !column.badge"
+                   :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none !important;':''}">
+              <span>{{
+                  collect(row, column.field) | moment(column.dateFormat)
                 }}</span>
               </div>
 
@@ -289,6 +298,14 @@
                                 collect(row, column.field)
                               }}</span>
                         </span>
+
+                        <!--            date Content-->
+                        <div v-if="column.date && !column.hidden && !column.badge"
+                             :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none !important;':''}">
+                            <span>{{
+                                collect(row, column.field) | moment(column.dateFormat)
+                              }}</span>
+                        </div>
 
                         <!--        Toggle button-->
                         <div v-if="column.buttonToggle && !column.hidden"
