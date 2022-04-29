@@ -77,14 +77,14 @@
         <div class="modal-body">
           <form>
             <div class="mb-3">
-              <label class="form-label" for="menuGroup">Group RequestMenu</label>
+              <label class="form-label" for="menuGroup">Group Menu</label>
               <select class="form-select" id="menuGroup" v-model="menu.menu_id" required>
                 <option value="null" disabled>Choose...</option>
                 <option v-for="item in menuList" :key="item.id" :value="item.id">{{ item.name }}</option>
               </select>
             </div>
             <div class="mb-3">
-              <label class="form-label" for="menuName">RequestMenu Name</label>
+              <label class="form-label" for="menuName">Menu Name</label>
               <input type="text" class="form-control" id="menuName" v-model="menu.name" placeholder="Please input"
                      required>
             </div>
@@ -93,7 +93,7 @@
               <input type="text" class="form-control" id="href" v-model="menu.href" placeholder="Please input" required>
             </div>
             <div class="mb-3">
-              <label class="form-label" for="slug">Slug</label>
+              <label class="form-label" for="slug">Type/Slug</label>
               <select class="form-select" id="slug" v-model="menu.slug" required>
                 <option value="null" disabled>Choose...</option>
                 <option value="title">Title</option>
@@ -102,7 +102,7 @@
               </select>
             </div>
             <div class="mb-3">
-              <label class="form-label" for="parentMenu">Parent RequestMenu</label>
+              <label class="form-label" for="parentMenu">Parent Menu</label>
               <select class="form-select" id="parentMenu" v-model="menu.parent_id">
                 <option value="null" disabled>Choose...</option>
                 <option v-for="item in menus" :key="item.id" :value="item.id">{{ item.name }}</option>
@@ -111,13 +111,21 @@
             <div class="mb-3">
               <div class="form-check">
                 <input class="form-check-input" type="checkbox" v-model="menu.is_icon" id="isIcon">
-                <label class="form-check-label" for="checkRemember">Icon</label>
+                <label class="form-check-label" v-if="menu.is_icon">Use Icon <a
+                    href="https://jossef.github.io/material-design-icons-iconfont/" target="_blank" class="text-info">
+                  material-design-icons-iconfont</a> </label>
+                <label class="form-check-label" v-else>Use Image</label>
               </div>
             </div>
             <div class="mb-3">
-              <label class="form-label" for="href">Icon</label>
-              <input v-if="menu.is_icon" type="text" class="form-control" v-model="menu.icon">
-              <input v-if="!menu.is_icon" type="file" class="form-control">
+              <label class="form-label" for="href">{{ menu.is_icon ? 'Icon' : 'Upload Image' }}</label>
+              <input v-if="menu.is_icon" type="text" class="form-control" v-model="menu.icon"
+                     placeholder="supervised_user_circle">
+              <input v-if="!menu.is_icon"
+                     type="file"
+                     accept="image/*"
+                     @change="onFileChange"
+                     class="form-control">
             </div>
             <div class="mb-3">
               <div class="form-check">
@@ -239,6 +247,18 @@ export default {
     this.getRecordPaginate(this.dateFrom, this.dateTo, this.searchBy, this.searchParam, this.pagination.perPage, this.pagination.currentPage, this.sortBy, this.sort)
   },
   methods: {
+
+    /**
+     * Get regords pagination
+     * @param dateFrom
+     * @param dateTo
+     * @param searchBy
+     * @param searchParam
+     * @param perPage
+     * @param currentPage
+     * @param sortBy
+     * @param sort
+     */
     getRecordPaginate(dateFrom, dateTo, searchBy, searchParam, perPage, currentPage, sortBy, sort) {
       let loading = this.$loading.show();
       let payload = {
@@ -270,10 +290,17 @@ export default {
       });
     },
 
+    /**
+     * Refresh datatable
+     */
     doRefresh() {
       this.getRecordPaginate(this.dateFrom, this.dateTo, this.searchBy, this.searchParam, this.pagination.perPage, this.pagination.currentPage, this.sortBy, this.sort)
     },
 
+    /**
+     * Filter selected datatable
+     * @param pagination
+     */
     doFilterSelected(pagination) {
       this.searchBy = pagination[0];
       if (this.searchBy === "All") {
@@ -289,30 +316,54 @@ export default {
         );
       }
     },
+
+    /**
+     * Filter date datatable
+     * @param selectedDate
+     */
     doFilterDate(selectedDate) {
       this.dateFrom = selectedDate[0];
       this.dateFrom = selectedDate[1];
       this.getRecordPaginate(this.dateFrom, this.dateTo, this.searchBy, this.searchParam, this.pagination.perPage, this.pagination.currentPage, this.sortBy, this.sort);
     },
 
+    /**
+     * Searching action
+     * @param props
+     */
     doSearch(props) {
       this.searchParam = props[0];
       this.getRecordPaginate(this.dateFrom, this.dateTo, this.searchBy, this.searchParam, props[1], props[2], this.sortBy, this.sort);
     },
-    //Prev Pagination
+
+    /**
+     * Prev page datatable
+     * @param props
+     */
     doPrevPage(props) {
       this.getRecordPaginate(this.dateFrom, this.dateTo, this.searchBy, this.searchParam, props[0], props[1], this.sortBy, this.sort);
     },
-    //Next Pagination
+
+    /**
+     * Netx page datatable
+     * @param props
+     */
     doNextPage(props) {
       this.getRecordPaginate(this.dateFrom, this.dateTo, this.searchBy, this.searchParam, props[0], props[1], this.sortBy, this.sort);
     },
 
-    //Search Record
+    /**
+     * Search datatable
+     * @param limit
+     */
     handleSearch(limit) {
       this.getRecordPaginate(this.dateFrom, this.dateTo, this.searchBy, this.searchParam, props[0], props[1], this.sortBy, this.sort);
     },
 
+    /**
+     * Change datatable record perpage
+     * @param props
+     */
     doChangePerPage(props) {
       this.getRecordPaginate(this.dateFrom, this.dateTo, this.searchBy, this.searchParam, props[0], props[1], this.sortBy, this.sort);
     },
@@ -336,11 +387,19 @@ export default {
       });
     },
 
+    /**
+     * Call api before modal show
+     * @param event
+     */
     beforeOpen(event) {
       this.getMenus();
       this.getMenuList();
       if (this.idUpdate) this.getShowMenu();
     },
+
+    /**
+     * Call api menu list
+     */
     getMenuList() {
       let loading = this.$loading.show();
       MenuListService.getAll().then((response) => {
@@ -353,6 +412,10 @@ export default {
         }
       });
     },
+
+    /**
+     * Call api all menu
+     */
     getMenus() {
       let loading = this.$loading.show();
       MenuService.getAll().then((response) => {
@@ -365,6 +428,10 @@ export default {
         }
       });
     },
+
+    /**
+     * Get show detail menu
+     */
     getShowMenu() {
       let loading = this.$loading.show();
       MenuService.getShow(this.menu.id).then((response) => {
@@ -377,6 +444,32 @@ export default {
         }
       });
     },
+
+    /**
+     * Image Change
+     * @param e
+     */
+    onFileChange(e) {
+      let files = e.target.files || e.dataTransfer.files;
+      if (!files.length) return;
+      this.createImage(files[0]);
+    },
+
+    /**
+     * Convert image to bas64
+     * @param file
+     */
+    createImage(file) {
+      let reader = new FileReader();
+      reader.onload = (e) => {
+        this.menu.icon = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    },
+
+    /**
+     * Create Or Update
+     */
     handleSubmit() {
       let loading = this.$loading.show();
       if (!this.idUpdate) {
@@ -415,19 +508,34 @@ export default {
         });
       }
     },
+    /**
+     * Modal show
+     */
     handleCreate() {
       this.idUpdate = false;
       this.$modal.show('my-first-modal')
     },
+    /**
+     * Update
+     * @param props
+     */
     handleUpdate(props) {
       this.menu.id = props.id
       this.idUpdate = true;
       this.$modal.show('my-first-modal')
     },
+
+    /**
+     * Modal hide
+     */
     hide() {
       this.$modal.hide('my-first-modal');
     },
 
+    /**
+     * Delete
+     * @param prop
+     */
     handleDelete(prop) {
       this.$swal({
         title: "Are you sure?",
@@ -439,7 +547,6 @@ export default {
         timer: 8200,
       }).then((result) => {
         if (result.value) {
-          // <-- if confirmed
           MenuService.delete(prop.id)
               .then(() => {
                 this.$swal({
