@@ -1,6 +1,7 @@
 <template>
-  <router-view></router-view>
+  <router-view :key="$route.path"></router-view>
 </template>
+
 <script>
 export default {
   name: "Companies",

@@ -7,7 +7,7 @@
       </div>
       <div id="layoutSidenav_content">
         <main class="mt-4">
-          <router-view></router-view>
+          <router-view :key="$route.path"></router-view>
         </main>
       </div>
     </div>
