@@ -25,6 +25,9 @@
                :refreshable="true"
                :filter-date="true"
                :upload-button="true"
+               :command-checkbox="true"
+               @onSelectAll="onSelectAll"
+               @onSelect="onSelect"
                upload-button-title="Upload"
                @onEnterSearch="doSearch"
                @onRefresh="doRefresh"
@@ -174,7 +177,9 @@ export default {
       },
       idUpdate: true,
       roles: [],
-      menus: []
+      menus: [],
+      selected: [],
+      selectAll: false
     }
   },
   computed: {
@@ -215,6 +220,20 @@ export default {
           this.$swal.fire("Error!", response.message, "error");
         }
       });
+    },
+
+    /**
+     * Checkbox All
+     */
+    onSelectAll(props) {
+      console.log(props);
+    },
+
+    /**
+     * Checkbox
+     */
+    onSelect(props) {
+      console.log(props)
     },
 
     doRefresh() {

@@ -102,6 +102,10 @@
           </th>
           <!--        Number-->
           <th style="width: 5px!important;">No</th>
+          <!--            slot first head-->
+          <slot name="thead-first"/>
+
+          <!--           end slot first head-->
           <!--        CheckBox-->
           <th v-if="commandCheckbox" style="width: 2px!important;">
             <input class="form-check-input" type="checkbox" id="all" v-model="selectAll"
@@ -143,6 +147,9 @@
                 1
               }}
             </td>
+            <!--            slot first body-->
+            <slot name="tbody-first" :row="row"/>
+            <!--            end slot first body-->
             <td v-if="commandCheckbox">
               <input v-if="row" class="form-check-input" type="checkbox" :value="row"
                      v-model="selected" @change="onSelect(row)"
