@@ -162,7 +162,7 @@
 
               <!--            Normal Content-->
               <span
-                  v-if="!column.html && !column.currency && !column.image && column.field !=='active' && !column.badge && !column.date && !column.hidden"
+                  v-if="!column.buttonToggle && !column.date && !column.badge && !column.html && !column.image && column.field !=='active' && !column.badge && !column.hidden"
                   :style="{width: column.width ? 'auto':column.width,display:column.hidden?'none !important;':''}">
               {{ collect(row, column.field) }} <span v-if="column.concat"> {{ collect(row, column.concatWith) }}</span>
             </span>
@@ -177,41 +177,48 @@
               </div>
 
               <!--            Currency Content-->
-              <div v-if="!column.html && column.currency"
-                   v-html="isCurrency(collect(row, column.field)) && !column.badge && !column.hidden"
-                   :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none !important;':''}"/>
+              <div
+                  v-if="!column.html && column.currency && !column.image && column.field !=='active' && !column.badge && !column.date && !column.hidden"
+                  v-html="isCurrency(collect(row, column.field)) && !column.badge && !column.hidden"
+                  :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none !important;':''}"/>
 
               <!--            HTML Content-->
-              <div v-if="column.html && !column.hidden" v-html="collect(row, column.field)"
-                   :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none !important;':''}"/>
+              <div
+                  v-if="column.html && !column.image && column.field !=='active' && !column.badge && !column.date && !column.hidden"
+                  v-html="collect(row, column.field)"
+                  :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none !important;':''}"/>
 
               <!--              Image Content-->
-              <div v-if="column.image && !column.hidden"
-                   :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none !important;':''}">
+              <div
+                  v-if="column.image && !column.html && column.field !=='active' && !column.badge && !column.date && !column.hidden"
+                  :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none !important;':''}">
                 <img v-if="collect(row, column.field)" :src="collect(row, column.field)" class="mih tbl-mih-img"
                      :alt="index"/>
                 <avatar v-else :username="collect(row, column.name)" :size="column.size"></avatar>
               </div>
 
               <!--            Badge Content-->
-              <div v-if="column.badge && !column.hidden"
-                   :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none !important;':''}">
+              <div
+                  v-if="column.badge && !column.html && !column.image && column.field !=='active' && !column.date && !column.hidden"
+                  :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none !important;':''}">
               <span :class="column.badgeClass? column.badgeClass : 'badge bg-primary'">{{
                   collect(row, column.field)
                 }}</span>
               </div>
 
               <!--            date Content-->
-              <div v-if="column.date && !column.hidden && !column.badge"
-                   :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none !important;':''}">
+              <div
+                  v-if="column.date && !column.badge && !column.html && !column.image && column.field !=='active' && !column.badge && !column.hidden"
+                  :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none !important;':''}">
               <span>{{
                   collect(row, column.field) | moment(column.dateFormat)
                 }}</span>
               </div>
 
               <!--        Toggle button-->
-              <div v-if="column.buttonToggle && !column.hidden"
-                   :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none !important;':''}">
+              <div
+                  v-if="column.buttonToggle && !column.date && !column.badge && !column.html && !column.image && column.field !=='active' && !column.badge && !column.hidden"
+                  :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none !important;':''}">
                 <div class="form-check form-switch">
                   <input class="form-check-input" type="checkbox"
                          :checked="collect(row, column.field)"

@@ -220,8 +220,8 @@ export default {
       sortBy: 'created_at',
       sort: 'DESC',
       filterRecord: [
-        {'id': 'id', "desc": "ID RequestMenu"},
-        {'id': 'name', "desc": "RequestMenu Name"},
+        {'id': 'id', "desc": "ID Menu"},
+        {'id': 'name', "desc": "Menu Name"},
         {'id': 'status', "desc": "Active =1 / Inactive=0"}
       ],
       pagination: {

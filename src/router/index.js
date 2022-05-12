@@ -7,19 +7,22 @@ import Pages from "../helpers/Pages";
 import VueCookies from "vue-cookies";
 import Password from "../views/Password";
 import Home from "../views/Home";
-import routeLandingPage from "../theme/routePage";
-import PagesPerformanceManagement from "../helpers/PerformanceManagement";
+import RouteLandingPage from "../theme/routePage";
+import PagesPM from "../helpers/PerformanceManagement";
 import PM from "../views/PM";
-import Pm from "./pm";
+import RoutePM from "./pm";
 import PagesHR from "../helpers/HR";
 import HR from "../views/HR";
-import hr from "./hr";
+import RouteHR from "./hr";
 import PagesLeaves from "../helpers/Leaves";
-import leaves from "./leaves";
+import RouteLeaves from "./leaves";
 import Leaves from "../views/Leaves";
 import PagesMaster from "../helpers/Master";
-import master from "./master";
+import RouteMaster from "./master";
 import Master from "../views/Master";
+import PagesBlog from "../helpers/Blog";
+import RouteBlog from "./blog";
+import Blog from "../views/Blog";
 
 Vue.use(VueRouter);
 const routes = [
@@ -27,7 +30,7 @@ const routes = [
         path: "/",
         name: 'Index',
         component: Index,
-        children: routeLandingPage
+        children: RouteLandingPage
     },
     {
         path: Pages.LOGIN,
@@ -71,25 +74,31 @@ const routes = [
                 path: PagesMaster.MASTERS,
                 name: "Master",
                 component: Master,
-                children: master
+                children: RouteMaster
             },
             {
-                path: PagesPerformanceManagement.PERFORMANCE,
+                path: PagesPM.PERFORMANCE,
                 name: "PerformanceManagement",
                 component: PM,
-                children: Pm
+                children: RoutePM
             },
             {
                 path: PagesHR.HR,
                 name: "HR",
                 component: HR,
-                children: hr
+                children: RouteHR
             },
             {
                 path: PagesLeaves.LEAVE,
                 name: "Leaves",
                 component: Leaves,
-                children: leaves
+                children: RouteLeaves
+            },
+            {
+                path: PagesBlog.BLOGS,
+                name: "Blog",
+                component: Blog,
+                children: RouteBlog
             },
         ]
     },
