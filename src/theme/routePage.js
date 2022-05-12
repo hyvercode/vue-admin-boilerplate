@@ -12,7 +12,7 @@ export default [
             {
                 path: "blog",
                 name: "Blog",
-                component: () => import("../theme/pages/blog/Blog"),
+                component: () => import("./pages/blog/Index"),
             },
         ],
     }

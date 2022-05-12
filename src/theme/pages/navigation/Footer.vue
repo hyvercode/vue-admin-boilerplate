@@ -6,7 +6,7 @@
       <div class="container">
         <div class="row border-top border-top-secondary pt-7">
           <div class="col-lg-3 col-md-6 mb-4 mb-md-6 mb-lg-0 mb-sm-2 order-1 order-md-1 order-lg-1"><img class="mb-4"
-                                                                                                         src="~@/theme/assets/img/logo.svg"
+                                                                                                         src="~@/theme/assets/img/logo.png"
                                                                                                          width="184"
                                                                                                          alt=""/></div>
           <div class="col-lg-3 col-md-6 mb-4 mb-lg-0 order-3 order-md-3 order-lg-2">
