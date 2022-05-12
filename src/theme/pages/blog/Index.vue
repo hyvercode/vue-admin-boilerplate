@@ -136,12 +136,12 @@
 
               <div class="blog-post-search-widget mb-100">
                 <form action="#">
-                  <input type="search" name="search" id="Search">
-                  <button type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
+                  <input type="search" name="search" class="form-control form-control-lg" placeholder="Search" id="Search">
+                  <button type="submit"><i class="material-icons py-1 mt-2">search</i></button>
                 </form>
               </div>
 
-              <div class="blog-post-archives mb-100">
+              <div class="blog-post-archives mb-100 mt-3">
                 <h5>Archives</h5>
                 <ul>
                   <li><a href="#">March 2018</a></li>
@@ -232,7 +232,7 @@
     </section>
     <!-- ***** Blog Area End ***** -->
     <!-- <section> close ============================-->
-    <Footer />
+    <Footer/>
   </div>
 </template>
 
