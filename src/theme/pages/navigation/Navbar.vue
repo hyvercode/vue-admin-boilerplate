@@ -8,10 +8,10 @@
           class="navbar-toggler-icon"> </span></button>
       <div class="collapse navbar-collapse border-lg-0 mt-4 mt-lg-0" id="navbarSupportedContent">
         <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" aria-current="page" href="/">Home</a></li>
           <li class="nav-item"><a class="nav-link" aria-current="page" href="#feature">Product</a></li>
           <li class="nav-item"><a class="nav-link" aria-current="page" href="#validation">Customers</a></li>
           <li class="nav-item"><a class="nav-link" aria-current="page" href="#superhero">Pricing</a></li>
-          <li class="nav-item"><a class="nav-link" aria-current="page" href="#marketing">Resources</a></li>
           <li class="nav-item"><a class="nav-link" aria-current="page" href="/blog">Blog</a></li>
         </ul>
         <div class="d-flex ms-lg-4">

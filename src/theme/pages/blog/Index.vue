@@ -231,15 +231,18 @@
       </div>
     </section>
     <!-- ***** Blog Area End ***** -->
+    <!-- <section> close ============================-->
+    <Footer />
   </div>
 </template>
 
 <script>
 import Navbar from "../navigation/Navbar";
+import Footer from "../navigation/Footer";
 
 export default {
   name: "Blog",
-  components: {Navbar}
+  components: {Footer, Navbar}
 }
 </script>
 
