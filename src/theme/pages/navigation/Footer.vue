@@ -1,5 +1,5 @@
 <template>
-  <div class="footer">
+  <div class="footer mt-5">
     <!-- ============================================-->
     <!-- Footer ============================-->
     <section class="pb-2 pb-lg-5">

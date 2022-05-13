@@ -13,7 +13,8 @@
                 <ol class="breadcrumb">
                   <li class="breadcrumb-item"><a href="/">Home</a></li>
                   <li class="breadcrumb-item"><a href="/blog">Blog</a></li>
-                  <li class="breadcrumb-item active" aria-current="page">Post</li>
+                  <li class="breadcrumb-item active" aria-current="page">{{ capitalizeFirstWord($route.params.slug) }}
+                  </li>
                 </ol>
               </nav>
             </div>
@@ -33,62 +34,45 @@
                 <!-- Single Blog Start -->
                 <div class="col-12" v-for="post in posts" :key="post.id">
                   <div class="single-blog wow fadeInUp" data-wow-delay="1.7s">
-                    <!-- Post Thumb -->
-                    <div class="blog-post-thumb">
-                      <img :src="post.thumbnail" alt="No Image" class="bg-white px-4 responsive-img"
-                           style="max-height: 350px;background-size: cover;width: 100%">
-                    </div>
+                    <!-- Post Title -->
+                    <h1>{{ post.title }}</h1>
                     <!-- Post Meta -->
                     <div class="post-meta">
                       <h6>By <a href="#">Lore Papp,</a><a href="#">{{ post.updated_at | moment("DD MMMM YYYY") }}</a><a
                           href="#">Uncategorized,</a><a
                           href="#">3 Comments</a></h6>
                     </div>
-                    <!-- Post Title -->
-                    <h2>{{ post.title }}</h2>
                     <!-- Post Excerpt -->
-                    <p><span v-html="subStr(post.content)"></span></p>
-                    <!-- Read More btn -->
-                    <a href="#">Read More</a>
+                    <div class="pos-content">
+                      <p><span v-html="post.content"></span></p>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
             <!-- Pagination Area Start -->
-            <div class="mosh-pagination-area">
-              <div class="table-pagination">
-                <nav aria-label="navigation">
-                  <ul class="pagination justify-content-center">
-                    <li class="page-item">
-                      <a class="page-link px-2" href="#"
-                         v-on:click.prevent="prevPage($event)">Prev</a>
-                    </li>
-                    <li class="page-item disabled"><a class="page-link" href="#" disabled>{{
-                        pagination.currentPage
-                      }}</a>
-                    </li>
-                    <li class="page-item disabled"><a class="page-link" href="#" disabled>/</a></li>
-                    <li class="page-item disabled"><a class="page-link" href="#" disabled>{{
-                        pagination.lastPage
-                      }}</a>
-                    </li>
-                    <li class="page-item">
-                      <a class="page-link" href="#"
-                         v-on:click.prevent="nextPage($event)">Next</a>
-                    </li>
-                  </ul>
-                </nav>
+            <div class="table-pagination">
+              <div class="row">
+                <div class="col-6 d-flex justify-content-start">
+                  <a class="px-2 text-info"
+                     v-on:click.prevent="prevPage($event)">Old Post</a>
+                </div>
+                <div class="col-6 d-flex justify-content-end">
+                  <a class="px-2 text-info"
+                     v-on:click.prevent="nextPage($event)">Next Post</a>
+                </div>
               </div>
             </div>
           </div>
+
           <div class="col-12 col-md-4">
             <div class="mosh-blog-sidebar">
 
               <div class="blog-post-search-widget mb-100">
                 <form action="#">
-                  <input type="search" name="search" class="form-control form-control-lg" placeholder="Search"
+                  <input type="search" name="search" class="form-control form-control-lg" v-model="searchParam" placeholder="Search"
                          id="Search">
-                  <button type="submit"><i class="material-icons py-1 mt-2">search</i></button>
+                  <button type="submit" @click="handleSearch"><i class="material-icons py-1 mt-2">search</i></button>
                 </form>
               </div>
 
@@ -164,13 +148,13 @@ export default {
       latestPosts: [],
       categories: [],
       archives: [],
-      searchBy: 'id',
+      searchBy: 'slug',
       searchParam: '',
       size: 30,
-      limit: 5,
-      records: [5, 10, 30, 50, 100, 500, 1000],
+      limit: 1,
+      records: [1],
       pagination: {
-        perPage: 10,
+        perPage: 1,
         currentPage: 1,
         lastPage: '',
         nextPageUrl: '',
@@ -193,25 +177,23 @@ export default {
     this.getLatestPosts('id', "", 5, 1);
   },
   mounted() {
-    this.getPosts(this.searchBy, this.searchParam, this.pagination.perPage, this.pagination.currentPage);
+    this.getPosts(this.searchBy, this.$route.params.slug, this.pagination.perPage, this.pagination.currentPage);
   },
   methods: {
-    doRefresh() {
-      this.getPosts(this.searchBy, this.searchParam, this.pagination.perPage, this.pagination.currentPage);
-    },
 
     subStr(str) {
       return Utils.sunStr(str, 0, 300);
     },
 
-    async handleRead(params) {
-      this.reads = params;
-      BlogService.getPost(params.id).then(response => {
-        if (response.code === 200) {
-          // this.doRefresh()
-        }
-      })
+    capitalizeFirstWord(value) {
+      const word = Utils.replaceAll(value, '-', ' ');
+      const arr = word.split(" ");
+      for (let i = 0; i < arr.length; i++) {
+        arr[i] = arr[i].charAt(0).toUpperCase() + arr[i].slice(1);
+      }
+      return arr.join(" ");
     },
+
     getArchives() {
       let loading = this.$loading.show();
       BlogService.getArchives().then(response => {
@@ -322,7 +304,7 @@ export default {
       }
     },
     //Search Record
-    handleChange() {
+    handleSearch() {
       this.searchParam = '';
       this.getPosts(this.searchBy, this.searchParam, this.limit, 1)
     },
