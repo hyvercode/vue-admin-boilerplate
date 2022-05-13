@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid">
     <DataTable v-if="pagination" :key="pagination.currentPage"
-               title="RequestMenu"
+               title="Blog Tag"
                :columns="columns"
                :rows="records"
                :filter-record="filterRecord"
@@ -24,15 +24,11 @@
                :filter="true"
                :refreshable="true"
                :filter-date="true"
-               :filter-month="true"
-               :upload-button="true"
-               upload-button-title="Upload"
                @onEnterSearch="doSearch"
                @onRefresh="doRefresh"
                @onPreviousPage="doPrevPage"
                @onNextPage="doNextPage"
                @onChangeRowPage="doChangePerPage"
-               @onCheckToggle="doCheckToggle"
                @onCreate="handleCreate"
     >
       <th
@@ -49,24 +45,24 @@
               class="btn btn-flat nopadding"
               @click="(e) => handleUpdate(props.row, e)"
           >
-            <i class="material-icons tbl-material-icons  white-text">edit</i>
+            <i class="material-icons tbl-material-icons  text-info">edit</i>
           </button>
           <button
               class="btn btn-flat nopadding"
               @click="(e) => handleDelete(props.row, e)"
           >
-            <i class="material-icons tbl-material-icons white-text">delete</i>
+            <i class="material-icons tbl-material-icons text-danger">delete</i>
           </button>
         </td>
       </template>
     </DataTable>
 
     <!--    modal -->
-    <modal name="my-first-modal"
+    <modal name="my-modal"
            :width="500"
            height="auto"
-           @before-open="beforeOpen"
            :adaptive="true"
+           @before-open="beforeOpen"
     >
 
       <div class="modal-content">
@@ -75,56 +71,23 @@
           <button type="button" class="btn-close" @click="hide"></button>
         </div>
         <div class="modal-body">
-          <form>
+          <form role="form">
             <div class="mb-3">
-              <label class="form-label" for="menuGroup">Group Menu</label>
-              <select class="form-select" id="menuGroup" v-model="menu.menu_id" required>
-                <option value="null" disabled>Choose...</option>
-                <option v-for="item in menuList" :key="item.id" :value="item.id">{{ item.name }}</option>
-              </select>
-            </div>
-            <div class="mb-3">
-              <label class="form-label" for="menuName">Menu Name</label>
-              <input type="text" class="form-control" id="menuName" v-model="menu.name" placeholder="Please input"
+              <label class="form-label" for="menuName">Tags Name</label>
+              <input type="text" class="form-control" v-model="tags.tag_name" placeholder="Please input"
                      required>
             </div>
             <div class="mb-3">
-              <label class="form-label" for="href">Route</label>
-              <input type="text" class="form-control" id="href" v-model="menu.href" placeholder="Please input" required>
+              <label class="form-label" for="href">Tags Slug</label>
+              <input type="text" class="form-control" v-model="tags.tag_slug" placeholder="Please input"
+                     required>
             </div>
             <div class="mb-3">
-              <label class="form-label" for="slug">Slug</label>
-              <select class="form-select" id="slug" v-model="menu.slug" required>
-                <option value="null" disabled>Choose...</option>
-                <option value="title">Title</option>
-                <option value="dropdown">Dropdown</option>
-                <option value="link">Link</option>
-              </select>
+              <label class="form-label" for="href">Tags Descriptions</label>
+              <textarea cols="5" rows="5" class="form-control" v-model="tags.descriptions"
+                        placeholder="Please input" required></textarea>
             </div>
-            <div class="mb-3">
-              <label class="form-label" for="parentMenu">Parent RequestMenu</label>
-              <select class="form-select" id="parentMenu" v-model="menu.parent_id">
-                <option value="null" disabled>Choose...</option>
-                <option v-for="item in menus" :key="item.id" :value="item.id">{{ item.name }}</option>
-              </select>
-            </div>
-            <div class="mb-3">
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" v-model="menu.is_icon" id="isIcon">
-                <label class="form-check-label" for="checkRemember">Icon</label>
-              </div>
-            </div>
-            <div class="mb-3">
-              <label class="form-label" for="href">Icon</label>
-              <input v-if="menu.is_icon" type="text" class="form-control" v-model="menu.icon">
-              <input v-if="!menu.is_icon" type="file" class="form-control">
-            </div>
-            <div class="mb-3">
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" v-model="menu.active" id="checkRemember">
-                <label class="form-check-label" for="checkRemember">Active</label>
-              </div>
-            </div>
+
             <div class="mb-3 d-flex justify-content-end">
               <button type="button" class="btn btn-secondary me-2" @click="hide">Cancel</button>
               <button type="button" class="btn btn-primary" @click="handleSubmit">Save changes</button>
@@ -137,17 +100,16 @@
 </template>
 
 <script>
-import DataTable from "../mih/components/DataTable";
-import MenuService from "../../services/menu.service";
-import MenuListService from "../../services/menuList.service";
-import RequestMenu from "../../payloads/request/RequestMenu";
+import DataTable from "../../mih/components/DataTable";
+import BlogTagService from "../../../services/blogTag.service";
+import RequestBlogTag from "../../../payloads/request/RequestBlogTag";
 
 export default {
-  name: "UserIndex",
+  name: "tagsIndex",
   components: {DataTable},
   data() {
     return {
-      menu: new RequestMenu(),
+      tags: new RequestBlogTag(),
       columns: [
         {
           label: "ID",
@@ -158,52 +120,34 @@ export default {
           concatWith: false
         },
         {
-          label: "icon",
-          field: "icon",
-          name: "name",
-          size: 30,
-          numeric: false,
-          html: false,
-          image: true
-        },
-        {
-          label: "name",
-          field: "name",
+          label: "tag name",
+          field: "tag_name",
           numeric: false,
           html: false,
           hidden: false,
         },
         {
-          label: "href",
-          field: "href",
+          label: "tag slug",
+          field: "tag_slug",
           numeric: false,
           html: false,
           hidden: false,
         },
         {
-          label: "slug",
-          field: "slug",
+          label: "descriptions",
+          field: "descriptions",
           numeric: false,
           html: false,
-          hidden: false,
+          hidden: false
         },
         {
-          label: "sequence",
-          field: "sequence",
+          label: "Update At",
+          field: "updated_at",
           numeric: false,
           html: false,
           hidden: false,
-        },
-        {
-          label: "status",
-          field: "active",
-          numeric: false,
-          html: false,
-          hidden: false,
-          buttonToggle: true,
-          buttonToggleDesc: [
-            "Active", "Inactive"
-          ]
+          date: true,
+          dateFormat: "DD MMMM YYYY"
         },
       ],
       records: [],
@@ -212,9 +156,10 @@ export default {
       sortBy: 'created_at',
       sort: 'DESC',
       filterRecord: [
-        {'id': 'id', "desc": "ID RequestMenu"},
-        {'id': 'name', "desc": "RequestMenu Name"},
-        {'id': 'status', "desc": "Active =1 / Inactive=0"}
+        {'id': 'id', "desc": "ID"},
+        {'id': 'tag_name', "desc": "Tag Name"},
+        {'id': 'tag_slug', "desc": "Tag Slug"},
+        {'id': 'descriptions', "desc": "Descriptions"},
       ],
       pagination: {
         recordsPerPage: [5, 10, 50, 100, 500, 1000, 5000, 10000],
@@ -239,6 +184,17 @@ export default {
     this.getRecordPaginate(this.dateFrom, this.dateTo, this.searchBy, this.searchParam, this.pagination.perPage, this.pagination.currentPage, this.sortBy, this.sort)
   },
   methods: {
+    /**
+     * Get regords pagination
+     * @param dateFrom
+     * @param dateTo
+     * @param searchBy
+     * @param searchParam
+     * @param perPage
+     * @param currentPage
+     * @param sortBy
+     * @param sort
+     */
     getRecordPaginate(dateFrom, dateTo, searchBy, searchParam, perPage, currentPage, sortBy, sort) {
       let loading = this.$loading.show();
       let payload = {
@@ -251,7 +207,7 @@ export default {
         sortBy: sortBy,
         sort: sort,
       }
-      MenuService.getPaginate(payload).then((response) => {
+      BlogTagService.getPaginate(payload).then((response) => {
         if (response.code === 200) {
           this.records = response.data.data;
           this.pagination = {
@@ -270,10 +226,17 @@ export default {
       });
     },
 
+    /**
+     * Refresh datatable
+     */
     doRefresh() {
       this.getRecordPaginate(this.dateFrom, this.dateTo, this.searchBy, this.searchParam, this.pagination.perPage, this.pagination.currentPage, this.sortBy, this.sort)
     },
 
+    /**
+     * Filter selected datatable
+     * @param pagination
+     */
     doFilterSelected(pagination) {
       this.searchBy = pagination[0];
       if (this.searchBy === "All") {
@@ -289,145 +252,62 @@ export default {
         );
       }
     },
+
+    /**
+     * Filter date datatable
+     * @param selectedDate
+     */
     doFilterDate(selectedDate) {
       this.dateFrom = selectedDate[0];
       this.dateFrom = selectedDate[1];
       this.getRecordPaginate(this.dateFrom, this.dateTo, this.searchBy, this.searchParam, this.pagination.perPage, this.pagination.currentPage, this.sortBy, this.sort);
     },
 
+    /**
+     * Searching action
+     * @param props
+     */
     doSearch(props) {
       this.searchParam = props[0];
       this.getRecordPaginate(this.dateFrom, this.dateTo, this.searchBy, this.searchParam, props[1], props[2], this.sortBy, this.sort);
     },
-    //Prev Pagination
+
+    /**
+     * Prev page datatable
+     * @param props
+     */
     doPrevPage(props) {
       this.getRecordPaginate(this.dateFrom, this.dateTo, this.searchBy, this.searchParam, props[0], props[1], this.sortBy, this.sort);
     },
-    //Next Pagination
+
+    /**
+     * Netx page datatable
+     * @param props
+     */
     doNextPage(props) {
       this.getRecordPaginate(this.dateFrom, this.dateTo, this.searchBy, this.searchParam, props[0], props[1], this.sortBy, this.sort);
     },
 
-    //Search Record
+    /**
+     * Search datatable
+     * @param limit
+     */
     handleSearch(limit) {
       this.getRecordPaginate(this.dateFrom, this.dateTo, this.searchBy, this.searchParam, props[0], props[1], this.sortBy, this.sort);
     },
 
+    /**
+     * Change datatable record perpage
+     * @param props
+     */
     doChangePerPage(props) {
       this.getRecordPaginate(this.dateFrom, this.dateTo, this.searchBy, this.searchParam, props[0], props[1], this.sortBy, this.sort);
     },
 
     /**
-     * Button Toggle
-     * @param props
+     * Delete
+     * @param prop
      */
-    doCheckToggle(props) {
-      let payload = props;
-      payload.active = !props.active
-      let loading = this.$loading.show();
-      MenuService.postUpdate(props.id, payload).then((response) => {
-        if (response.code === 200) {
-          this.doRefresh();
-          loading.hide();
-        } else {
-          loading.hide();
-          this.$swal.fire("Error!", response.message, "error");
-        }
-      });
-    },
-
-    beforeOpen(event) {
-      this.getMenus();
-      this.getMenuList();
-      if (this.idUpdate) this.getShowMenu();
-    },
-    getMenuList() {
-      let loading = this.$loading.show();
-      MenuListService.getAll().then((response) => {
-        if (response.code === 200) {
-          this.menuList = response.data;
-          loading.hide();
-        } else {
-          loading.hide();
-          this.$swal.fire("Error!", response.message, "error");
-        }
-      });
-    },
-    getMenus() {
-      let loading = this.$loading.show();
-      MenuService.getAll().then((response) => {
-        if (response.code === 200) {
-          this.menus = response.data;
-          loading.hide();
-        } else {
-          loading.hide();
-          this.$swal.fire("Error!", response.message, "error");
-        }
-      });
-    },
-    getShowMenu() {
-      let loading = this.$loading.show();
-      MenuService.getShow(this.menu.id).then((response) => {
-        if (response.code === 200) {
-          this.menu = response.data;
-          loading.hide();
-        } else {
-          loading.hide();
-          this.$swal.fire("Error!", response.message, "error");
-        }
-      });
-    },
-    handleSubmit() {
-      let loading = this.$loading.show();
-      if (!this.idUpdate) {
-        MenuService.postCreate(this.menu).then((response) => {
-          if (response.code === 200) {
-            this.menu = new RequestMenu();
-            loading.hide();
-            this.$swal.fire({
-              icon: "success",
-              title: "Success",
-              text: "Record has been created",
-            });
-            this.doRefresh();
-            this.hide();
-          } else {
-            loading.hide();
-            this.$swal.fire("Error!", response.message, "error");
-          }
-        });
-      } else {
-        MenuService.postUpdate(this.menu.id, this.menu).then((response) => {
-          if (response.code === 200) {
-            this.menu = new RequestMenu();
-            loading.hide();
-            this.$swal.fire({
-              icon: "success",
-              title: "Success",
-              text: "Record has been updated",
-            });
-            this.doRefresh();
-            this.hide();
-          } else {
-            loading.hide();
-            this.$swal.fire("Error!", response.message, "error");
-          }
-        });
-      }
-    },
-    handleCreate() {
-      this.idUpdate = false;
-      this.$modal.show('my-first-modal')
-    },
-    handleUpdate(props) {
-      this.menu.id = props.id
-      this.idUpdate = true;
-      this.$modal.show('my-first-modal')
-    },
-    hide() {
-      this.$modal.hide('my-first-modal');
-    },
-
     handleDelete(prop) {
       this.$swal({
         title: "Are you sure?",
@@ -439,8 +319,7 @@ export default {
         timer: 8200,
       }).then((result) => {
         if (result.value) {
-          // <-- if confirmed
-          MenuService.delete(prop.id)
+          BlogTagService.delete(prop.id)
               .then(() => {
                 this.$swal({
                   position: "top-end",
@@ -460,6 +339,72 @@ export default {
         }
       });
     },
+    beforeOpen(event) {
+      if (this.idUpdate) this.getShow();
+    },
+    getShow() {
+      let loading = this.$loading.show();
+      BlogTagService.getShow(this.tags.id).then((response) => {
+        if (response.code === 200) {
+          this.tags = response.data;
+          loading.hide();
+        } else {
+          loading.hide();
+          this.$swal.fire("Error!", response.message, "error");
+        }
+      });
+    },
+    handleSubmit() {
+      let loading = this.$loading.show();
+      if (!this.idUpdate) {
+        BlogTagService.postCreate(this.tags).then((response) => {
+          if (response.code === 200) {
+            this.tags = new RequestBlogTag();
+            loading.hide();
+            this.$swal.fire({
+              icon: "success",
+              title: "Success",
+              text: "Record has been created",
+            });
+            this.doRefresh();
+            this.hide();
+          } else {
+            loading.hide();
+            this.$swal.fire("Error!", response.message, "error");
+          }
+        });
+      } else {
+        BlogTagService.postUpdate(this.tags.id, this.tags).then((response) => {
+          if (response.code === 200) {
+            this.tags = new RequestBlogTag();
+            loading.hide();
+            this.$swal.fire({
+              icon: "success",
+              title: "Success",
+              text: "Record has been updated",
+            });
+            this.doRefresh();
+            this.hide();
+          } else {
+            loading.hide();
+            this.$swal.fire("Error!", response.message, "error");
+          }
+        });
+      }
+    },
+    handleCreate() {
+      this.idUpdate = false;
+      this.$modal.show('my-modal')
+    },
+    handleUpdate(props) {
+      this.tags.id = props.id
+      this.idUpdate = true;
+      this.$modal.show('my-modal')
+    },
+    hide() {
+      this.$modal.hide('my-modal');
+    },
+
   }
 }
 </script>

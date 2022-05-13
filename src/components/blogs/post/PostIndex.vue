@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid">
     <DataTable v-if="pagination" :key="pagination.currentPage"
-               title="Menu Roles"
+               title="Blog Post"
                :columns="columns"
                :rows="records"
                :filter-record="filterRecord"
@@ -17,18 +17,13 @@
                :next-page-url="paginate.nextPageUrl"
                :prev-page-url="paginate.prevPageUrl"
                :create-button="true"
-               create-button-title="Add New"
+               create-button-title="Create Post"
                :printable="true"
                :exportable="true"
                :searchable="true"
                :filter="true"
                :refreshable="true"
                :filter-date="true"
-               :upload-button="true"
-               :command-checkbox="true"
-               @onSelectAll="onSelectAll"
-               @onSelect="onSelect"
-               upload-button-title="Upload"
                @onEnterSearch="doSearch"
                @onRefresh="doRefresh"
                @onPreviousPage="doPrevPage"
@@ -51,7 +46,7 @@
               class="btn btn-flat nopadding"
               @click="(e) => handleUpdate(props.row, e)"
           >
-            <i class="material-icons tbl-material-icons text-info">edit</i>
+            <i class="material-icons tbl-material-icons  text-info">edit</i>
           </button>
           <button
               class="btn btn-flat nopadding"
@@ -62,66 +57,21 @@
         </td>
       </template>
     </DataTable>
-
-    <!--    modal -->
-    <modal name="my-first-modal"
-           :width="500"
-           height="auto"
-           @before-open="beforeOpen"
-           :adaptive="true"
-    >
-
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">{{ idUpdate ? 'Update' : 'Create' }}</h5>
-          <button type="button" class="btn-close" @click="hide"></button>
-        </div>
-        <div class="modal-body">
-          <form>
-            <div class="mb-3">
-              <label class="form-label" for="menuGroup">Role</label>
-              <select class="form-select" id="menuGroup" v-model="menu.role_name" required>
-                <option value="null" disabled>Choose...</option>
-                <option v-for="item in roles" :key="item.name" :value="item.name">{{ item.name }}</option>
-              </select>
-            </div>
-            <div class="mb-3">
-              <label class="form-label" for="parentMenu">Menu</label>
-              <select class="form-select" id="parentMenu" v-model="menu.menus_id">
-                <option value="null" disabled>Choose...</option>
-                <option v-for="item in menus" :key="item.id" :value="item.id">{{ item.name }}</option>
-              </select>
-            </div>
-            <div class="mb-3">
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" v-model="menu.active" id="checkRemember">
-                <label class="form-check-label" for="checkRemember">Active</label>
-              </div>
-            </div>
-            <div class="mb-3 d-flex justify-content-end">
-              <button type="button" class="btn btn-secondary me-2" @click="hide">Cancel</button>
-              <button type="button" class="btn btn-primary" @click="handleSubmit">Save changes</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </modal>
   </div>
 </template>
 
 <script>
-import DataTable from "../mih/components/DataTable";
-import MenuRoleService from "../../services/menuRole.service";
-import RolesService from "../../services/role.service";
-import RequestMenuRole from "../../payloads/request/RequestMenuRole";
-import MenuService from "../../services/menu.service";
+import DataTable from "../../mih/components/DataTable";
+import BlogPostService from "../../../services/blogPost.service";
+import router from "../../../router";
+import Pages from "../../../helpers/Blog";
+import Utils from "../../../helpers/Utils";
 
 export default {
-  name: "UserIndex",
+  name: "PostIndex",
   components: {DataTable},
   data() {
     return {
-      menu: new RequestMenuRole(),
       columns: [
         {
           label: "ID",
@@ -132,29 +82,38 @@ export default {
           concatWith: false
         },
         {
-          label: "name",
-          field: "name",
+          label: "title",
+          field: "title",
           numeric: false,
           html: false,
           hidden: false,
         },
         {
-          label: "role",
-          field: "role_name",
+          label: "tags",
+          field: "tag",
           numeric: false,
           html: false,
           hidden: false,
         },
         {
-          label: "status",
-          field: "active",
+          label: "published",
+          field: "published",
           numeric: false,
           html: false,
           hidden: false,
           buttonToggle: true,
           buttonToggleDesc: [
-            "Active", "Inactive"
+            "Published", "Draft"
           ]
+        },
+        {
+          label: "Update At",
+          field: "updated_at",
+          numeric: false,
+          html: false,
+          hidden: false,
+          date: true,
+          dateFormat: "DD MMMM YYYY"
         },
       ],
       records: [],
@@ -163,8 +122,9 @@ export default {
       sortBy: 'created_at',
       sort: 'DESC',
       filterRecord: [
-        {'id': 'id', "desc": "ID RequestMenu"},
-        {'id': 'role_name', "desc": " Role Name"}
+        {'id': 'id', "desc": "ID Post"},
+        {'id': 'title', "desc": "Title"},
+        {'id': 'published', "desc": "Published =1 / Draft=0"}
       ],
       pagination: {
         recordsPerPage: [5, 10, 50, 100, 500, 1000, 5000, 10000],
@@ -176,10 +136,8 @@ export default {
         total: 0,
       },
       idUpdate: true,
-      roles: [],
-      menus: [],
-      selected: [],
-      selectAll: false
+      menuList: [],
+      menus: []
     }
   },
   computed: {
@@ -191,6 +149,34 @@ export default {
     this.getRecordPaginate(this.dateFrom, this.dateTo, this.searchBy, this.searchParam, this.pagination.perPage, this.pagination.currentPage, this.sortBy, this.sort)
   },
   methods: {
+
+    /**
+     * Create
+     */
+    handleCreate() {
+      router.push(Pages.BLOG_POST_CREATE);
+    },
+
+    /**
+     * Update
+     * @param prop
+     * @returns {Promise<void>}
+     */
+    async handleUpdate(prop) {
+      await router.push({path: Pages.BLOG_POST_UPDATE, query: {id: Utils.encrypt(prop.id)}});
+    },
+
+    /**
+     * Get regords pagination
+     * @param dateFrom
+     * @param dateTo
+     * @param searchBy
+     * @param searchParam
+     * @param perPage
+     * @param currentPage
+     * @param sortBy
+     * @param sort
+     */
     getRecordPaginate(dateFrom, dateTo, searchBy, searchParam, perPage, currentPage, sortBy, sort) {
       let loading = this.$loading.show();
       let payload = {
@@ -203,7 +189,7 @@ export default {
         sortBy: sortBy,
         sort: sort,
       }
-      MenuRoleService.getPaginate(payload).then((response) => {
+      BlogPostService.getPaginate(payload).then((response) => {
         if (response.code === 200) {
           this.records = response.data.data;
           this.pagination = {
@@ -223,23 +209,16 @@ export default {
     },
 
     /**
-     * Checkbox All
+     * Refresh datatable
      */
-    onSelectAll(props) {
-      console.log(props);
-    },
-
-    /**
-     * Checkbox
-     */
-    onSelect(props) {
-      console.log(props)
-    },
-
     doRefresh() {
       this.getRecordPaginate(this.dateFrom, this.dateTo, this.searchBy, this.searchParam, this.pagination.perPage, this.pagination.currentPage, this.sortBy, this.sort)
     },
 
+    /**
+     * Filter selected datatable
+     * @param pagination
+     */
     doFilterSelected(pagination) {
       this.searchBy = pagination[0];
       if (this.searchBy === "All") {
@@ -255,30 +234,54 @@ export default {
         );
       }
     },
+
+    /**
+     * Filter date datatable
+     * @param selectedDate
+     */
     doFilterDate(selectedDate) {
       this.dateFrom = selectedDate[0];
       this.dateFrom = selectedDate[1];
       this.getRecordPaginate(this.dateFrom, this.dateTo, this.searchBy, this.searchParam, this.pagination.perPage, this.pagination.currentPage, this.sortBy, this.sort);
     },
 
+    /**
+     * Searching action
+     * @param props
+     */
     doSearch(props) {
       this.searchParam = props[0];
       this.getRecordPaginate(this.dateFrom, this.dateTo, this.searchBy, this.searchParam, props[1], props[2], this.sortBy, this.sort);
     },
-    //Prev Pagination
+
+    /**
+     * Prev page datatable
+     * @param props
+     */
     doPrevPage(props) {
       this.getRecordPaginate(this.dateFrom, this.dateTo, this.searchBy, this.searchParam, props[0], props[1], this.sortBy, this.sort);
     },
-    //Next Pagination
+
+    /**
+     * Netx page datatable
+     * @param props
+     */
     doNextPage(props) {
       this.getRecordPaginate(this.dateFrom, this.dateTo, this.searchBy, this.searchParam, props[0], props[1], this.sortBy, this.sort);
     },
 
-    //Search Record
+    /**
+     * Search datatable
+     * @param limit
+     */
     handleSearch(limit) {
       this.getRecordPaginate(this.dateFrom, this.dateTo, this.searchBy, this.searchParam, props[0], props[1], this.sortBy, this.sort);
     },
 
+    /**
+     * Change datatable record perpage
+     * @param props
+     */
     doChangePerPage(props) {
       this.getRecordPaginate(this.dateFrom, this.dateTo, this.searchBy, this.searchParam, props[0], props[1], this.sortBy, this.sort);
     },
@@ -289,9 +292,9 @@ export default {
      */
     doCheckToggle(props) {
       let payload = props;
-      payload.active = !props.active
+      payload.published = !props.published
       let loading = this.$loading.show();
-      MenuRoleService.postUpdate(props.id, payload).then((response) => {
+      BlogPostService.postPublished(props.id, payload).then((response) => {
         if (response.code === 200) {
           this.doRefresh();
           loading.hide();
@@ -302,98 +305,10 @@ export default {
       });
     },
 
-    beforeOpen(event) {
-      this.getMenus();
-      this.getRoles()
-      if (this.idUpdate) this.getShowMenu();
-    },
-    getRoles() {
-      let loading = this.$loading.show();
-      RolesService.getAll().then((response) => {
-        if (response.code === 200) {
-          this.roles = response.data;
-          loading.hide();
-        } else {
-          loading.hide();
-          this.$swal.fire("Error!", response.message, "error");
-        }
-      });
-    },
-    getMenus() {
-      let loading = this.$loading.show();
-      MenuService.getAll().then((response) => {
-        if (response.code === 200) {
-          this.menus = response.data;
-          loading.hide();
-        } else {
-          loading.hide();
-          this.$swal.fire("Error!", response.message, "error");
-        }
-      });
-    },
-    getShowMenu() {
-      let loading = this.$loading.show();
-      MenuRoleService.getShow(this.menu.id).then((response) => {
-        if (response.code === 200) {
-          this.menu = response.data;
-          loading.hide();
-        } else {
-          loading.hide();
-          this.$swal.fire("Error!", response.message, "error");
-        }
-      });
-    },
-    handleSubmit() {
-      let loading = this.$loading.show();
-      if (!this.idUpdate) {
-        MenuRoleService.postCreate(this.menu).then((response) => {
-          if (response.code === 200) {
-            this.menu = new RequestMenuRole();
-            loading.hide();
-            this.$swal.fire({
-              icon: "success",
-              title: "Success",
-              text: "Record has been created",
-            });
-            this.doRefresh();
-            this.hide();
-          } else {
-            loading.hide();
-            this.$swal.fire("Error!", response.message, "error");
-          }
-        });
-      } else {
-        MenuRoleService.postUpdate(this.menu.id, this.menu).then((response) => {
-          if (response.code === 200) {
-            this.menu = new RequestMenuRole();
-            loading.hide();
-            this.$swal.fire({
-              icon: "success",
-              title: "Success",
-              text: "Record has been updated",
-            });
-            this.doRefresh();
-            this.hide();
-          } else {
-            loading.hide();
-            this.$swal.fire("Error!", response.message, "error");
-          }
-        });
-      }
-    },
-    handleCreate() {
-      this.idUpdate = false;
-      this.$modal.show('my-first-modal')
-    },
-    handleUpdate(props) {
-      this.menu.id = props.id
-      this.idUpdate = true;
-      this.$modal.show('my-first-modal')
-    },
-    hide() {
-      this.$modal.hide('my-first-modal');
-    },
-
+    /**
+     * Delete
+     * @param prop
+     */
     handleDelete(prop) {
       this.$swal({
         title: "Are you sure?",
@@ -405,8 +320,7 @@ export default {
         timer: 8200,
       }).then((result) => {
         if (result.value) {
-          // <-- if confirmed
-          MenuRoleService.delete(prop.id)
+          BlogPostService.delete(prop.id)
               .then(() => {
                 this.$swal({
                   position: "top-end",
