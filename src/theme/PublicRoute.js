@@ -18,16 +18,14 @@ export default [
                         path: "",
                         name: "Pots",
                         component: () => import("./pages/blog/Posts.vue"),
-                        children: []
+                    },
+                    {
+                        path: "/blog/post/:id/:slug",
+                        name: "Post",
+                        component: () => import("./pages/blog/Post.vue"),
                     },
                 ]
             },
-            {
-                path: "/blog/post/:id/:slug",
-                name: "Post",
-                component: () => import("./pages/blog/Post.vue"),
-            },
-
         ],
     }
 ]
