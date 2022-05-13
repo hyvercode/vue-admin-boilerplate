@@ -23,7 +23,7 @@ export default [
                 ]
             },
             {
-                path: "/blog/post/:id",
+                path: "/blog/post/:id/:slug",
                 name: "Post",
                 component: () => import("./pages/blog/Post.vue"),
             },
