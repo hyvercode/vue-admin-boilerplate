@@ -109,18 +109,21 @@
               </select>
             </div>
             <div class="mb-3">
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" v-model="menu.is_icon" id="isIcon">
-                <label class="form-check-label" v-if="menu.is_icon">Use Icon <a
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" v-model="menu.is_icon" v-bind:value="0">
+                <label class="form-check-label" for="inlineRadio1">Use Image</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" v-model="menu.is_icon" v-bind:value="1">
+                <label class="form-check-label" for="inlineRadio2">Use Reference :<a
                     href="https://jossef.github.io/material-design-icons-iconfont/" target="_blank" class="text-info">
-                  material-design-icons-iconfont</a> </label>
-                <label class="form-check-label" v-else>Use Image</label>
+                  Material Icons</a> </label>
               </div>
             </div>
             <div class="mb-3">
               <label class="form-label" for="href">{{ menu.is_icon ? 'Icon' : 'Upload Image' }}</label>
               <input v-if="menu.is_icon" type="text" class="form-control" v-model="menu.icon"
-                     placeholder="supervised_user_circle">
+                     placeholder="Example: user_circle">
               <input v-if="!menu.is_icon"
                      type="file"
                      accept="image/*"
@@ -155,7 +158,7 @@ export default {
   components: {DataTable},
   data() {
     return {
-      menu: new RequestMenu(),
+      menu: new RequestMenu(null,null, null, null, null, 0, null, null, true),
       columns: [
         {
           label: "ID",
