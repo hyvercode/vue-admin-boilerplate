@@ -108,7 +108,7 @@
 import avatar from 'vue-avatar'
 import VueCookies from "vue-cookies";
 import Util from "../../helpers/Utils";
-import pages from "../../helpers/Pages";
+import publicPages from "../../helpers/Pages";
 
 export default {
   name: "SideBar",

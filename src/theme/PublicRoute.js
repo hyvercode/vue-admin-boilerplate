@@ -13,7 +13,21 @@ export default [
                 path: "blog",
                 name: "Blog",
                 component: () => import("./pages/blog/Index"),
+                children: [
+                    {
+                        path: "",
+                        name: "Pots",
+                        component: () => import("./pages/blog/Posts.vue"),
+                        children: []
+                    },
+                ]
             },
+            {
+                path: "/blog/post/:id",
+                name: "Post",
+                component: () => import("./pages/blog/Post.vue"),
+            },
+
         ],
     }
 ]

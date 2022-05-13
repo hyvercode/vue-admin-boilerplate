@@ -3,11 +3,9 @@ import VueRouter from 'vue-router'
 import Dashboard from "@/views/Dashboard";
 import Login from "@/views/Login";
 import Index from "../views/Index";
-import Pages from "../helpers/Pages";
 import VueCookies from "vue-cookies";
 import Password from "../views/Password";
 import Home from "../views/Home";
-import RouteLandingPage from "../theme/routePage";
 import PagesPM from "../helpers/PerformanceManagement";
 import PM from "../views/PM";
 import RoutePM from "./pm";
@@ -23,6 +21,9 @@ import Master from "../views/Master";
 import PagesBlog from "../helpers/Blog";
 import RouteBlog from "./blog";
 import Blog from "../views/Blog";
+import Pages from "././../helpers/Pages";
+import PublicPages from "../theme/PublicPages";
+import PublicRoute from "../theme/PublicRoute";
 
 Vue.use(VueRouter);
 const routes = [
@@ -30,7 +31,7 @@ const routes = [
         path: "/",
         name: 'Index',
         component: Index,
-        children: RouteLandingPage
+        children: PublicRoute
     },
     {
         path: Pages.LOGIN,
@@ -116,23 +117,11 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-    const publicPages = [
-        Pages.INDEX,
-        Pages.BLOG,
-        Pages.BLOG_SLUG,
-        Pages.BLOG_POST,
-        Pages.BLOG_ARCHIVE,
-        Pages.BLOG_CATEGORY,
-        Pages.LOGIN,
-        Pages.PASSWORD_FORGOT,
-        Pages.PASSWORD_OTP,
-        Pages.PASSWORD_RESET,
-    ];
-    const authRequired = !publicPages.includes(to.path);
+    const authRequired = !PublicPages.includes(to.path);
     const loggedIn = VueCookies.get("__MIH__BASE__SESSIONID__");
 
     if (authRequired && !loggedIn) {
-        next(Pages.INDEX);
+        next(PublicPages);
     } else {
         next();
     }

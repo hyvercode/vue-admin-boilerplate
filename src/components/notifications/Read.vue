@@ -51,7 +51,7 @@
 import NotificationService from "../../services/notification.service";
 import utils from "../../helpers/Utils";
 import router from "../../router";
-import pages from "../../helpers/Pages";
+import publicPages from "../../helpers/Pages";
 
 export default {
   name: "Read",

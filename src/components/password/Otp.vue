@@ -100,7 +100,7 @@
 <script>
 import OTP from "../../services/auth.service";
 import router from "@/router";
-import pages from "../../helpers/Pages";
+import publicPages from "../../helpers/Pages";
 import Autor from "../navigation/Autor";
 
 export default {

@@ -100,8 +100,6 @@
 </template>
 
 <script>
-import router from "../../router";
-import Pages from "../../helpers/Pages";
 import Utils from "../../helpers/Utils";
 import NotificationService from "../../services/notification.service";
 import FormHeader from "../navigation/FormHeader";

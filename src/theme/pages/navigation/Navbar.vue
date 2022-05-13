@@ -15,7 +15,7 @@
           <li class="nav-item"><a class="nav-link" aria-current="page" href="/blog">Blog</a></li>
         </ul>
         <div class="d-flex ms-lg-4">
-          <router-link class="btn btn-info" :to="PAGES.LOGIN">Sign In</router-link>
+          <router-link class="btn btn-info" to="/login">Sign In</router-link>
           <a class="btn btn-warning ms-3" href="#!">Sign Up</a></div>
       </div>
     </div>
@@ -23,14 +23,8 @@
 </template>
 
 <script>
-import pages from "../../../helpers/Pages";
 
 export default {
   name: "Navbar",
-  data() {
-    return {
-      PAGES: pages
-    }
-  }
 }
 </script>
