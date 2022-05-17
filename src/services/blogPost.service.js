@@ -29,6 +29,10 @@ class BlogPostService {
     postPublished(id, payloads) {
         return Api.doPost(Host.API_V1 + `/blogs/posts/publish/${id}`, payloads);
     }
+
+    postUpload(payloads) {
+        return Api.doPost(Host.API_V1 + `/blogs/posts/upload`, payloads);
+    }
 }
 
 export default new BlogPostService();
