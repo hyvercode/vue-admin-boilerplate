@@ -162,8 +162,8 @@ export default {
      * @param prop
      * @returns {Promise<void>}
      */
-    async handleUpdate(prop) {
-      await router.push({path: Pages.BLOG_POST_UPDATE, query: {id: Utils.encrypt(prop.id)}});
+    async handleUpdate(props) {
+      await router.push(`/blogs/post/update/${props.id}/${props.slug}`);
     },
 
     /**

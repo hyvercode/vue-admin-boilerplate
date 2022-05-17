@@ -34,7 +34,7 @@
                   <div class="single-blog wow fadeInUp" data-wow-delay="1.7s">
                     <!-- Post Thumb -->
                     <div class="blog-post-thumb">
-                      <img :src="post.thumbnail" alt="No Image" class="bg-white px-4 responsive-img"
+                      <img :src="post.thumbnail" alt="No Image" class="bg-white responsive-img"
                            style="max-height: 350px;background-size: cover;width: 100%">
                     </div>
                     <!-- Post Meta -->
@@ -112,7 +112,7 @@
                 <!-- Single Latest Blog Post -->
                 <div class="single-latest-blog-post d-flex" v-for="latest in latestPosts" :key="latest.id">
                   <div class="latest-blog-post-thumb">
-                    <img :src="latest.thumbnail" class="bg-white px-2 img-thumbnail" alt="No Image"
+                    <img :src="latest.thumbnail" class="bg-white img-thumbnail" alt="No Image"
                          style="background-size: cover;">
                   </div>
                   <div class="latest-blog-post-content">
@@ -169,7 +169,7 @@ export default {
       limit: 5,
       records: [5, 10, 30, 50, 100, 500, 1000],
       pagination: {
-        perPage: 10,
+        perPage: 5,
         currentPage: 1,
         lastPage: '',
         nextPageUrl: '',

@@ -2,7 +2,7 @@ const BLOG={
     BLOGS: "/blogs",
     BLOG_POSTS: "/blogs/posts",
     BLOG_POST_CREATE: "/blogs/post/create",
-    BLOG_POST_UPDATE: "/blogs/post/update",
+    BLOG_POST_UPDATE: "/blogs/post/update/:id/:slug",
     BLOG_CATEGORIES: "/blogs/categories",
     BLOG_CATEGORY_CREATE: "/blogs/category/create",
     BLOG_CATEGORY_UPDATE: "/blogs/category/update",

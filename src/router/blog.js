@@ -14,12 +14,12 @@ export default [
             {
                 path: Pages.BLOG_POST_CREATE,
                 name: "Create",
-                component: () => import("../components/company/Create.vue"),
+                component: () => import("../components/blogs/post/PostCreate.vue")
             },
             {
                 path: Pages.BLOG_POST_UPDATE,
                 name: "Update",
-                component: () => import("../components/company/Update.vue"),
+                component: () => import("../components/blogs/post/PostUpdate.vue"),
             },
         ],
     },

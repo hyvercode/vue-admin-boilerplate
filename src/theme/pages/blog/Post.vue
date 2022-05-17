@@ -97,7 +97,7 @@
                 <!-- Single Latest Blog Post -->
                 <div class="single-latest-blog-post d-flex" v-for="latest in latestPosts" :key="latest.id">
                   <div class="latest-blog-post-thumb">
-                    <img :src="latest.thumbnail" class="bg-white px-2 img-thumbnail" alt="No Image"
+                    <img :src="latest.thumbnail" class="bg-white img-thumbnail" alt="No Image"
                          style="background-size: cover;">
                   </div>
                   <div class="latest-blog-post-content">
