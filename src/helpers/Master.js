@@ -12,6 +12,7 @@ const master = {
     MENU: "/masters/menu",
     MENU_LIST: "/masters/menu/list",
     MENU_ROLE: "/masters/menu/role",
+    ROLES: "/masters/roles",
     NOTIFICATIONS: "/notifications",
     NOTIFICATION_READ: "/notification/read",
     BANNER: "/masters/banner",

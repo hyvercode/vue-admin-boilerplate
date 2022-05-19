@@ -25,10 +25,6 @@ class RoleService {
     delete(id) {
         return Api.doDelete(Host.API_V1 + `/roles/delete/${id}`);
     }
-
-    getMenu() {
-        return Api.doGet(Host.API_V1 + `/roles/menu`);
-    }
 }
 
 export default new RoleService();

@@ -162,14 +162,14 @@
 
               <!--            Normal Content-->
               <span
-                  v-if="!column.buttonToggle && !column.date && !column.badge && !column.html && !column.image && column.field !=='active' && !column.badge && !column.hidden"
+                  v-if="!column.boolean && !column.buttonToggle && !column.date && !column.badge && !column.html && !column.image && column.field !=='active' && !column.badge && !column.hidden"
                   :style="{width: column.width ? 'auto':column.width,display:column.hidden?'none !important;':''}">
               {{ collect(row, column.field) }} <span v-if="column.concat"> {{ collect(row, column.concatWith) }}</span>
             </span>
 
-              <!--            Boolean Content-->
+              <!--            Active Content-->
               <div
-                  v-if="column.boolean && !column.html && !column.currency && column.field ==='active'  &&  !column.badge && !column.hidden"
+                  v-if="column.field ==='active' && !column.html && !column.currency  &&  !column.badge && !column.hidden"
                   :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none !important;':''}">
                           <span :class="collect(row, column.field) ? 'badge bg-success' : 'badge bg-secondary'">{{
                               collect(row, column.field) ? column.booleanDesc[0] : column.booleanDesc[1]
@@ -229,6 +229,15 @@
                       collect(row, column.field) ? column.buttonToggleDesc[0] : column.buttonToggleDesc[1]
                     }}</small>
                 </div>
+              </div>
+
+              <!--          Boolean Content-->
+              <div
+                  v-if="column.boolean && !column.buttonToggle && !column.date && !column.badge && !column.html && !column.image && column.field !=='active' && !column.badge && !column.hidden"
+                  :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none !important;':''}">
+                          <span :class="collect(row, column.field) ? 'badge bg-success' : 'badge bg-secondary'">{{
+                              collect(row, column.field) ? column.booleanDesc[0] : column.booleanDesc[1]
+                            }}</span>
               </div>
 
             </td>

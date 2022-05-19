@@ -10,6 +10,7 @@ import Banner from "../views/Banner";
 import Profile from "../views/Profile";
 import Education from "../views/Education";
 import Notifications from "../views/Notification";
+import Role from "../views/Role";
 
 export default [
     {
@@ -88,6 +89,18 @@ export default [
                 component: MenuRoleIndex
             }
         ]
+    },
+    {
+        path: Pages.ROLES,
+        name: "Role",
+        component: Role,
+        children: [
+            {
+                path: "",
+                name: "Index",
+                component: () => import("../components/role/RoleIndex.vue"),
+            },
+        ],
     },
     {
         path: Pages.BANNER,
