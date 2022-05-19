@@ -59,7 +59,7 @@
 
 <script>
 
-import MyDataTable from "../mih/components/DataTable";
+import MyDataTable from "../hyver-vue/components/DataTable";
 import StagingsService from "../../services/stagings.service";
 import RequestStaging from "../../payloads/request/RequestStaging";
 

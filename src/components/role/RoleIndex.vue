@@ -122,7 +122,7 @@
 </template>
 
 <script>
-import DataTable from "../mih/components/DataTable";
+import DataTable from "../hyver-vue/components/DataTable";
 import RoleService from "../../services/role.service";
 import RolesService from "../../services/role.service";
 import RequestRole from "../../payloads/request/RequestRole";

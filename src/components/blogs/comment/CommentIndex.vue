@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import DataTable from "../../mih/components/DataTable";
+import DataTable from "../../hyver-vue/components/DataTable";
 import BlogCommentService from "../../../services/blogComment.service";
 
 export default {

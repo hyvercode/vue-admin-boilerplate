@@ -137,7 +137,7 @@
 </template>
 
 <script>
-import DataTable from "../mih/components/DataTable";
+import DataTable from "../hyver-vue/components/DataTable";
 import MenuService from "../../services/menu.service";
 import MenuListService from "../../services/menuList.service";
 import RequestMenu from "../../payloads/request/RequestMenu";

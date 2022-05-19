@@ -100,7 +100,7 @@
 </template>
 
 <script>
-import DataTable from "../../mih/components/DataTable";
+import DataTable from "../../hyver-vue/components/DataTable";
 import BlogCategoriesService from "../../../services/blogCategory.service";
 import RequestBlogCategory from "../../../payloads/request/RequestBlogCategory";
 

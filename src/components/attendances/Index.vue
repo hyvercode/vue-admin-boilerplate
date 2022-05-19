@@ -52,7 +52,7 @@
 
 <script>
 
-import MyDataTable from "../mih/components/DataTable";
+import MyDataTable from "../hyver-vue/components/DataTable";
 import Pages from "../../helpers/HR";
 import Utils from "../../helpers/Utils";
 import router from "../../router";

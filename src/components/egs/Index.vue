@@ -88,7 +88,7 @@
 
 <script>
 import EgsService from "../../services/egs.service";
-import MyDataTable from "../mih/components/DataTable";
+import MyDataTable from "../hyver-vue/components/DataTable";
 import Utils from "../../helpers/Utils";
 import router from "../../router";
 import Pages from "../../helpers/PerformanceManagement";

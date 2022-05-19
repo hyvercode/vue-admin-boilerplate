@@ -60,7 +60,7 @@
 
 <script>
 import UsersService from "../../services/user.service";
-import MyDataTable from "../mih/mihVueDataTable";
+import MyDataTable from "../hyver-vue/mihVueDataTable";
 
 export default {
   name: "Picker",

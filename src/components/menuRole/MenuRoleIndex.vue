@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid">
     <DataTable v-if="pagination" :key="pagination.currentPage"
-               title="Menu Roles"
+               title="Groups Menu"
                :columns="columns"
                :rows="records"
                :filter-record="filterRecord"
@@ -110,14 +110,14 @@
 </template>
 
 <script>
-import DataTable from "../mih/components/DataTable";
+import DataTable from "../hyver-vue/components/DataTable";
 import MenuRoleService from "../../services/menuRole.service";
 import RolesService from "../../services/role.service";
 import RequestMenuRole from "../../payloads/request/RequestMenuRole";
 import MenuService from "../../services/menu.service";
 
 export default {
-  name: "UserIndex",
+  name: "Index",
   components: {DataTable},
   data() {
     return {
@@ -132,15 +132,15 @@ export default {
           concatWith: false
         },
         {
-          label: "name",
-          field: "name",
+          label: "role",
+          field: "role_name",
           numeric: false,
           html: false,
           hidden: false,
         },
         {
-          label: "role",
-          field: "role_name",
+          label: "menu name",
+          field: "name",
           numeric: false,
           html: false,
           hidden: false,

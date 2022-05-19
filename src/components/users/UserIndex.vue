@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import DataTable from "../mih/components/DataTable";
+import DataTable from "../hyver-vue/components/DataTable";
 import UserService from "../../services/user.service";
 import MenuService from "../../services/menu.service";
 import EmployeeService from "../../services/employee.service";

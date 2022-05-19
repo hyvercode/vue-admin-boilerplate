@@ -167,7 +167,7 @@
 <script>
 import RequestKpiDirectories from "../../payloads/request/RequestKpiDirectories";
 import KpiDirectoriesService from "../../services/kpidirectories.service";
-import MyDataTable from "../mih/components/DataTable";
+import MyDataTable from "../hyver-vue/components/DataTable";
 import Utils from "../../helpers/Utils";
 import BscService from "@/services/bsc.service";
 import KpigroupService from "@/services/kpigroup.service";

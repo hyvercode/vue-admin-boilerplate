@@ -107,7 +107,7 @@
 <script>
 import RequestTargetType from "../../payloads/request/RequestTargetType";
 import TargetTypeService from "../../services/targettype.service";
-import MyDataTable from "../mih/components/DataTable";
+import MyDataTable from "../hyver-vue/components/DataTable";
 import Utils from "../../helpers/Utils";
 
 export default {

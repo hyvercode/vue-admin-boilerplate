@@ -95,7 +95,7 @@
 </template>
 
 <script>
-import DataTable from "../mih/components/DataTable";
+import DataTable from "../hyver-vue/components/DataTable";
 import EducationsService from "../../services/education.service";
 import RequestEducation from "../../payloads/request/RequestEducation";
 

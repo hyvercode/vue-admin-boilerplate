@@ -93,7 +93,7 @@
 </template>
 <script>
 
-import MyDataTable from "../mih/components/DataTable";
+import MyDataTable from "../hyver-vue/components/DataTable";
 import UsersService from "../../services/user.service";
 import GlobalService from "../../services/global.service";
 import CompaniesService from "../../services/companies.service";

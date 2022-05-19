@@ -94,7 +94,7 @@
 <script>
 import RequestJobPosition from "../../payloads/request/RequestJobPosition";
 import JobPositionService from "../../services/jobposition.service";
-import MyDataTable from "../mih/components/DataTable";
+import MyDataTable from "../hyver-vue/components/DataTable";
 import Utils from "../../helpers/Utils";
 
 export default {
