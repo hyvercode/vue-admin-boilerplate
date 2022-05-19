@@ -30,6 +30,8 @@
                @onNextPage="doNextPage"
                @onChangeRowPage="doChangePerPage"
                @onCreate="handleCreate"
+               @onChangeFilter="doFilterSelected"
+               @onChangeSearch="doSearch"
     >
       <th
           id="delete"

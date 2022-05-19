@@ -34,7 +34,8 @@
                @onChangeRowPage="doChangePerPage"
                @onCheckToggle="doCheckToggle"
                @onCreate="handleCreate"
-    >
+               @onChangeFilter="doFilterSelected"
+               @onChangeSearch="doSearch">
       <th
           id="delete"
           slot="thead-tr"
@@ -306,17 +307,10 @@ export default {
      */
     doFilterSelected(pagination) {
       this.searchBy = pagination[0];
-      if (this.searchBy === "All") {
-        this.searchBy = "id";
-        this.searchParam = "";
-        this.getRecordPaginate(
-            this.dateFrom,
-            this.dateTo,
-            this.searchBy,
-            this.searchParam,
-            pagination[1],
-            pagination[2]
-        );
+      if (this.searchBy === 'All') {
+        this.searchBy = 'id';
+        this.searchParam = '';
+        this.getPaginate(this.dateFrom, this.dateTo, this.searchBy, this.searchParam, pagination[1], pagination[2])
       }
     },
 

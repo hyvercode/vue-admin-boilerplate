@@ -30,6 +30,8 @@
                @onNextPage="doNextPage"
                @onChangeRowPage="doChangePerPage"
                @onCreate="handleCreate"
+               @onChangeFilter="doFilterSelected"
+               @onChangeSearch="doSearch"
     >
       <th
           id="delete"
@@ -76,38 +78,45 @@
               <label class="form-label" for="href">Role Name</label>
               <input type="text" class="form-control" id="name" v-model="role.name" placeholder="Please input" required>
             </div>
-            <div class="mb-1">
-              <label class="form-label" for="href">Access Privileges</label>
+            <div class="mb-3">
+              <label class="form-label" for="href">Description</label>
+              <textarea type="text" class="form-control" rows="3" v-model="role.description"
+                        placeholder="Please input"></textarea>
             </div>
             <div class="mb-3">
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" v-model="role.create" id="checkRemember">
-                <label class="form-check-label" for="checkRemember">Create</label>
+              <label class="form-label" for="href">Access Privileges :</label>
+            </div>
+            <div class="px-5">
+              <div class="mb-3">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" v-model="role.create" id="checkRemember">
+                  <label class="form-check-label" for="checkRemember">Create</label>
+                </div>
               </div>
-            </div>
-            <div class="mb-3">
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" v-model="role.read" id="checkRemember">
-                <label class="form-check-label" for="checkRemember">Read</label>
+              <div class="mb-3">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" v-model="role.read" id="checkRemember">
+                  <label class="form-check-label" for="checkRemember">Read</label>
+                </div>
               </div>
-            </div>
-            <div class="mb-3">
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" v-model="role.update" id="checkRemember">
-                <label class="form-check-label" for="checkRemember">Update</label>
+              <div class="mb-3">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" v-model="role.update" id="checkRemember">
+                  <label class="form-check-label" for="checkRemember">Update</label>
+                </div>
               </div>
-            </div>
-            <div class="mb-3">
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" v-model="role.delete" id="checkRemember">
-                <label class="form-check-label" for="checkRemember">delete</label>
+              <div class="mb-3">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" v-model="role.delete" id="checkRemember">
+                  <label class="form-check-label" for="checkRemember">delete</label>
+                </div>
               </div>
-            </div>
-            <div class="mb-3">
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" v-model="role.administration" id="checkRemember"
-                       @change="changeAdministration">
-                <label class="form-check-label" for="checkRemember">Administration</label>
+              <div class="mb-3">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" v-model="role.administration" id="checkRemember"
+                         @change="changeAdministration">
+                  <label class="form-check-label" for="checkRemember">Administration</label>
+                </div>
               </div>
             </div>
             <div class="mb-3 d-flex justify-content-end">
@@ -124,7 +133,6 @@
 <script>
 import DataTable from "../hyver-vue/components/DataTable";
 import RoleService from "../../services/role.service";
-import RolesService from "../../services/role.service";
 import RequestRole from "../../payloads/request/RequestRole";
 
 export default {
@@ -145,6 +153,13 @@ export default {
         {
           label: "role name",
           field: "name",
+          numeric: false,
+          html: false,
+          hidden: false,
+        },
+        {
+          label: "description",
+          field: "description",
           numeric: false,
           html: false,
           hidden: false,
@@ -200,8 +215,8 @@ export default {
       sortBy: 'created_at',
       sort: 'DESC',
       filterRecord: [
-        {'id': 'id', "desc": "ID Role"},
-        {'id': 'name', "desc": " Role Name"}
+        {id: 'id', desc: "ID Role"},
+        {id: 'name', desc: "Role Name"}
       ],
       pagination: {
         recordsPerPage: [5, 10, 50, 100, 500, 1000, 5000, 10000],
@@ -283,19 +298,13 @@ export default {
 
     doFilterSelected(pagination) {
       this.searchBy = pagination[0];
-      if (this.searchBy === "All") {
-        this.searchBy = "id";
-        this.searchParam = "";
-        this.getRecordPaginate(
-            this.dateFrom,
-            this.dateTo,
-            this.searchBy,
-            this.searchParam,
-            pagination[1],
-            pagination[2]
-        );
+      if (this.searchBy === 'All') {
+        this.searchBy = 'id';
+        this.searchParam = '';
+        this.getPaginate(this.dateFrom, this.dateTo, this.searchBy, this.searchParam, pagination[1], pagination[2])
       }
     },
+
     doFilterDate(selectedDate) {
       this.dateFrom = selectedDate[0];
       this.dateFrom = selectedDate[1];

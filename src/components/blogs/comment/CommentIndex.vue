@@ -28,6 +28,8 @@
                @onNextPage="doNextPage"
                @onChangeRowPage="doChangePerPage"
                @onCheckToggle="doCheckToggle"
+               @onChangeFilter="doFilterSelected"
+               @onChangeSearch="doSearch"
     >
       <th
           id="delete"

@@ -36,6 +36,8 @@
                @onChangeRowPage="doChangePerPage"
                @onCheckToggle="doCheckToggle"
                @onCreate="handleCreate"
+               @onChangeFilter="doFilterSelected"
+               @onChangeSearch="doSearch"
     >
       <th
           id="delete"
@@ -163,7 +165,7 @@ export default {
       sortBy: 'created_at',
       sort: 'DESC',
       filterRecord: [
-        {'id': 'id', "desc": "ID RequestMenu"},
+        {'id': 'id', "desc": "ID Menu"},
         {'id': 'role_name', "desc": " Role Name"}
       ],
       pagination: {
@@ -242,19 +244,13 @@ export default {
 
     doFilterSelected(pagination) {
       this.searchBy = pagination[0];
-      if (this.searchBy === "All") {
-        this.searchBy = "id";
-        this.searchParam = "";
-        this.getRecordPaginate(
-            this.dateFrom,
-            this.dateTo,
-            this.searchBy,
-            this.searchParam,
-            pagination[1],
-            pagination[2]
-        );
+      if (this.searchBy === 'All') {
+        this.searchBy = 'id';
+        this.searchParam = '';
+        this.getPaginate(this.dateFrom, this.dateTo, this.searchBy, this.searchParam, pagination[1], pagination[2])
       }
     },
+
     doFilterDate(selectedDate) {
       this.dateFrom = selectedDate[0];
       this.dateFrom = selectedDate[1];

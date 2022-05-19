@@ -1,7 +1,8 @@
 export default class RequestRole {
-    constructor(id,name,create,read,update,deletee,administration) {
+    constructor(id,name,description,create,read,update,deletee,administration) {
         this.id = id;
         this.name = name;
+        this.description = description;
         this.create = create;
         this.read = read;
         this.update = update;

@@ -31,6 +31,8 @@
                @onChangeRowPage="doChangePerPage"
                @onCheckToggle="doCheckToggle"
                @onCreate="handleCreate"
+               @onChangeFilter="doFilterSelected"
+               @onChangeSearch="doSearch"
     >
       <th
           id="delete"
@@ -75,7 +77,8 @@
           <form>
             <div class="mb-3">
               <label class="form-label">Description</label>
-              <input class="form-control" type="text" v-model="education.education_name" placeholder="Please input text" required>
+              <input class="form-control" type="text" v-model="education.education_name" placeholder="Please input text"
+                     required>
             </div>
             <div class="mb-3">
               <div class="form-check">

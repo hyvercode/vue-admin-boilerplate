@@ -31,6 +31,8 @@
                @onChangeRowPage="doChangePerPage"
                @onCheckToggle="doCheckToggle"
                @onCreate="handleCreate"
+               @onChangeFilter="doFilterSelected"
+               @onChangeSearch="doSearch"
     >
       <th
           id="delete"
