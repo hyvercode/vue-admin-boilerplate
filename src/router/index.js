@@ -24,6 +24,9 @@ import Blog from "../views/Blog";
 import Pages from "././../helpers/Pages";
 import PublicPages from "../theme/PublicPages";
 import PublicRoute from "../theme/PublicRoute";
+import RouteEticket from "./eticket";
+import ETicket from "../views/Blog";
+
 
 Vue.use(VueRouter);
 const routes = [
@@ -94,6 +97,12 @@ const routes = [
                 name: "Leaves",
                 component: Leaves,
                 children: RouteLeaves
+            },
+            {
+                path: PagesBlog.BLOGS,
+                name: "Blog",
+                component: Blog,
+                children: RouteBlog
             },
             {
                 path: PagesBlog.BLOGS,
