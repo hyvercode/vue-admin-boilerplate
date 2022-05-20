@@ -245,6 +245,7 @@
                     <option value="null" disabled>Choose...</option>
                     <option value="contract">Contract</option>
                     <option value="permanent">Permanent</option>
+                    <option value="freelance">Freelance</option>
                   </select>
                 </div>
               </div>

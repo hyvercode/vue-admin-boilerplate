@@ -59,174 +59,168 @@
     </MyDataTable>
     <b-modal id="m-unit" :title="isUpdate?'Update Family Member':'Create Family Member'" hide-footer>
       <form @submit.prevent="submit($event)">
-        <div class="row">
-          <div class="col-lg-6 mb-3">
-            <div class="form-group mt-1 mb-3">
-              <label>First Name</label>
-              <input
-                  type="text"
-                  class="form-control"
-                  placeholder="Please input text"
-                  v-model="family.first_name"
-                  required
-              />
-            </div>
-          </div>
-          <div class="col-lg-6 mb-3">
-            <div class="form-group mt-1 mb-3">
-              <label>Last Name</label>
-              <input
-                  type="text"
-                  class="form-control"
-                  placeholder="Please input text"
-                  v-model="family.last_name"
-                  required
-              />
-            </div>
+        <div class="mb-3">
+          <div class="form-group mt-1 mb-3">
+            <label>First Name</label>
+            <input
+                type="text"
+                class="form-control"
+                placeholder="Please input text"
+                v-model="family.first_name"
+                required
+            />
           </div>
         </div>
-        <div class="row">
-          <div class="col-lg-6 mb-3">
-            <div class="form-group">
-              <label for="phone"
-              >Maritial Status <span class="mandatory">*</span></label
-              >
-              <select
-                  class="form-control"
-                  id="maritial_status"
-                  name="maritial_status"
-                  v-model="family.maritial_status"
-              >
-                <option value="Single">Single</option>
-                <option value="Married">Married</option>
-                <option value="Widowed">Widowed</option>
-                <option value="Widower">Widower</option>
-                <option value="Divorced">Divorced</option>
-              </select>
-            </div>
-          </div>
-          <div class="col-lg-6 mb-3">
-            <div class="form-group">
-              <label>Religion</label>
-              <input
-                  type="text"
-                  class="form-control"
-                  placeholder="Please input text"
-                  v-model="family.religion"
-                  required
-              />
-            </div>
+        <div class="mb-3">
+          <div class="form-group mt-1 mb-3">
+            <label>Last Name</label>
+            <input
+                type="text"
+                class="form-control"
+                placeholder="Please input text"
+                v-model="family.last_name"
+                required
+            />
           </div>
         </div>
-        <div class="row">
-          <div class="col-lg-6 mb-3">
-            <div class="form-group">
-              <label for="phone"
-              >Identity Type <span class="mandatory">*</span></label
-              >
-              <select
-                  class="form-control"
-                  id="identity_type"
-                  name="identity_type"
-                  v-model="family.identity_type"
-              >
-                <option value="KTP">KTP</option>
-                <option value="SIM">SIM</option>
-                <option value="PASSPORT">PASSPORT</option>
-                <option value="QTAS">QTAS</option>
-              </select>
-            </div>
-          </div>
-          <div class="col-lg-6 mb-3">
-            <div class="form-group">
-              <label for="phone"
-              >Identity Number <span class="mandatory">*</span></label
-              >
-              <input
-                  type="text"
-                  placeholder="Please input number"
-                  id="identity_number"
-                  name="identity_number"
-                  @keypress="isNumber($event)"
-                  class="form-control"
-                  v-model="family.identity_number"
-                  maxlength="20"
-                  required
-              />
-            </div>
+        <div class="mb-3">
+          <div class="form-group">
+            <label for="phone"
+            >Maritial Status <span class="mandatory">*</span></label
+            >
+            <select
+                class="form-control"
+                id="maritial_status"
+                name="maritial_status"
+                v-model="family.maritial_status"
+            >
+              <option value="Single">Single</option>
+              <option value="Married">Married</option>
+              <option value="Widowed">Widowed</option>
+              <option value="Widower">Widower</option>
+              <option value="Divorced">Divorced</option>
+            </select>
           </div>
         </div>
-        <div class="row">
-          <div class="col-lg-6 mb-3">
-            <div class="form-group">
-              <label for="name"
-              >Blood Type <span class="mandatory">*</span></label
-              >
-              <input
-                  type="text"
-                  placeholder="Please input text"
-                  id="blood_type"
-                  name="blood_type"
-                  maxlength="40"
-                  class="form-control"
-                  v-model="family.blood_type"
-                  required
-              />
-            </div>
-          </div>
-          <div class="col-lg-6 mb-3">
-            <div class="form-group">
-              <label for="birth_place"
-              >Birth Place <span class="mandatory">*</span></label
-              >
-              <input
-                  type="text"
-                  placeholder="Please input text"
-                  id="birth_place"
-                  name="birth_place"
-                  class="form-control"
-                  v-model="family.birth_place"
-                  maxlength="50"
-                  required
-              />
-            </div>
+        <div class="mb-3">
+          <div class="form-group">
+            <label>Religion</label>
+            <input
+                type="text"
+                class="form-control"
+                placeholder="Please input text"
+                v-model="family.religion"
+                required
+            />
           </div>
         </div>
-        <div class="row">
-          <div class="col-lg-6 mb-3">
-            <div class="form-group">
-              <label for="birth_date"
-              >Birth Date <span class="mandatory">*</span></label
-              >
-              <input
-                  type="date"
-                  placeholder="Please input date"
-                  id="birth_date"
-                  name="birth_place"
-                  class="form-control"
-                  v-model="family.birth_date"
-                  maxlength="20"
-                  required
-              />
-            </div>
-          </div>
-          <div class="col-lg-6 mb-3">
-            <div class="form-group">
-              <label for="Name"
-              >Gender <span class="mandatory">*</span></label
-              >
-              <select
-                  class="form-control"
-                  id="gender"
-                  name="gender"
-                  v-model="family.gender"
-              >
-                <option value="M">Male</option>
-                <option value="F">Female</option>
-              </select>
-            </div>
+
+        <div class="mb-3">
+          <div class="form-group">
+            <label for="phone"
+            >Identity Type <span class="mandatory">*</span></label
+            >
+            <select
+                class="form-control"
+                id="identity_type"
+                name="identity_type"
+                v-model="family.identity_type"
+            >
+              <option value="KTP">KTP</option>
+              <option value="SIM">SIM</option>
+              <option value="PASSPORT">PASSPORT</option>
+              <option value="QTAS">QTAS</option>
+            </select>
           </div>
         </div>
+        <div class="mb-3">
+          <div class="form-group">
+            <label for="phone"
+            >Identity Number <span class="mandatory">*</span></label
+            >
+            <input
+                type="text"
+                placeholder="Please input number"
+                id="identity_number"
+                name="identity_number"
+                @keypress="isNumber($event)"
+                class="form-control"
+                v-model="family.identity_number"
+                maxlength="20"
+                required
+            />
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <div class="form-group">
+            <label for="name"
+            >Blood Type <span class="mandatory">*</span></label
+            >
+            <input
+                type="text"
+                placeholder="Please input text"
+                id="blood_type"
+                name="blood_type"
+                maxlength="40"
+                class="form-control"
+                v-model="family.blood_type"
+                required
+            />
+          </div>
+        </div>
+        <div class="mb-3">
+          <div class="form-group">
+            <label for="birth_place"
+            >Birth Place <span class="mandatory">*</span></label
+            >
+            <input
+                type="text"
+                placeholder="Please input text"
+                id="birth_place"
+                name="birth_place"
+                class="form-control"
+                v-model="family.birth_place"
+                maxlength="50"
+                required
+            />
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <div class="form-group">
+            <label for="birth_date"
+            >Birth Date <span class="mandatory">*</span></label
+            >
+            <input
+                type="date"
+                placeholder="Please input date"
+                id="birth_date"
+                name="birth_place"
+                class="form-control"
+                v-model="family.birth_date"
+                maxlength="20"
+                required
+            />
+          </div>
+        </div>
+        <div class="mb-3">
+          <div class="form-group">
+            <label for="Name"
+            >Gender <span class="mandatory">*</span></label
+            >
+            <select
+                class="form-control"
+                id="gender"
+                name="gender"
+                v-model="family.gender"
+            >
+              <option value="M">Male</option>
+              <option value="F">Female</option>
+            </select>
+          </div>
+        </div>
+
         <div class="d-flex mt-4 float-end">
           <button class="btn btn-primary" style="margin-right: 5px" @click.prevent="doClose">Cancel</button>
           <input type="submit" class="btn btn-primary" value="Submit">
