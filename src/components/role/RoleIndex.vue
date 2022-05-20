@@ -76,7 +76,7 @@
           <form role="form">
             <div class="mb-3">
               <label class="form-label" for="href">Role Name</label>
-              <input type="text" class="form-control" id="name" v-model="role.name" placeholder="Please input" required>
+              <input type="text" class="form-control" id="name" v-model="role.name" :disabled="idUpdate" placeholder="Please input" required>
             </div>
             <div class="mb-3">
               <label class="form-label" for="href">Description</label>
