@@ -169,11 +169,11 @@ export default {
         {
           label: "icon",
           field: "icon",
+          image: true,
           name: "name",
           size: 30,
           numeric: false,
           html: false,
-          image: true
         },
         {
           label: "name",
@@ -190,15 +190,8 @@ export default {
           hidden: false,
         },
         {
-          label: "slug",
+          label: "type",
           field: "slug",
-          numeric: false,
-          html: false,
-          hidden: false,
-        },
-        {
-          label: "sequence",
-          field: "sequence",
           numeric: false,
           html: false,
           hidden: false,
