@@ -14,7 +14,6 @@
                :default-per-page="paginate.perPage"
                :next-page-url="paginate.nextPageUrl"
                :prev-page-url="paginate.prevPageUrl"
-               v-on:onRowClick="handleClick"
                v-on:onChangeRowPage="doChangePerPage"
                v-on:onPreviousPage="doPrevPage"
                v-on:onNextPage="doNextPage"
@@ -36,7 +35,11 @@
                :mode="true"
                :kanban="true"
                :columnsKanban="columnsKanban"
+               :commandContact="true"
+               @onRowClick="handleUpdate"
                @onCheckToggle="doCheckToggle"
+               @onChangeFilter="doFilterSelected"
+               @onChangeSearch="doSearch"
     >
       <th
           id="delete"
@@ -63,20 +66,106 @@
         </td>
       </template>
     </DataTable>
+
+    <!--    modal -->
+    <modal name="my-modal"
+           :width="500"
+           height="auto"
+           :adaptive="true"
+           @before-open="beforeOpen"
+    >
+
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ isUpdate ? 'Update' : 'Create' }}</h5>
+          <button type="button" class="btn-close" @click="hide"></button>
+        </div>
+        <div class="modal-body">
+          <form role="form">
+            <div class="form-group mb-3">
+              <label for="Name">Employee Name</label>
+              <select
+                  type="text"
+                  class="form-select"
+                  v-model="user.employee_id"
+                  required
+              >
+                <option disabled value="">Choose...</option>
+                <option v-for="item in employees" :key="item.id" :value="item.id">{{ item.first_name }}
+                  {{ item.last_name }}
+                </option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Email</label>
+              <input type="email" maxlength="30" min="6" class="form-control" v-model="user.email"
+                     placeholder="Please input"
+                     required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="menuName">Username</label>
+              <input type="text" class="form-control" maxlength="30" min="3" v-model="user.username"
+                     placeholder="Please input"
+                     required>
+            </div>
+            <div class="mb-3" v-if="!isUpdate">
+              <label class="form-label" for="menuName">Password</label>
+              <input type="password" maxlength="30" min="6" class="form-control" v-model="user.password"
+                     placeholder="Please input"
+                     required>
+            </div>
+            <div class="form-group mb-3">
+              <label for="Name">Roles (ACL)</label>
+              <select
+                  type="text"
+                  class="form-select"
+                  v-model="user.menu_roles"
+                  required
+              >
+                <option disabled value="">Choose...</option>
+                <option v-for="item in roles" :key="item.id" :value="item.name">{{ item.name }}
+                </option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="Name">Avatar</label>
+              <input
+                  type="file"
+                  accept="image/*"
+                  @change="onFileChange"
+                  class="form-control">
+            </div>
+            <div class="mb-3">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" v-model="user.active" id="checkRemember">
+                <label class="form-check-label" for="checkRemember">Active</label>
+              </div>
+            </div>
+            <div class="mb-3 d-flex justify-content-end">
+              <button type="button" class="btn btn-secondary me-2" @click="hide">Cancel</button>
+              <button type="button" class="btn btn-primary" @click="handleSubmit">Save changes</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </modal>
+
   </div>
 </template>
 
 <script>
 import DataTable from "../hyver-vue/components/DataTable";
 import UserService from "../../services/user.service";
-import MenuService from "../../services/menu.service";
+import RequestUser from "../../payloads/request/RequestUser";
 import EmployeeService from "../../services/employee.service";
+import RoleService from "../../services/role.service";
 
 export default {
   name: "UserIndex",
   components: {DataTable},
   data() {
     return {
+      user: new RequestUser(),
       columns: [
         {
           label: "ID",
@@ -192,6 +281,9 @@ export default {
         prevPageUrl: "",
         total: 0,
       },
+      isUpdate: true,
+      employees: [],
+      roles: [],
     }
   },
   computed: {
@@ -299,6 +391,127 @@ export default {
         }
       });
     },
+
+    beforeOpen(event) {
+      this.getEmployees();
+      this.getRoles();
+      if (this.isUpdate) this.getShow();
+    },
+
+    getEmployees() {
+      let loading = this.$loading.show();
+      EmployeeService.getAll().then((response) => {
+        if (response.code === 200) {
+          this.employees = response.data;
+          loading.hide();
+        } else {
+          loading.hide();
+          this.$swal.fire("Error!", "Categories" + response.message, "error");
+        }
+      });
+    },
+
+    getRoles() {
+      let loading = this.$loading.show();
+      RoleService.getAll().then((response) => {
+        if (response.code === 200) {
+          this.roles = response.data;
+          loading.hide();
+        } else {
+          loading.hide();
+          this.$swal.fire("Error!", "Categories" + response.message, "error");
+        }
+      });
+    },
+
+    getShow() {
+      let loading = this.$loading.show();
+      UserService.getShow(this.user.id).then((response) => {
+        if (response.code === 200) {
+          this.user = response.data;
+          loading.hide();
+        } else {
+          loading.hide();
+          this.$swal.fire("Error!", response.message, "error");
+        }
+      });
+    },
+    handleSubmit() {
+      let loading = this.$loading.show();
+      if (!this.isUpdate) {
+        UserService.postCreate(this.user).then((response) => {
+          if (response.code === 200) {
+            this.user = new RequestUser();
+            loading.hide();
+            this.$swal.fire({
+              icon: "success",
+              title: "Success",
+              text: "Record has been created",
+            });
+            this.doRefresh();
+            this.hide();
+          } else {
+            loading.hide();
+            this.$swal.fire("Error!", response.message, "error");
+          }
+        });
+      } else {
+        UserService.postUpdate(this.user.id, this.user).then((response) => {
+          if (response.code === 200) {
+            this.user = new RequestUser();
+            loading.hide();
+            this.$swal.fire({
+              icon: "success",
+              title: "Success",
+              text: "Record has been updated",
+            });
+            this.doRefresh();
+            this.hide();
+          } else {
+            loading.hide();
+            this.$swal.fire("Error!", response.message, "error");
+          }
+        });
+      }
+    },
+    handleCreate() {
+      this.user = new RequestUser();
+      this.isUpdate = false;
+      this.$modal.show('my-modal')
+    },
+
+    handleUpdate(props) {
+      this.user.id = props.id
+      this.isUpdate = true;
+      this.$modal.show('my-modal')
+    },
+
+    hide() {
+      this.$modal.hide('my-modal');
+    },
+    /**
+     * Image Change
+     * @param e
+     */
+    onFileChange(e) {
+      let files = e.target.files || e.dataTransfer.files;
+      if (!files.length) return;
+      this.createImage(files[0]);
+    },
+
+    /**
+     * Convert image to bas64
+     * @param file
+     */
+    createImage(file) {
+      let reader = new FileReader();
+      reader.onload = (e) => {
+        this.user.avatar = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    },
+
+
   }
 }
 </script>

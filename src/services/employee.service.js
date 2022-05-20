@@ -19,11 +19,6 @@ class EmployeeService {
         return Api.doPost(Host.API_V1 + `/employees/update/${id}`, params);
     }
 
-    getEmployee() {
-        return Api.doGet(Host.API_V1 + '/employees');
-    }
-
-
     delete(id) {
         return Api.doDelete(Host.API_V1 + `/employees/delete/${id}`);
     }

@@ -108,7 +108,6 @@
 import avatar from 'vue-avatar'
 import VueCookies from "vue-cookies";
 import Util from "../../helpers/Utils";
-import publicPages from "../../helpers/Pages";
 
 export default {
   name: "SideBar",
@@ -118,8 +117,7 @@ export default {
   data() {
     return {
       user: null,
-      size: 60,
-      PAGES: pages
+      size: 60
     }
   },
   computed: {

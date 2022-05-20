@@ -341,8 +341,8 @@
                   </table>
                 </div>
               </div>
-              <div class="row" v-if="commandContact">
-                <div class="col-7">
+              <div class="row bg-gray-45" v-if="commandContact">
+                <div class="col-7 mt-2">
                   <a type="button" :href="'mailto:'+row.email" target="_blank" class="kanban-a btn-sm"><i
                       class="material-icons" data-bs-toggle="tooltip" data-bs-placement="top"
                       title="Send Mail">email</i></a>
@@ -1444,6 +1444,6 @@ table th:first-child, table td:first-child {
 .kanban-a {
   color: #0F75BC;
   font-size: 13px;
-  margin-top: 10px;
+  margin-top: 5px;
 }
 </style>
