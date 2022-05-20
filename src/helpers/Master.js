@@ -11,7 +11,7 @@ const master = {
     USERS_UPDATE: "/masters/user/update",
     MENU: "/masters/menu",
     MENU_LIST: "/masters/menu/list",
-    MENU_ROLE: "/masters/menu/role",
+    MENU_GROUP: "/masters/menu/group",
     ROLES: "/masters/roles",
     NOTIFICATIONS: "/notifications",
     NOTIFICATION_READ: "/notification/read",

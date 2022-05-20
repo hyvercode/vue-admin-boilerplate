@@ -63,7 +63,7 @@
     <!--    modal -->
     <modal name="crud-modal"
            :width="500"
-           :height="350"
+           height="auto"
            @before-open="beforeOpen"
            :adaptive="true"
     >

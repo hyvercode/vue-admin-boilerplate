@@ -5,7 +5,7 @@ import MenuList from "../views/MenuList";
 import MenuListIndex from "../components/menuList/MenuListIndex";
 import Menu from "../views/Menu";
 import MenuIndex from "../components/menu/MenuIndex";
-import MenuRoleIndex from "../components/menuRole/MenuRoleIndex";
+import MenuGroup from "../components/menuGroup/MenuGroupIndex";
 import Banner from "../views/Banner";
 import Profile from "../views/Profile";
 import Education from "../views/Education";
@@ -79,14 +79,14 @@ export default [
         ]
     },
     {
-        path: Pages.MENU_ROLE,
+        path: Pages.MENU_GROUP,
         name: 'Menu',
         component: MenuList,
         children: [
             {
                 path: "",
                 name: "Index",
-                component: MenuRoleIndex
+                component: MenuGroup
             }
         ]
     },

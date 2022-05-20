@@ -23,7 +23,7 @@
         :filter="true"
         :filterRecord="filterRecord"
         v-on:onChangeFilter="doFilterSelected"
-        :filterDate="false"
+        :filter-date="true"
         v-on:onChangeDate="doFilterDate"
         :exportable="true"
         :printable="false"
