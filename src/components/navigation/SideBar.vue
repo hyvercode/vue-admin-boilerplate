@@ -59,7 +59,7 @@
         <li v-for="(items,index) in menu" :key="index" v-if="items.slug ==='dropdown'" class="nav-item">
             <span
                 class="nav-link collapsed d-flex justify-content-between align-items-center"
-                v-bind:href="'#collapse'+replaceSpace(items.name)"
+                v-bind:href="'#collapse'+replaceSpace(items.id)"
                 data-bs-toggle="collapse" aria-expanded="false"
             >
               <span>
@@ -85,7 +85,7 @@
               </span>
             </span>
           <div
-              v-bind:id="'collapse'+replaceSpace(items.name)" class="multi-level collapse"
+              v-bind:id="'collapse'+replaceSpace(items.id)" class="multi-level collapse"
               role="list"
               aria-expanded="false"
           >
@@ -138,7 +138,8 @@ export default {
   },
   methods: {
     replaceSpace(value) {
-      return value ? value.replaceAll(" ", "_") : "";
+      let link = value ? value.replaceAll(" ", "_") : "";
+      return link.toString();
     },
     handleLogout() {
       this.$swal
