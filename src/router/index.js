@@ -21,11 +21,13 @@ import Master from "../views/Master";
 import PagesBlog from "../helpers/Blog";
 import RouteBlog from "./blog";
 import Blog from "../views/Blog";
-import Pages from "././../helpers/Pages";
+import Pages from "../helpers/Pages";
 import PublicPages from "../theme/PublicPages";
 import PublicRoute from "../theme/PublicRoute";
-import RouteEticket from "./eticket";
-import ETicket from "../views/Blog";
+//E-Ticket
+import PagesETicket from "../helpers/ETicket";
+import RouteETicket from "./eticket";
+import ETicket from "../views/ETicket";
 
 
 Vue.use(VueRouter);
@@ -110,6 +112,12 @@ const routes = [
                 component: Blog,
                 children: RouteBlog
             },
+            {
+                path: PagesETicket.ETICKETS,
+                name: "ETicket",
+                component: ETicket,
+                children: RouteETicket
+            }
         ]
     },
     {

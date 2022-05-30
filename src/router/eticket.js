@@ -9,9 +9,67 @@ export default [
         children: [
             {
                 path: "",
-                name: "Post",
-                component: () => import("../components/blogs/post/PostIndex.vue")
-            }
+                name: "Index",
+                component: () => import("../components/etickets/tickets/Index.vue")
+            },
+            {
+                path: Pages.ETICKET_CREATE,
+                name: "Create",
+                component: () => import("../components/etickets/tickets/Create.vue")
+            },
+            {
+                path: Pages.ETICKET_UPDATE,
+                name: "Update",
+                component: () => import("../components/etickets/tickets/Update.vue")
+            },
+        ],
+    },
+    {
+        path: Pages.ETICKET_CATEGORIES,
+        name: "ETicket",
+        component: ETicket,
+        children: [
+            {
+                path: "",
+                name: "IndexCategories",
+                component: () => import("../components/etickets/categories/IndexCategories.vue")
+            },
+        ],
+    },
+    {
+        path: Pages.ETICKET_MILESTONE,
+        name: "ETicket",
+        component: ETicket,
+        children: [
+            {
+                path: "",
+                name: "IndexMilestone",
+                component: () => import("../components/etickets/milestone/IndexMilestone.vue")
+            },
+        ],
+    },
+    {
+        path: Pages.ETICKET_ISSUETYPE,
+        name: "ETicket",
+        component: ETicket,
+        children: [
+            {
+                path: "",
+                name: "IndexIssueType",
+                component: () => import("../components/etickets/issuetype/IndexIssueType.vue")
+            },
+        ],
+    },
+    {
+        path: Pages.ETICKET_PRIORITY,
+        name: "ETicket",
+        component: ETicket,
+        children: [
+            {
+                path: "",
+                name: "IndexPriority",
+                component: () => import("../components/etickets/priority/IndexPriority.vue")
+            },
         ],
     }
 ]
