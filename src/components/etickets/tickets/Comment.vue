@@ -30,7 +30,7 @@
       </div>
     </div>
     <div class="col-12">
-      <div class="card px-3 py-3 mb-3">
+      <div class="card px-3 py-3 mb-3 scroll-comment">
         <div v-for="item in eticketComment" :key="item.id">
           <div class="d-flex flex-row-reverse bg-gray-100"  v-if="user.id === item.user_id">
             <div class="p-2 bd-highlight">
@@ -40,7 +40,7 @@
             <div class="p-2 bd-highlight">
               <h5 style="text-align: right">{{ item.first_name }} {{ item.last_name}}</h5>
               <p style="text-align: right; font-size: 10px">{{item.created_at | moment('DD-MMM-YYYY')}}</p>
-              <div style="text-align: right">
+              <div style="text-align: left">
                 <span v-html="item.body"></span>
               </div>
             </div>
@@ -140,5 +140,30 @@ export default {
 }
 .solid {
   border-top: 1px solid #bbb;
+}
+.scroll-comment{
+  height: 400px;
+  overflow: auto;
+  scrollbar-width: thin;
+}
+
+/* width */
+.scroll-comment::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+.scroll-comment::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+.scroll-comment::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+.scroll-comment::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
 </style>
