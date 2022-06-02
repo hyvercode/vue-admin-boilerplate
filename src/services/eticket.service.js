@@ -26,6 +26,10 @@ class ETicketService {
     delete(id) {
         return Api.doDelete(Host.API_V1 + `/eticket/delete/${id}`);
     }
+
+    getMyTicketPaginate(params) {
+        return Api.doGet(Host.API_V1 + "/eticket/myTicketPagination?", params);
+    }
 }
 
 export default new ETicketService();

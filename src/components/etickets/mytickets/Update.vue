@@ -1,6 +1,6 @@
 <template xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
   <div class="container-fluid">
-    <form-header title="Update E-Ticket"/>
+    <form-header title="Update MyTickets"/>
     <form>
       <div class="row">
         <div class="col-8">
@@ -16,6 +16,7 @@
                       v-model="eticket.subject"
                       placeholder="Please input text"
                       required
+                      readonly
                   />
                 </div>
               </div>
@@ -93,6 +94,7 @@
                         class="form-select"
                         v-model="eticket.reviewer_id"
                         required
+                        disabled
                     >
                       <option disabled value="">Choose...</option>
                       <option v-for="item in user" :key="item.id" :value="item.id">{{ item.username }}
@@ -114,6 +116,7 @@
                         class="form-control"
                         v-model="eticket.request_date"
                         maxlength="20"
+                        readonly
                     />
                   </div>
 
@@ -131,6 +134,7 @@
                         class="form-control"
                         v-model="eticket.due_date"
                         maxlength="20"
+                        readonly
                     />
                   </div>
 
@@ -145,6 +149,7 @@
                         class="form-select"
                         v-model="eticket.parent_issue"
                         required
+                        disabled
                     >
                       <option disabled value="">Choose...</option>
                       <option v-for="item in ticket" :key="item.id" :value="item.id">{{ item.ticket }}
@@ -163,6 +168,7 @@
                         class="form-select"
                         v-model="eticket.e_ticket_id"
                         required
+                        disabled
                     >
                       <option disabled value="">Choose...</option>
                       <option v-for="item in ticket" :key="item.id" :value="item.id">{{ item.ticket }}
@@ -181,6 +187,7 @@
                         class="form-select"
                         v-model="eticket.e_ticket_category_id"
                         required
+                        disabled
                     >
                       <option disabled value="">Choose...</option>
                       <option v-for="item in ticketCategories" :key="item.id" :value="item.id">{{ item.category_name }}
@@ -217,6 +224,7 @@
                         class="form-select"
                         v-model="eticket.issue_type_id"
                         required
+                        disabled
                     >
                       <option disabled value="">Choose...</option>
                       <option v-for="item in ticketIssueType" :key="item.id" :value="item.id">{{ item.issue_type_name }}
@@ -228,17 +236,29 @@
               </div>
               <div class="col-12 mb-3">
                 <div class="form-group row">
-                  <label for="inputEmail3" class="col-sm-4 col-form-label">Active</label>
+                  <label for="inputEmail3" class="col-sm-4 col-form-label">Status</label>
                   <div class="col-sm-8">
                     <select class="form-select" v-model="eticket.status" required>
                       <option value="null" disabled>Choose...</option>
-                      <option
-                          v-for="item in status"
-                          :key="item.id"
-                          :value="item.id"
-                      >
-                        {{ item.desc }}
-                      </option>
+                      <option value="BACKLOG">BACKLOG</option>
+                      <option value="TODO">TODO</option>
+                      <option value="INPROGRESS">INPROGRESS</option>
+                      <option value="TESTING">TESTING</option>
+                      <option value="DONE">DONE</option>
+                      <option value="BLOCKED">BLOCKED</option>
+                      <option value="PENDING">PENDING</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 mb-3" v-if="users.id === eticket.reviewer_id">
+                <div class="form-group row">
+                  <label for="inputEmail3" class="col-sm-4 col-form-label">Approve Status</label>
+                  <div class="col-sm-8">
+                    <select class="form-select" v-model="eticket.approve_status" required>
+                      <option value="null" disabled>Choose...</option>
+                      <option value="OPEN">OPEN</option>
+                      <option value="CLOSED">CLOSED</option>
                     </select>
                   </div>
                 </div>
@@ -278,6 +298,8 @@ import Comment from "./Comment"
 import Pages from "@/helpers/ETicket";
 import EticketcommentService from "@/services/eticketcomment.service";
 import RequestEticketComment from "@/payloads/request/RequestEticketComment";
+import Util from "@/helpers/Utils";
+import VueCookies from "vue-cookies";
 
 export default {
   components: {FormHeader, Comment},
@@ -287,6 +309,7 @@ export default {
       eticket: new RequestEticket(),
       ticket: [],
       user: [],
+      users: {},
       ticketCategories: [],
       ticketPriority: [],
       ticketIssueType: [],
@@ -300,13 +323,15 @@ export default {
     };
   },
   created() {
+    this.users = Util.jwtDecode(
+        JSON.parse(JSON.stringify(VueCookies.get("__MIH__BASE__SESSIONID__"))).access_token
+    );
     this.getListUser();
     this.getTicket();
     this.getTicketCategories();
     this.getTicketPriority();
     this.getTicketIssueType();
     this.getListTickets();
-    this.getComment();
   },
   methods: {
     submit(event) {

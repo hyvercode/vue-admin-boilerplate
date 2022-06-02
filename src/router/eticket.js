@@ -71,5 +71,34 @@ export default [
                 component: () => import("../components/etickets/priority/IndexPriority.vue")
             },
         ],
+    },
+    {
+        path: Pages.ETICKET_REPORTING,
+        name: "Reporting",
+        component: ETicket,
+        children: [
+            {
+                path: "",
+                name: "Reporting",
+                component: () => import("../components/etickets/reporting/Reporting.vue")
+            },
+        ],
+    },
+    {
+        path: Pages.ETICKET_MYTICKETS,
+        name: "MyTickets",
+        component: ETicket,
+        children: [
+            {
+                path: "",
+                name: "MyTickets",
+                component: () => import("../components/etickets/mytickets/MyTickets.vue")
+            },
+            {
+                path: Pages.ETICKET_MYTICKETS_UPDATE,
+                name: "Update",
+                component: () => import("../components/etickets/mytickets/Update.vue")
+            },
+        ],
     }
 ]
