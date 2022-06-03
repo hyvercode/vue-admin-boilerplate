@@ -57,7 +57,7 @@
                         required
                     >
                       <option disabled value="">Choose...</option>
-                      <option v-for="item in user" :key="item.id" :value="item.id">{{ item.username }}
+                      <option v-for="item in user" :key="item.id" :value="item.id">{{ item.first_name }} {{ item.last_name }}
                       </option>
                     </select>
                   </div>
@@ -75,7 +75,7 @@
                         required
                     >
                       <option disabled value="">Choose...</option>
-                      <option v-for="item in user" :key="item.id" :value="item.id">{{ item.username }}
+                      <option v-for="item in user" :key="item.id" :value="item.id">{{ item.first_name }} {{ item.last_name }}
                       </option>
                     </select>
                   </div>
@@ -93,7 +93,7 @@
                         required
                     >
                       <option disabled value="">Choose...</option>
-                      <option v-for="item in user" :key="item.id" :value="item.id">{{ item.username }}
+                      <option v-for="item in user" :key="item.id" :value="item.id">{{ item.first_name }} {{ item.last_name }}
                       </option>
                     </select>
                   </div>
@@ -152,27 +152,27 @@
 
                 </div>
               </div>
-              <div class="col-12 mb-3">
-                <div class="form-group row">
-                  <label for="inputEmail3" class="col-sm-4 col-form-label">Eticket</label>
-                  <div class="col-sm-8">
-                    <select
-                        type="text"
-                        class="form-select"
-                        v-model="eticket.e_ticket_id"
-                        required
-                    >
-                      <option disabled value="">Choose...</option>
-                      <option v-for="item in ticket" :key="item.id" :value="item.id">{{ item.ticket }}
-                      </option>
-                    </select>
-                  </div>
+<!--              <div class="col-12 mb-3">-->
+<!--                <div class="form-group row">-->
+<!--                  <label for="inputEmail3" class="col-sm-4 col-form-label">Eticket</label>-->
+<!--                  <div class="col-sm-8">-->
+<!--                    <select-->
+<!--                        type="text"-->
+<!--                        class="form-select"-->
+<!--                        v-model="eticket.e_ticket_id"-->
+<!--                        required-->
+<!--                    >-->
+<!--                      <option disabled value="">Choose...</option>-->
+<!--                      <option v-for="item in ticket" :key="item.id" :value="item.id">{{ item.ticket }}-->
+<!--                      </option>-->
+<!--                    </select>-->
+<!--                  </div>-->
 
-                </div>
-              </div>
+<!--                </div>-->
+<!--              </div>-->
               <div class="col-12 mb-3">
                 <div class="form-group row">
-                  <label for="inputEmail3" class="col-sm-4 col-form-label">Eticket Categories</label>
+                  <label for="inputEmail3" class="col-sm-4 col-form-label">Categories</label>
                   <div class="col-sm-8">
                     <select
                         type="text"
@@ -190,7 +190,7 @@
               </div>
               <div class="col-12 mb-3">
                 <div class="form-group row">
-                  <label for="inputEmail3" class="col-sm-4 col-form-label">Eticket Priority</label>
+                  <label for="inputEmail3" class="col-sm-4 col-form-label">Priority</label>
                   <div class="col-sm-8">
                     <select
                         type="text"
@@ -208,7 +208,7 @@
               </div>
               <div class="col-12 mb-3">
                 <div class="form-group row">
-                  <label for="inputEmail3" class="col-sm-4 col-form-label">Eticket Issue Type</label>
+                  <label for="inputEmail3" class="col-sm-4 col-form-label">Issue</label>
                   <div class="col-sm-8">
                     <select
                         type="text"
@@ -226,17 +226,17 @@
               </div>
               <div class="col-12 mb-3">
                 <div class="form-group row">
-                  <label for="inputEmail3" class="col-sm-4 col-form-label">Active</label>
+                  <label for="inputEmail3" class="col-sm-4 col-form-label">Status</label>
                   <div class="col-sm-8">
                     <select class="form-select" v-model="eticket.status" required>
                       <option value="null" disabled>Choose...</option>
-                      <option
-                          v-for="item in status"
-                          :key="item.id"
-                          :value="item.id"
-                      >
-                        {{ item.desc }}
-                      </option>
+                      <option value="BACKLOG">BACKLOG</option>
+                      <option value="TODO">TODO</option>
+                      <option value="INPROGRESS">INPROGRESS</option>
+                      <option value="TESTING">TESTING</option>
+                      <option value="DONE">DONE</option>
+                      <option value="BLOCKED">BLOCKED</option>
+                      <option value="PENDING">PENDING</option>
                     </select>
                   </div>
                 </div>
@@ -303,6 +303,10 @@ export default {
     this.getTicketPriority();
     this.getTicketIssueType();
   },
+  mounted() {
+    this.eticket.request_date = new Date().toISOString().substr(0, 10);
+    this.eticket.due_date = new Date().toISOString().substr(0, 10);
+  },
   methods: {
     submit(event) {
       event.preventDefault();
@@ -325,7 +329,7 @@ export default {
     },
     getListUser() {
       let loading = this.$loading.show();
-      UserService.getAll().then((response) => {
+      UserService.getAllUsers().then((response) => {
         if (response.code === 200) {
           this.user = response.data;
           loading.hide();

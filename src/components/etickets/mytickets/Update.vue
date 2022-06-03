@@ -49,6 +49,18 @@
           <div class="card px-3 py-3 mb-3">
             <h5 class="card-title">Details</h5>
             <div class="row">
+              <div class="col-12 mb-3" v-if="users.id === eticket.reviewer_id">
+                <div class="form-group row">
+                  <label for="inputEmail3" class="col-sm-4 col-form-label">Approve Status</label>
+                  <div class="col-sm-8">
+                    <select class="form-select" v-model="eticket.approve_status" required>
+                      <option value="null" disabled>Choose...</option>
+                      <option value="OPEN">OPEN</option>
+                      <option value="CLOSED">CLOSED</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
               <div class="col-12 mb-3">
                 <div class="form-group row">
                   <label for="inputEmail3" class="col-sm-4 col-form-label">Assigned</label>
@@ -247,18 +259,6 @@
                       <option value="DONE">DONE</option>
                       <option value="BLOCKED">BLOCKED</option>
                       <option value="PENDING">PENDING</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-              <div class="col-12 mb-3" v-if="users.id === eticket.reviewer_id">
-                <div class="form-group row">
-                  <label for="inputEmail3" class="col-sm-4 col-form-label">Approve Status</label>
-                  <div class="col-sm-8">
-                    <select class="form-select" v-model="eticket.approve_status" required>
-                      <option value="null" disabled>Choose...</option>
-                      <option value="OPEN">OPEN</option>
-                      <option value="CLOSED">CLOSED</option>
                     </select>
                   </div>
                 </div>

@@ -100,5 +100,17 @@ export default [
                 component: () => import("../components/etickets/mytickets/Update.vue")
             },
         ],
+    },
+    {
+        path: Pages.ETICKET_HISTORY,
+        name: "History",
+        component: ETicket,
+        children: [
+            {
+                path: "",
+                name: "History",
+                component: () => import("../components/etickets/tickets/History.vue")
+            },
+        ],
     }
 ]

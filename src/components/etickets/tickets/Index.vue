@@ -33,6 +33,7 @@
                @onCreate="handleCreate"
                @onChangeFilter="doFilterSelected"
                @onChangeSearch="doSearch"
+               @onRowClick="handleHistory"
     >
       <th
           id="delete"
@@ -375,6 +376,9 @@ export default {
         }
       });
     },
+    async handleHistory(props) {
+      await router.push(`/eticket/history/${props.id}`);
+    }
   }
 }
 </script>

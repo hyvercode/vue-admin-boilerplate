@@ -15,6 +15,7 @@ export default class RequestEticket {
                 assignee_id,
                 reviewer_id,
                 approve_status,
+                notes
                 ) {
         this.id = id;
         this.request_date = request_date;
@@ -32,6 +33,7 @@ export default class RequestEticket {
         this.assignee_id = assignee_id;
         this.reviewer_id = reviewer_id;
         this.approve_status = approve_status;
+        this.notes = notes;
     }
 
 }

@@ -37,6 +37,10 @@ class UserService {
     postChangeAvatar(id,payloads) {
         return Api.doPost(Host.API_V1 + `/users/avatar/${id}`, payloads);
     }
+
+    getAllUsers() {
+        return Api.doGet(Host.API_V1 + `/users/allUsers`);
+    }
 }
 
 export default new UserService();

@@ -16,6 +16,17 @@
               </div>
             </div>
           </div>
+          <div class="col-3 mb-3">
+            <div class="form-group">
+              <label for="Name">Attachment</label>
+              <input class="form-control btn btn-light btn-sm" type="file" accept="image/*"
+                     @change="onFileChange" />
+              <br>
+              <br>
+              <img alt="No Image" v-if="comment.attachments" :src="comment.attachments"
+                   class="avatar-xl mx-auto bg-gray-100" style="height: 80px; width: 150px">
+            </div>
+          </div>
           <div class="row text-right mt-3">
             <div class="col-lg-12 d-flex justify-content-end">
               <button
@@ -45,6 +56,7 @@
             <div class="clearfix"/>
             <div class="span-right">
               <span v-html="item.body"></span>
+              <a :href="item.attachments" target="_blank"><i class="material-icons mt-2">attachment</i><span class="text-info">Attacment</span></a>
             </div>
           </div>
           <div class="flex-row bd-highlight mb-3" v-else>
@@ -61,6 +73,7 @@
 
               <div class="span-left" style="text-align: left">
                 <span v-html="item.body"></span>
+                <a :href="item.attachments" target="_blank"><i class="material-icons mt-2">attachment</i><span class="text-info">Attacment</span></a>
               </div>
           </div>
           <div class="solid clearfix"></div>
@@ -135,6 +148,27 @@ export default {
         }
       });
     },
+    /**
+     * Image Change
+     * @param e
+     */
+    onFileChange(e) {
+      let files = e.target.files || e.dataTransfer.files;
+      if (!files.length) return;
+      this.createImage(files[0]);
+    },
+
+    /**
+     * Convert image to bas64
+     * @param file
+     */
+    createImage(file) {
+      let reader = new FileReader();
+      reader.onload = (e) => {
+        this.comment.attachments = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    },
   }
 }
 </script>
@@ -179,9 +213,13 @@ export default {
   text-align: left;
   word-break: break-word;
   overflow-x: scroll;
+  margin-left: 5px;
+  margin-right: 5px;
 }
 
 .span-left {
   word-break: break-word;
+  margin-left: 5px;
+  margin-right: 5px;
 }
 </style>
