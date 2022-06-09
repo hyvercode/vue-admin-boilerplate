@@ -32,6 +32,7 @@
                @onCreate="handleCreate"
                @onChangeFilter="doFilterSelected"
                @onChangeSearch="doSearch"
+               @onChangeDate="doFilterDate"
     >
       <th
           id="delete"

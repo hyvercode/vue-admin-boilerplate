@@ -23,7 +23,7 @@
                :searchable="true"
                :filter="true"
                :refreshable="true"
-               :filter-date="false"
+               :filter-date="true"
                @onEnterSearch="doSearch"
                @onRefresh="doRefresh"
                @onPreviousPage="doPrevPage"
@@ -34,6 +34,7 @@
                @onChangeFilter="doFilterSelected"
                @onChangeSearch="doSearch"
                @onRowClick="handleHistory"
+               @onChangeDate="doFilterDate"
     >
       <th
           id="delete"
@@ -159,7 +160,9 @@ export default {
       records: [],
       searchBy: 'id',
       searchParam: '',
-      sortBy: 'created_at',
+      dateTo: new Date(),
+      dateFrom: new Date(),
+      sortBy: 'DESC',
       sort: 'DESC',
       filterRecord: [
         {'id': 'id', "desc": "ID Ticket"},
@@ -185,6 +188,10 @@ export default {
     }
   },
   mounted() {
+    this.dateTo = new Date().toISOString().substr(0, 10);
+    let d = new Date(this.dateTo);
+    d.setDate(d.getDate() - 30);
+    this.dateFrom = new Date(d).toISOString().substr(0, 10);
     this.getRecordPaginate(
         this.dateFrom,
         this.dateTo,
@@ -232,6 +239,7 @@ export default {
         searchParam: searchParam,
         limit: limit,
         page: page,
+        sortBy: this.sortBy
       };
       EticketService.getPaginate(params).then((response) => {
         if (response.code === 200) {
@@ -285,7 +293,7 @@ export default {
      */
     doFilterDate(selectedDate) {
       this.dateFrom = selectedDate[0];
-      this.dateFrom = selectedDate[1];
+      this.dateTo = selectedDate[1];
       this.getRecordPaginate(this.dateFrom, this.dateTo, this.searchBy, this.searchParam, this.pagination.perPage, this.pagination.currentPage, this.sortBy, this.sort);
     },
 
