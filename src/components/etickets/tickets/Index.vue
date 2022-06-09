@@ -23,7 +23,7 @@
                :searchable="true"
                :filter="true"
                :refreshable="true"
-               :filter-date="true"
+               :filter-date="false"
                @onEnterSearch="doSearch"
                @onRefresh="doRefresh"
                @onPreviousPage="doPrevPage"
@@ -126,6 +126,15 @@ export default {
           html: false,
           hidden: false,
         },
+        {
+          label: "Created At",
+          field: "created_at",
+          numeric: false,
+          html: false,
+          hidden: false,
+          date: true,
+          dateFormat: "DD MMMM YYYY"
+        },
         // {
         //   label: "published",
         //   field: "published",
@@ -153,9 +162,8 @@ export default {
       sortBy: 'created_at',
       sort: 'DESC',
       filterRecord: [
-        {'id': 'id', "desc": "ID Post"},
-        {'id': 'title', "desc": "Title"},
-        {'id': 'published', "desc": "Published =1 / Draft=0"}
+        {'id': 'id', "desc": "ID Ticket"},
+        {'id': 'ticket', "desc": "Ticket"},
       ],
       pagination: {
         recordsPerPage: [5, 10, 50, 100, 500, 1000, 5000, 10000],
