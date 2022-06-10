@@ -4,6 +4,7 @@
       <div class="col-12">
         <div class="row">
           <div class="card px-3 py-3 mb-3">
+            <h3>{{ eticket.ticket }}</h3>
             <h5 class="card-title">{{ eticket.status }} - {{ eticket.approve_status }}</h5>
             <div class="row">
               <div class="col-12 mb-3">
@@ -15,19 +16,20 @@
                       v-model="eticket.subject"
                       placeholder="Please input text"
                       required
+                      readonly
                   />
                 </div>
               </div>
-              <div class="col-12 mb-3">
-                <div class="form-group">
-                  <label for="Name">Description</label>
-                  <ckeditor
-                      :editor="editor"
-                      v-model="eticket.body"
-                      :config="editorConfig"
-                  ></ckeditor>
-                </div>
-              </div>
+<!--              <div class="col-12 mb-3">-->
+<!--                <div class="form-group">-->
+<!--                  <label for="Name">Description</label>-->
+<!--                  <ckeditor-->
+<!--                      :editor="editor"-->
+<!--                      v-model="eticket.body"-->
+<!--                      :config="editorConfig"-->
+<!--                  ></ckeditor>-->
+<!--                </div>-->
+<!--              </div>-->
             </div>
           </div>
         </div>
