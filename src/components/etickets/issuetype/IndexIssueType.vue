@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid">
     <MyDataTable
-        title="E-Ticket IssueTypes"
+        title="E-Ticket Issue"
         :columns="columns"
         :rows="records"
         :clickable="true"
@@ -60,7 +60,7 @@
     <b-modal id="m-jobposition" :title="isUpdate?'Update E-Ticket IssueTypes':'Create E-Ticket IssueTypes'" hide-footer>
       <form @submit.prevent="submit($event)">
         <div class="form-group mb-3">
-          <label>IssueTypes Name <span class="mandatory">*</span></label>
+          <label>Issue Name <span class="mandatory">*</span></label>
           <input
               type="text"
               class="form-control"
