@@ -128,13 +128,21 @@ export default {
           hidden: false,
         },
         {
+          label: "Status",
+          field: "status",
+          numeric: false,
+          html: false,
+          hidden: false,
+        },
+        {
           label: "Created At",
           field: "created_at",
           numeric: false,
           html: false,
           hidden: false,
           date: true,
-          dateFormat: "DD MMMM YYYY"
+          dateFormat: "DD MMMM YYYY",
+          hidden: true,
         },
         // {
         //   label: "published",
@@ -154,7 +162,8 @@ export default {
           html: false,
           hidden: false,
           date: true,
-          dateFormat: "DD MMMM YYYY"
+          dateFormat: "DD MMMM YYYY",
+          hidden: true,
         },
       ],
       records: [],

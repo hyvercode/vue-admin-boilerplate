@@ -8,6 +8,18 @@
             <div class="row">
               <div class="col-12 mb-3">
                 <div class="form-group">
+                  <label for="Name">Ticket</label>
+                  <input
+                      type="text"
+                      class="form-control"
+                      v-model="eticket.ticket"
+                      placeholder="Please input text"
+                      required
+                  />
+                </div>
+              </div>
+              <div class="col-12 mb-3">
+                <div class="form-group">
                   <label for="Name">Title</label>
                   <input
                       type="text"
@@ -152,24 +164,6 @@
 
                 </div>
               </div>
-<!--              <div class="col-12 mb-3">-->
-<!--                <div class="form-group row">-->
-<!--                  <label for="inputEmail3" class="col-sm-4 col-form-label">Eticket</label>-->
-<!--                  <div class="col-sm-8">-->
-<!--                    <select-->
-<!--                        type="text"-->
-<!--                        class="form-select"-->
-<!--                        v-model="eticket.e_ticket_id"-->
-<!--                        required-->
-<!--                    >-->
-<!--                      <option disabled value="">Choose...</option>-->
-<!--                      <option v-for="item in ticket" :key="item.id" :value="item.id">{{ item.ticket }}-->
-<!--                      </option>-->
-<!--                    </select>-->
-<!--                  </div>-->
-
-<!--                </div>-->
-<!--              </div>-->
               <div class="col-12 mb-3">
                 <div class="form-group row">
                   <label for="inputEmail3" class="col-sm-4 col-form-label">Categories</label>
@@ -178,7 +172,6 @@
                         type="text"
                         class="form-select"
                         v-model="eticket.e_ticket_category_id"
-                        required
                     >
                       <option disabled value="">Choose...</option>
                       <option v-for="item in ticketCategories" :key="item.id" :value="item.id">{{ item.category_name }}
@@ -196,7 +189,6 @@
                         type="text"
                         class="form-select"
                         v-model="eticket.e_ticket_priority_id"
-                        required
                     >
                       <option disabled value="">Choose...</option>
                       <option v-for="item in ticketPriority" :key="item.id" :value="item.id">{{ item.priority_name }}
@@ -214,10 +206,26 @@
                         type="text"
                         class="form-select"
                         v-model="eticket.issue_type_id"
-                        required
                     >
                       <option disabled value="">Choose...</option>
                       <option v-for="item in ticketIssueType" :key="item.id" :value="item.id">{{ item.issue_type_name }}
+                      </option>
+                    </select>
+                  </div>
+
+                </div>
+              </div>
+              <div class="col-12 mb-3">
+                <div class="form-group row">
+                  <label for="inputEmail3" class="col-sm-4 col-form-label">Milestone</label>
+                  <div class="col-sm-8">
+                    <select
+                        type="text"
+                        class="form-select"
+                        v-model="eticket.e_ticket_milestone_id"
+                    >
+                      <option disabled value="">Choose...</option>
+                      <option v-for="item in ticketMilestone" :key="item.id" :value="item.id">{{ item.milestone_name }}
                       </option>
                     </select>
                   </div>
@@ -275,6 +283,7 @@ import UserService from "@/services/user.service";
 import EticketissuetypeService from "@/services/eticketissuetype.service";
 import Comment from "./Comment"
 import Pages from "@/helpers/ETicket";
+import EticketmilestoneService from "@/services/eticketmilestone.service";
 
 export default {
   components: {FormHeader, Comment},
@@ -287,6 +296,7 @@ export default {
       ticketCategories: [],
       ticketPriority: [],
       ticketIssueType: [],
+      ticketMilestone: [],
       status: Utils.status(),
       editor: ClassicEditor,
       editorData: "<p>Content of the editor.</p>",
@@ -302,6 +312,7 @@ export default {
     this.getTicketCategories();
     this.getTicketPriority();
     this.getTicketIssueType();
+    this.getTicketMilestone();
   },
   mounted() {
     this.eticket.request_date = new Date().toISOString().substr(0, 10);
@@ -335,7 +346,7 @@ export default {
           loading.hide();
         } else {
           loading.hide();
-          this.$swal.fire("Error!", "Ticket" + response.message, "error");
+          this.$swal.fire("Error!", "Users" + response.message, "error");
         }
       });
     },
@@ -383,7 +394,19 @@ export default {
           loading.hide();
         } else {
           loading.hide();
-          this.$swal.fire("Error!", "Priority" + response.message, "error");
+          this.$swal.fire("Error!", "Issue Type" + response.message, "error");
+        }
+      });
+    },
+    getTicketMilestone() {
+      let loading = this.$loading.show();
+      EticketmilestoneService.getAll().then((response) => {
+        if (response.code === 200) {
+          this.ticketMilestone = response.data;
+          loading.hide();
+        } else {
+          loading.hide();
+          this.$swal.fire("Error!", "Milestone" + response.message, "error");
         }
       });
     },

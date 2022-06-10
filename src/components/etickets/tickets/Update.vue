@@ -5,6 +5,7 @@
       <div class="row">
         <div class="col-8">
           <div class="card px-3 py-3 mb-3">
+            <h3>{{ eticket.ticket }}</h3>
             <h5 class="card-title">{{ eticket.status }} - {{ eticket.approve_status }}</h5>
             <div class="row">
               <div class="col-12 mb-3">
@@ -59,7 +60,7 @@
                         required
                     >
                       <option disabled value="">Choose...</option>
-                      <option v-for="item in user" :key="item.id" :value="item.id">{{ item.username }}
+                      <option v-for="item in user" :key="item.id" :value="item.id">{{ item.first_name }} {{ item.last_name }}
                       </option>
                     </select>
                   </div>
@@ -77,7 +78,7 @@
                         required
                     >
                       <option disabled value="">Choose...</option>
-                      <option v-for="item in user" :key="item.id" :value="item.id">{{ item.username }}
+                      <option v-for="item in user" :key="item.id" :value="item.id">{{ item.first_name }} {{ item.last_name }}
                       </option>
                     </select>
                   </div>
@@ -95,7 +96,7 @@
                         required
                     >
                       <option disabled value="">Choose...</option>
-                      <option v-for="item in user" :key="item.id" :value="item.id">{{ item.username }}
+                      <option v-for="item in user" :key="item.id" :value="item.id">{{ item.first_name }} {{ item.last_name }}
                       </option>
                     </select>
                   </div>
@@ -154,24 +155,6 @@
 
                 </div>
               </div>
-<!--              <div class="col-12 mb-3">-->
-<!--                <div class="form-group row">-->
-<!--                  <label for="inputEmail3" class="col-sm-4 col-form-label">Eticket</label>-->
-<!--                  <div class="col-sm-8">-->
-<!--                    <select-->
-<!--                        type="text"-->
-<!--                        class="form-select"-->
-<!--                        v-model="eticket.e_ticket_id"-->
-<!--                        required-->
-<!--                    >-->
-<!--                      <option disabled value="">Choose...</option>-->
-<!--                      <option v-for="item in ticket" :key="item.id" :value="item.id">{{ item.ticket }}-->
-<!--                      </option>-->
-<!--                    </select>-->
-<!--                  </div>-->
-
-<!--                </div>-->
-<!--              </div>-->
               <div class="col-12 mb-3">
                 <div class="form-group row">
                   <label for="inputEmail3" class="col-sm-4 col-form-label">Categories</label>
@@ -220,6 +203,23 @@
                     >
                       <option disabled value="">Choose...</option>
                       <option v-for="item in ticketIssueType" :key="item.id" :value="item.id">{{ item.issue_type_name }}
+                      </option>
+                    </select>
+                  </div>
+
+                </div>
+              </div><div class="col-12 mb-3">
+                <div class="form-group row">
+                  <label for="inputEmail3" class="col-sm-4 col-form-label">Milestone</label>
+                  <div class="col-sm-8">
+                    <select
+                        type="text"
+                        class="form-select"
+                        v-model="eticket.e_ticket_milestone_id"
+                        required
+                    >
+                      <option disabled value="">Choose...</option>
+                      <option v-for="item in ticketMilestone" :key="item.id" :value="item.id">{{ item.milestone_name }}
                       </option>
                     </select>
                   </div>
@@ -286,6 +286,7 @@ import Comment from "./Comment"
 import Pages from "@/helpers/ETicket";
 import EticketcommentService from "@/services/eticketcomment.service";
 import RequestEticketComment from "@/payloads/request/RequestEticketComment";
+import EticketmilestoneService from "@/services/eticketmilestone.service";
 
 export default {
   components: {FormHeader, Comment},
@@ -298,6 +299,7 @@ export default {
       ticketCategories: [],
       ticketPriority: [],
       ticketIssueType: [],
+      ticketMilestone: [],
       status: Utils.status(),
       editor: ClassicEditor,
       editorData: "<p>Content of the editor.</p>",
@@ -314,7 +316,7 @@ export default {
     this.getTicketPriority();
     this.getTicketIssueType();
     this.getListTickets();
-    this.getComment();
+    this.getTicketMilestone();
   },
   methods: {
     submit(event) {
@@ -350,13 +352,13 @@ export default {
     },
     getListUser() {
       let loading = this.$loading.show();
-      UserService.getAll().then((response) => {
+      UserService.getAllUsers().then((response) => {
         if (response.code === 200) {
           this.user = response.data;
           loading.hide();
         } else {
           loading.hide();
-          this.$swal.fire("Error!", "Ticket" + response.message, "error");
+          this.$swal.fire("Error!", "Users" + response.message, "error");
         }
       });
     },
@@ -405,6 +407,18 @@ export default {
         } else {
           loading.hide();
           this.$swal.fire("Error!", "Priority" + response.message, "error");
+        }
+      });
+    },
+    getTicketMilestone() {
+      let loading = this.$loading.show();
+      EticketmilestoneService.getAll().then((response) => {
+        if (response.code === 200) {
+          this.ticketMilestone = response.data;
+          loading.hide();
+        } else {
+          loading.hide();
+          this.$swal.fire("Error!", "Milestone" + response.message, "error");
         }
       });
     },
