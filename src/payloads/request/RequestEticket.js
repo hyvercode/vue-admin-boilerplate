@@ -1,5 +1,6 @@
 export default class RequestEticket {
     constructor(id,
+                ticket,
                 request_date,
                 due_date,
                 issue_type_id,
@@ -9,6 +10,7 @@ export default class RequestEticket {
                 body,
                 e_ticket_priority_id,
                 e_ticket_category_id,
+                e_ticket_milestone_id,
                 e_ticket_id,
                 attachments,
                 status,
