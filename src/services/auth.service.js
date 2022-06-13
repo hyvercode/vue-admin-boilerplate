@@ -23,8 +23,6 @@ class AuthService {
     }
 
     logout() {
-        VueCookies.remove("__MIH__BASE__SESSIONID__");
-        location.reload();
         return Api.doPostOut(Host.API_V1 + "/auth/logout", "").then(
             () => {
                 VueCookies.remove("__MIH__BASE__SESSIONID__");

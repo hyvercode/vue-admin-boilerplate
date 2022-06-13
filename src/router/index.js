@@ -35,6 +35,11 @@ const routes = [
     {
         path: "/",
         name: 'Index',
+        component: Login
+    },
+    {
+        path: "/public",
+        name: 'Index',
         component: Index,
         children: PublicRoute
     },

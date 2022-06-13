@@ -17,7 +17,7 @@
                :next-page-url="paginate.nextPageUrl"
                :prev-page-url="paginate.prevPageUrl"
                :create-button="true"
-               create-button-title="Create ETickets"
+               create-button-title="Request E-Tickets"
                :printable="true"
                :exportable="true"
                :searchable="true"
