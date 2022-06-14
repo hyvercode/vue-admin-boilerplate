@@ -196,7 +196,7 @@ export default {
      * Create
      */
     handleCreate() {
-      router.push(Pages.ETICKET_CREATE);
+      router.push(Pages.ETICKET_MYTICKETS_CREATE);
     },
 
     /**
