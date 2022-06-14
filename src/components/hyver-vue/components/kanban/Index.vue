@@ -8,17 +8,18 @@
             class="bg-gray-100 rounded-lg px-3 py-3 column-width rounded" style="margin-left: 10px;"
         >
           <p class="text-gray-700 font-semibold font-sans tracking-wide text-sm">{{ column.title }}</p>
-          <draggable :move="onDragAble"
-                     :list="column.tasks"
-                     :animation="200"
-                     ghost-class="ghost-card"
-                     group="tasks">
-              <task-card
-                  v-for="(task) in column.tasks"
-                  :key="task.id"
-                  :task="task"
-                  class="mt-3 cursor-move"
-              ></task-card>
+          <draggable
+              :list="column.tasks"
+              :animation="200"
+              ghost-class="ghost-card"
+              group="tasks">
+            <task-card
+                v-for="(task) in column.tasks"
+                :key="task.id"
+                :task="task"
+                class="mt-3 cursor-move"
+                @click="onClick(task)"
+            ></task-card>
           </draggable>
         </div>
       </div>
@@ -82,7 +83,7 @@ export default {
     }
   },
   methods: {
-    log: function(evt) {
+    log: function (evt) {
       window.console.log(evt);
     },
     /**
@@ -90,6 +91,14 @@ export default {
      */
     onDragAble(evt) {
       this.$emit("onDragAble", this.draggingRows)
+    },
+
+    /**
+     * On Click
+     */
+    onClick(props) {
+      alert('Click');
+      // this.$emit("onClick", props)
     },
 
     groupBy(array) {
