@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white shadow rounded px-3 pt-3 pb-3 border" style="min-width: 300px;">
+  <div class="bg-white shadow rounded px-3 pt-3 pb-3 border" style="min-width: 300px;"  @click="onClick(task)">
     <div class="row">
       <div class="col-10">
         <p class="text-gray-700 font-semibold font-sans tracking-wide text-sm">{{ task.subject }}</p>
@@ -50,6 +50,15 @@ export default {
       };
       return mappings[this.task.type] || mappings.default;
     }
+  },
+  methods:{
+    /**
+     * On Click
+     */
+    onClick(props) {
+      alert('Click');
+      // this.$emit("onClick", props)
+    },
   }
 };
 </script>
