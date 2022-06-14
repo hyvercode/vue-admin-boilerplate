@@ -1,71 +1,82 @@
 <template>
   <div class="container-fluid">
-    <h3 class="px-3 mt-3">My Ticket</h3>
-<!--    <DataTable v-if="pagination" :key="pagination.currentPage"-->
-<!--               title="MyTickets"-->
-<!--               :columns="columns"-->
-<!--               :rows="records"-->
-<!--               :filter-record="filterRecord"-->
-<!--               :clickable="true"-->
-<!--               :sortable="true"-->
-<!--               :paginate="true"-->
-<!--               :pagination="paginate"-->
-<!--               :rows-per-page="paginate.recordsPerPage"-->
-<!--               :current-page="paginate.currentPage"-->
-<!--               :last-page="paginate.lastPage"-->
-<!--               :total-records="paginate.total"-->
-<!--               :default-per-page="paginate.perPage"-->
-<!--               :next-page-url="paginate.nextPageUrl"-->
-<!--               :prev-page-url="paginate.prevPageUrl"-->
-<!--               :create-button="true"-->
-<!--               create-button-title="Request E-Tickets"-->
-<!--               :printable="true"-->
-<!--               :exportable="true"-->
-<!--               :searchable="true"-->
-<!--               :filter="true"-->
-<!--               :refreshable="true"-->
-<!--               :filter-date="true"-->
-<!--               @onEnterSearch="doSearch"-->
-<!--               @onRefresh="doRefresh"-->
-<!--               @onPreviousPage="doPrevPage"-->
-<!--               @onNextPage="doNextPage"-->
-<!--               @onChangeRowPage="doChangePerPage"-->
-<!--               @onCheckToggle="doCheckToggle"-->
-<!--               @onCreate="handleCreate"-->
-<!--               @onChangeFilter="doFilterSelected"-->
-<!--               @onChangeSearch="doSearch"-->
-<!--    >-->
-<!--      <th-->
-<!--          id="delete"-->
-<!--          slot="thead-tr"-->
-<!--          class="text-center"-->
-<!--          style="margin-top: -30px !important;"-->
-<!--      >-->
-<!--        Actions-->
-<!--      </th>-->
-<!--      <template slot="tbody-tr" slot-scope="props">-->
-<!--        <td class="text-center">-->
-<!--          <button-->
-<!--              class="btn btn-flat nopadding"-->
-<!--              @click="(e) => handleUpdate(props.row, e)"-->
-<!--          >-->
-<!--            <i class="material-icons tbl-material-icons  text-info">edit</i>-->
-<!--          </button>-->
-<!--          <button-->
-<!--              class="btn btn-flat nopadding"-->
-<!--              @click="(e) => handleDelete(props.row, e)"-->
-<!--          >-->
-<!--            <i class="material-icons tbl-material-icons text-danger">delete</i>-->
-<!--          </button>-->
-<!--        </td>-->
-<!--      </template>-->
-<!--    </DataTable>-->
-    <Kanban></Kanban>
+    <div class="row mb-2">
+      <div class="col-6 d-flex justify-content-start">
+        <h4 class="px-3 mt-3">My Ticket</h4>
+      </div>
+      <div class="col-6">
+        <div class="px-3 mt-3 btn-group" style="float: right">
+          <button type="button" class="btn btn-secondary" @click="doKanban('list')">List</button>
+          <button type="button" class="btn btn-secondary" @click="doKanban('kanban')">Kanban</button>
+        </div>
+      </div>
+    </div>
+    <DataTable v-show="view" v-if="paginate" :key="pagination.currentPage"
+               :arrow-back="false"
+               :title-show="false"
+               :columns="columns"
+               :rows="records"
+               :filter-record="filterRecord"
+               :clickable="true"
+               :sortable="true"
+               :paginate="true"
+               :pagination="paginate"
+               :rows-per-page="paginate.recordsPerPage"
+               :current-page="paginate.currentPage"
+               :last-page="paginate.lastPage"
+               :total-records="paginate.total"
+               :default-per-page="paginate.perPage"
+               :next-page-url="paginate.nextPageUrl"
+               :prev-page-url="paginate.prevPageUrl"
+               :create-button="true"
+               create-button-title="Request E-Tickets"
+               :printable="true"
+               :exportable="true"
+               :searchable="true"
+               :filter="true"
+               :refreshable="true"
+               :filter-date="true"
+               @onEnterSearch="doSearch"
+               @onRefresh="doRefresh"
+               @onPreviousPage="doPrevPage"
+               @onNextPage="doNextPage"
+               @onChangeRowPage="doChangePerPage"
+               @onCheckToggle="doCheckToggle"
+               @onCreate="handleCreate"
+               @onChangeFilter="doFilterSelected"
+               @onChangeSearch="doSearch"
+    >
+      <th
+          id="delete"
+          slot="thead-tr"
+          class="text-center"
+          style="margin-top: -30px !important;"
+      >
+        Actions
+      </th>
+      <template slot="tbody-tr" slot-scope="props">
+        <td class="text-center">
+          <button
+              class="btn btn-flat nopadding"
+              @click="(e) => handleUpdate(props.row, e)"
+          >
+            <i class="material-icons tbl-material-icons  text-info">edit</i>
+          </button>
+          <button
+              class="btn btn-flat nopadding"
+              @click="(e) => handleDelete(props.row, e)"
+          >
+            <i class="material-icons tbl-material-icons text-danger">delete</i>
+          </button>
+        </td>
+      </template>
+    </DataTable>
+    <Kanban v-show="!view" v-if="records" :records="records"></Kanban>
   </div>
 </template>
 
 <script>
-// import DataTable from "../../hyver-vue/components/table/DataTable";
+import DataTable from "../../hyver-vue/components/table/DataTable";
 import router from "../../../router";
 import Pages from "../../../helpers/ETicket";
 import EticketService from "@/services/eticket.service";
@@ -74,7 +85,7 @@ import Kanban from "../../hyver-vue/components/kanban/Index"
 export default {
   name: "MyTickets",
   components: {
-    // DataTable,
+    DataTable,
     Kanban
   },
   data() {
@@ -91,6 +102,13 @@ export default {
         {
           label: "ticket",
           field: "ticket",
+          numeric: false,
+          html: false,
+          hidden: false,
+        },
+        {
+          label: "status",
+          field: "status",
           numeric: false,
           html: false,
           hidden: false,
@@ -172,7 +190,8 @@ export default {
       },
       idUpdate: true,
       menuList: [],
-      menus: []
+      menus: [],
+      view: true
     }
   },
   computed: {
@@ -380,8 +399,11 @@ export default {
         }
       });
     },
-    doCheckToggle(prop){
+    doCheckToggle(prop) {
 
+    },
+    doKanban(mode) {
+      this.view = mode === 'list';
     }
   }
 }

@@ -1,20 +1,24 @@
 <template>
-  <div id="app">
+  <div id="app" class="div-scroll">
     <div class="d-flex justify-center">
       <div class="min-h-screen d-flex overflow-x-scroll py-4">
         <div
-            v-for="column in columns"
-            :key="column.title"
+            v-for="(column,index) in columns"
+            :key="index"
             class="bg-gray-100 rounded-lg px-3 py-3 column-width rounded" style="margin-left: 10px;"
         >
           <p class="text-gray-700 font-semibold font-sans tracking-wide text-sm">{{ column.title }}</p>
-          <draggable :list="column.tasks" :animation="200" ghost-class="ghost-card" group="tasks">
-            <task-card
-                v-for="(task) in column.tasks"
-                :key="task.id"
-                :task="task"
-                class="mt-3 cursor-move"
-            ></task-card>
+          <draggable :move="onDragAble"
+                     :list="column.tasks"
+                     :animation="200"
+                     ghost-class="ghost-card"
+                     group="tasks">
+              <task-card
+                  v-for="(task) in column.tasks"
+                  :key="task.id"
+                  :task="task"
+                  class="mt-3 cursor-move"
+              ></task-card>
           </draggable>
         </div>
       </div>
@@ -32,182 +36,85 @@ export default {
     TaskCard,
     draggable
   },
-  data() {
-    return {
-      columns: [
-        {
-          title: "Backlog",
-          tasks: [
-            {
-              id: 1,
-              title: "Add discount code to checkout page",
-              date: "Sep 14",
-              type: "Feature Request"
-            },
-            {
-              id: 2,
-              title: "Provide documentation on integrations",
-              date: "Sep 12"
-            },
-            {
-              id: 3,
-              title: "Design shopping cart dropdown",
-              date: "Sep 9",
-              type: "Design"
-            },
-            {
-              id: 4,
-              title: "Add discount code to checkout page",
-              date: "Sep 14",
-              type: "Feature Request"
-            },
-            {
-              id: 5,
-              title: "Test checkout flow",
-              date: "Sep 15",
-              type: "QA"
-            }
-          ]
-        },
-        {
-          title: "In Progress",
-          tasks: [
-            {
-              id: 6,
-              title: "Design shopping cart dropdown",
-              date: "Sep 9",
-              type: "Design"
-            },
-            {
-              id: 7,
-              title: "Add discount code to checkout page",
-              date: "Sep 14",
-              type: "Feature Request"
-            },
-            {
-              id: 8,
-              title: "Provide documentation on integrations",
-              date: "Sep 12",
-              type: "Backend"
-            }
-          ]
-        },
-        {
-          title: "Review",
-          tasks: [
-            {
-              id: 9,
-              title: "Provide documentation on integrations",
-              date: "Sep 12"
-            },
-            {
-              id: 10,
-              title: "Design shopping cart dropdown",
-              date: "Sep 9",
-              type: "Design"
-            },
-            {
-              id: 11,
-              title: "Add discount code to checkout page",
-              date: "Sep 14",
-              type: "Feature Request"
-            },
-            {
-              id: 12,
-              title: "Design shopping cart dropdown",
-              date: "Sep 9",
-              type: "Design"
-            },
-            {
-              id: 13,
-              title: "Add discount code to checkout page",
-              date: "Sep 14",
-              type: "Feature Request"
-            }
-          ]
-        },
-        {
-          title: "Done",
-          tasks: [
-            {
-              id: 14,
-              title: "Add discount code to checkout page",
-              date: "Sep 14",
-              type: "Feature Request"
-            },
-            {
-              id: 15,
-              title: "Design shopping cart dropdown",
-              date: "Sep 9",
-              type: "Backlog"
-            },
-            {
-              id: 16,
-              title: "Add discount code to checkout page",
-              date: "Sep 14",
-              type: "Feature Request"
-            }
-          ]
-        }
-      ],
-      records: [
+  props: {
+    records: {
+      type: Array,
+      required: true,
+      default: [
         {
           id: 1,
           status: "Backlog",
-          title: "Add discount code to checkout page",
-          date: "Sep 14",
-          type: "Feature Request"
+          subject: "Add discount code to checkout page",
+          request_date: "Sep 14",
+          issue_type_name: "Feature Request",
+          avatar: "https://pickaface.net/gallery/avatar/unr_sample_161118_2054_ynlrg.png"
         },
         {
-          id: 2,
-          status: "Backlog",
-          title: "Provide documentation on integrations",
-          date: "Sep 12"
-        },
-        {
-          id: 3,
+          id: 1,
           status: "Done",
-          title: "Design shopping cart dropdown",
-          date: "Sep 9",
-          type: "Design"
+          subject: "Add discount code to checkout page",
+          request_date: "Sep 14",
+          issue_type_name: "Done",
+          avatar: "https://pickaface.net/gallery/avatar/unr_sample_161118_2054_ynlrg.png"
         },
         {
-          id: 4,
-          status: "Done",
-          title: "Add discount code to checkout page",
-          date: "Sep 14",
-          type: "Feature Request"
+          id: 1,
+          status: "In Progress",
+          subject: "Add discount code to checkout page",
+          request_date: "Sep 14",
+          issue_type_name: "Design",
+          avatar: "https://pickaface.net/gallery/avatar/unr_sample_161118_2054_ynlrg.png"
         },
-        {
-          id: 5,
-          status: "Done",
-          title: "Test checkout flow",
-          date: "Sep 15",
-          type: "QA"
-        }
       ],
-    };
+    }
   },
-  mounted() {
-    console.log(this.groupBy(this.records, 'status'))
+  computed: {
+    columns() {
+      return Object.keys(this.groupBy(this.records.sort(this.dynamicSort('status_code')))).map(index => {
+        return {
+          title: index,
+          tasks: this.groupBy(this.records)[index]
+        };
+      });
+    },
+    draggingRows() {
+      return this.columns();
+    }
   },
   methods: {
-    groupBy(array, key) {
-      var groupedData = {};
-      let record=[];
-      let task=[];
-      let data={
-        title:null,
-        task:[]
-      }
+    log: function(evt) {
+      window.console.log(evt);
+    },
+    /**
+     * On Dragable
+     */
+    onDragAble(evt) {
+      this.$emit("onDragAble", this.draggingRows)
+    },
+
+    groupBy(array) {
+      let groupedData = {};
       array.forEach(item => {
         if (!groupedData[item.status]) {
           groupedData[item.status] = [];
         }
         groupedData[item.status].push(item);
       })
-
-      return record;
+      return groupedData;
+    },
+    dynamicSort(property) {
+      var sortOrder = 1;
+      if (property[0] === "-") {
+        sortOrder = -1;
+        property = property.substr(1);
+      }
+      return function (a, b) {
+        /* next line works with strings and numbers,
+         * and you may want to customize it to your needs
+         */
+        var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
+        return result * sortOrder;
+      }
     }
   }
 };
@@ -217,6 +124,11 @@ export default {
 .column-width {
   /*min-width: 320px;*/
   /*width: 320px;*/
+}
+
+.div-scroll {
+  overflow-x: scroll;
+  scrollbar-width: none;
 }
 
 .ghost-card {
