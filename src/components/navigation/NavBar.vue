@@ -12,14 +12,14 @@
             <span class="navbar-toggler-icon"></span>
           </button>
           <!-- Search form -->
-          <form>
-            <div class="input-group">
-              <input class="form-control" type="search"
-                     placeholder="Please input your value">
-              <button class="input-group-text" id="addon-wrapping"><i
-                  class="material-icons">search</i></button>
-            </div>
-          </form>
+<!--          <form>-->
+<!--            <div class="input-group">-->
+<!--              <input class="form-control" type="search"-->
+<!--                     placeholder="Please input your value">-->
+<!--              <button class="input-group-text" id="addon-wrapping"><i-->
+<!--                  class="material-icons">search</i></button>-->
+<!--            </div>-->
+<!--          </form>-->
           <!-- / Search form -->
         </div>
         <!-- Navbar links -->

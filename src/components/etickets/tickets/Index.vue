@@ -65,7 +65,7 @@
 </template>
 
 <script>
-import DataTable from "../../hyver-vue/components/DataTable";
+import DataTable from "../../hyver-vue/components/table/DataTable";
 import BlogPostService from "../../../services/blogPost.service";
 import router from "../../../router";
 import Pages from "../../../helpers/ETicket";

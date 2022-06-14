@@ -95,7 +95,7 @@
 <script>
 import RequestKpiGroup from "../../payloads/request/RequestKpiGroup";
 import KpiGroupService from "../../services/kpigroup.service";
-import MyDataTable from "../hyver-vue/components/DataTable";
+import MyDataTable from "../hyver-vue/components/table/DataTable";
 import Utils from "../../helpers/Utils";
 
 export default {

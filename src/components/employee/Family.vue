@@ -233,7 +233,7 @@
 <script>
 import RequestFamily from "../../payloads/request/RequestFamily";
 import FamilyService from "../../services/family.service";
-import MyDataTable from "../hyver-vue/components/DataTable";
+import MyDataTable from "../hyver-vue/components/table/DataTable";
 import Utils from "../../helpers/Utils";
 
 export default {

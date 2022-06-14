@@ -63,7 +63,7 @@
 
 <script>
 import BranchService from "../../services/branch.service";
-import MyDataTable from "../hyver-vue/components/DataTable";
+import MyDataTable from "../hyver-vue/components/table/DataTable";
 import router from "../../router";
 import Utils from "../../helpers/Utils";
 import Pages from "../../helpers/HR";

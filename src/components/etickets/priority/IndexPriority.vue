@@ -92,7 +92,7 @@
 </template>
 
 <script>
-import MyDataTable from "../../hyver-vue/components/DataTable";
+import MyDataTable from "../../hyver-vue/components/table/DataTable";
 import Utils from "../../../helpers/Utils";
 import RequestEticketPriority from "@/payloads/request/RequestEticketPriority";
 import ETicketPriorityService from "@/services/eticketpriority.service";

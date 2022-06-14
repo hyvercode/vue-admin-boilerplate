@@ -94,7 +94,7 @@
 <script>
 import RequestBsc from "../../payloads/request/RequestBsc";
 import BscService from "../../services/bsc.service";
-import MyDataTable from "../hyver-vue/components/DataTable";
+import MyDataTable from "../hyver-vue/components/table/DataTable";
 import Utils from "../../helpers/Utils";
 
 export default {

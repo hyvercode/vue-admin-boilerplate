@@ -1,76 +1,82 @@
 <template>
   <div class="container-fluid">
-    <DataTable v-if="pagination" :key="pagination.currentPage"
-               title="MyTickets"
-               :columns="columns"
-               :rows="records"
-               :filter-record="filterRecord"
-               :clickable="true"
-               :sortable="true"
-               :paginate="true"
-               :pagination="paginate"
-               :rows-per-page="paginate.recordsPerPage"
-               :current-page="paginate.currentPage"
-               :last-page="paginate.lastPage"
-               :total-records="paginate.total"
-               :default-per-page="paginate.perPage"
-               :next-page-url="paginate.nextPageUrl"
-               :prev-page-url="paginate.prevPageUrl"
-               :create-button="true"
-               create-button-title="Request E-Tickets"
-               :printable="true"
-               :exportable="true"
-               :searchable="true"
-               :filter="true"
-               :refreshable="true"
-               :filter-date="true"
-               @onEnterSearch="doSearch"
-               @onRefresh="doRefresh"
-               @onPreviousPage="doPrevPage"
-               @onNextPage="doNextPage"
-               @onChangeRowPage="doChangePerPage"
-               @onCheckToggle="doCheckToggle"
-               @onCreate="handleCreate"
-               @onChangeFilter="doFilterSelected"
-               @onChangeSearch="doSearch"
-    >
-      <th
-          id="delete"
-          slot="thead-tr"
-          class="text-center"
-          style="margin-top: -30px !important;"
-      >
-        Actions
-      </th>
-      <template slot="tbody-tr" slot-scope="props">
-        <td class="text-center">
-          <button
-              class="btn btn-flat nopadding"
-              @click="(e) => handleUpdate(props.row, e)"
-          >
-            <i class="material-icons tbl-material-icons  text-info">edit</i>
-          </button>
-          <button
-              class="btn btn-flat nopadding"
-              @click="(e) => handleDelete(props.row, e)"
-          >
-            <i class="material-icons tbl-material-icons text-danger">delete</i>
-          </button>
-        </td>
-      </template>
-    </DataTable>
+    <h3 class="px-3 mt-3">My Ticket</h3>
+<!--    <DataTable v-if="pagination" :key="pagination.currentPage"-->
+<!--               title="MyTickets"-->
+<!--               :columns="columns"-->
+<!--               :rows="records"-->
+<!--               :filter-record="filterRecord"-->
+<!--               :clickable="true"-->
+<!--               :sortable="true"-->
+<!--               :paginate="true"-->
+<!--               :pagination="paginate"-->
+<!--               :rows-per-page="paginate.recordsPerPage"-->
+<!--               :current-page="paginate.currentPage"-->
+<!--               :last-page="paginate.lastPage"-->
+<!--               :total-records="paginate.total"-->
+<!--               :default-per-page="paginate.perPage"-->
+<!--               :next-page-url="paginate.nextPageUrl"-->
+<!--               :prev-page-url="paginate.prevPageUrl"-->
+<!--               :create-button="true"-->
+<!--               create-button-title="Request E-Tickets"-->
+<!--               :printable="true"-->
+<!--               :exportable="true"-->
+<!--               :searchable="true"-->
+<!--               :filter="true"-->
+<!--               :refreshable="true"-->
+<!--               :filter-date="true"-->
+<!--               @onEnterSearch="doSearch"-->
+<!--               @onRefresh="doRefresh"-->
+<!--               @onPreviousPage="doPrevPage"-->
+<!--               @onNextPage="doNextPage"-->
+<!--               @onChangeRowPage="doChangePerPage"-->
+<!--               @onCheckToggle="doCheckToggle"-->
+<!--               @onCreate="handleCreate"-->
+<!--               @onChangeFilter="doFilterSelected"-->
+<!--               @onChangeSearch="doSearch"-->
+<!--    >-->
+<!--      <th-->
+<!--          id="delete"-->
+<!--          slot="thead-tr"-->
+<!--          class="text-center"-->
+<!--          style="margin-top: -30px !important;"-->
+<!--      >-->
+<!--        Actions-->
+<!--      </th>-->
+<!--      <template slot="tbody-tr" slot-scope="props">-->
+<!--        <td class="text-center">-->
+<!--          <button-->
+<!--              class="btn btn-flat nopadding"-->
+<!--              @click="(e) => handleUpdate(props.row, e)"-->
+<!--          >-->
+<!--            <i class="material-icons tbl-material-icons  text-info">edit</i>-->
+<!--          </button>-->
+<!--          <button-->
+<!--              class="btn btn-flat nopadding"-->
+<!--              @click="(e) => handleDelete(props.row, e)"-->
+<!--          >-->
+<!--            <i class="material-icons tbl-material-icons text-danger">delete</i>-->
+<!--          </button>-->
+<!--        </td>-->
+<!--      </template>-->
+<!--    </DataTable>-->
+    <Kanban></Kanban>
   </div>
 </template>
 
 <script>
-import DataTable from "../../hyver-vue/components/DataTable";
+// import DataTable from "../../hyver-vue/components/table/DataTable";
 import router from "../../../router";
 import Pages from "../../../helpers/ETicket";
 import EticketService from "@/services/eticket.service";
+import Kanban from "../../hyver-vue/components/kanban/Index"
 
 export default {
   name: "MyTickets",
-  components: {DataTable},
+  components: {
+    // DataTable,
+    Kanban
+  },
   data() {
     return {
       columns: [
@@ -374,6 +380,9 @@ export default {
         }
       });
     },
+    doCheckToggle(prop){
+
+    }
   }
 }
 </script>

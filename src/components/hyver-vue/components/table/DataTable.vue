@@ -427,8 +427,8 @@
 
 <script>
 import Fuse from 'fuse.js';
-import locales from '../index';
-import Utils from "../../../helpers/Utils";
+import locales from '../../index';
+import Utils from "../../../../helpers/Utils";
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable';
 import draggable from 'vuedraggable'

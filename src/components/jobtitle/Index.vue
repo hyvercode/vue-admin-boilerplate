@@ -95,7 +95,7 @@
 <script>
 import RequestJobTitle from "../../payloads/request/RequestJobTitle";
 import JobtitleService from "../../services/jobtitle.service";
-import MyDataTable from "../hyver-vue/components/DataTable";
+import MyDataTable from "../hyver-vue/components/table/DataTable";
 import Utils from "../../helpers/Utils";
 
 export default {

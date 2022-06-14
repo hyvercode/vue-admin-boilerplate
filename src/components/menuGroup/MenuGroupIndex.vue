@@ -110,7 +110,7 @@
 </template>
 
 <script>
-import DataTable from "../hyver-vue/components/DataTable";
+import DataTable from "../hyver-vue/components/table/DataTable";
 import MenuRoleService from "../../services/menuRole.service";
 import RolesService from "../../services/role.service";
 import RequestMenuRole from "../../payloads/request/RequestMenuRole";

@@ -154,7 +154,7 @@
 </template>
 
 <script>
-import DataTable from "../hyver-vue/components/DataTable";
+import DataTable from "../hyver-vue/components/table/DataTable";
 import UserService from "../../services/user.service";
 import RequestUser from "../../payloads/request/RequestUser";
 import EmployeeService from "../../services/employee.service";

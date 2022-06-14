@@ -131,7 +131,7 @@
 </template>
 
 <script>
-import DataTable from "../hyver-vue/components/DataTable";
+import DataTable from "../hyver-vue/components/table/DataTable";
 import RoleService from "../../services/role.service";
 import RequestRole from "../../payloads/request/RequestRole";
 

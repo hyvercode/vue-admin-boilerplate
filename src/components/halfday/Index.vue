@@ -109,7 +109,7 @@
 </template>
 
 <script>
-import MyDataTable from "../hyver-vue/components/DataTable";
+import MyDataTable from "../hyver-vue/components/table/DataTable";
 import Utils from "../../helpers/Utils";
 import HalfdayService from "../../services/halfday.service";
 import RequestHalfday from "../../payloads/request/RequestHalfday";

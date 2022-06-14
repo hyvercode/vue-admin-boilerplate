@@ -182,7 +182,7 @@
 <script>
 import PerformanceReviewService from "../../services/performancereview.service";
 import RequestPerformanceReview from "../../payloads/request/RequestPerformanceReview.js";
-import MyDataTable from "../hyver-vue/components/DataTable";
+import MyDataTable from "../hyver-vue/components/table/DataTable";
 import Utils from "../../helpers/Utils";
 import RequestEgs from "../../payloads/request/EGS";
 import EmployeeService from "../../services/employee.service";

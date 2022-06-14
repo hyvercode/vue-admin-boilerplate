@@ -39,7 +39,7 @@
 
 <script>
 
-import MyDataTable from "../hyver-vue/components/DataTable";
+import MyDataTable from "../hyver-vue/components/table/DataTable";
 import Utils from "../../helpers/Utils";
 import AttendanceService from "../../services/attendance.service";
 

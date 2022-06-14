@@ -265,7 +265,7 @@
 <script>
 import PerformanceReviewService from "../../services/performanceapprasial.service";
 import RequestPerformanceApprasial from "../../payloads/request/RequestPerformanceApprasial.js";
-import MyDataTable from "../hyver-vue/components/DataTable";
+import MyDataTable from "../hyver-vue/components/table/DataTable";
 import Utils from "../../helpers/Utils";
 import RequestEgs from "../../payloads/request/EGS";
 import EmployeeService from "../../services/employee.service";

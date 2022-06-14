@@ -101,7 +101,7 @@
 <script>
 import RequestBanner from "../../payloads/request/RequestBanner";
 import BannerService from "../../services/banner.service";
-import MyDataTable from "../hyver-vue/components/DataTable";
+import MyDataTable from "../hyver-vue/components/table/DataTable";
 import Utils from "../../helpers/Utils";
 
 export default {

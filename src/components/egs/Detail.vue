@@ -200,7 +200,7 @@ import KpiService from "../../services/kpidirectories.service";
 import MeasurementService from "../../services/measurement.service";
 import TargetTypeService from "../../services/targettype.service";
 import EgsDetailService from "../../services/egs-detail.service";
-import MyDataTable from "../hyver-vue/components/DataTable";
+import MyDataTable from "../hyver-vue/components/table/DataTable";
 import Utils from "../../helpers/Utils";
 import utils from "../../helpers/Utils";
 import RequestEgs from "../../payloads/request/EGS";

@@ -93,7 +93,7 @@
 
 <script>
 import ETicketCategoriesService from "../../../services/eticketcategories.service";
-import MyDataTable from "../../hyver-vue/components/DataTable";
+import MyDataTable from "../../hyver-vue/components/table/DataTable";
 import Utils from "../../../helpers/Utils";
 import RequestEticketCategories from "@/payloads/request/RequestEticketCategories";
 

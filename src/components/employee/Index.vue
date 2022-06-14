@@ -66,7 +66,7 @@
 <script>
 
 import EmployeesService from "../../services/employee.service";
-import MyDataTable from "../hyver-vue/components/DataTable";
+import MyDataTable from "../hyver-vue/components/table/DataTable";
 import router from "../../router";
 import Pages from "../../helpers/HR";
 import Utils from "../../helpers/Utils";

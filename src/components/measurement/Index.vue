@@ -120,7 +120,7 @@
 
 <script>
 
-import MyDataTable from "../hyver-vue/components/DataTable";
+import MyDataTable from "../hyver-vue/components/table/DataTable";
 import Utils from "../../helpers/Utils";
 import MeasurementService from "../../services/measurement.service";
 import RequestMeasurement from "../../payloads/request/RequestMeasurement";

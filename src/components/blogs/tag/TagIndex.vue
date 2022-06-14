@@ -103,7 +103,7 @@
 </template>
 
 <script>
-import DataTable from "../../hyver-vue/components/DataTable";
+import DataTable from "../../hyver-vue/components/table/DataTable";
 import BlogTagService from "../../../services/blogTag.service";
 import RequestBlogTag from "../../../payloads/request/RequestBlogTag";
 

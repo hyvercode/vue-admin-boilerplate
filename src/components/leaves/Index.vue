@@ -110,7 +110,7 @@
 
 <script>
 
-import MyDataTable from "../hyver-vue/components/DataTable";
+import MyDataTable from "../hyver-vue/components/table/DataTable";
 import Utils from "../../helpers/Utils";
 import leavesService from "../../services/leaves.service";
 import RequestLeaves from "../../payloads/request/RequestLeaves";
