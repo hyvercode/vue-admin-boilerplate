@@ -9,7 +9,7 @@
         >
           <p class="text-gray-700 font-semibold font-sans tracking-wide text-sm">{{ column.title }}</p>
           <draggable
-              :list="column.tasks"
+              v-model="column.tasks"
               :animation="200"
               ghost-class="ghost-card"
               group="tasks">
