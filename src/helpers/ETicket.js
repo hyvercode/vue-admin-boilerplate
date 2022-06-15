@@ -8,6 +8,7 @@ const ETICKET={
     ETICKET_PRIORITY: "/eticket/priority",
     ETICKET_REPORTING: "/eticket/reporting",
     ETICKET_MYTICKETS: "/eticket/mytickets",
+    ETICKET_MYTICKETS_CREATE: "/eticket/mytickets/create",
     ETICKET_MYTICKETS_UPDATE: "/eticket/mytickets/update/:id",
     ETICKET_HISTORY: "/eticket/history/:id"
 }

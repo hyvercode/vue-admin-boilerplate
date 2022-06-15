@@ -95,6 +95,11 @@ export default [
                 component: () => import("../components/etickets/mytickets/MyTickets.vue")
             },
             {
+                path: Pages.ETICKET_MYTICKETS_CREATE,
+                name: "Create",
+                component: () => import("../components/etickets/mytickets/Create.vue")
+            },
+            {
                 path: Pages.ETICKET_MYTICKETS_UPDATE,
                 name: "Update",
                 component: () => import("../components/etickets/mytickets/Update.vue")

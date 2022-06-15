@@ -68,7 +68,7 @@
                 <h5 style="text-align: left">{{ item.first_name }} {{ item.last_name }}</h5>
                 <p style="text-align: left; font-size: 10px">{{ item.created_at | moment('DD-MMM-YYYY') }}</p>
               </div>
-            </div>
+            </div>san
             <div class="clearfix"/>
 
               <div class="span-left" style="text-align: left">
