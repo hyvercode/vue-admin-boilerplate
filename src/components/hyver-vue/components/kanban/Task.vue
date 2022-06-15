@@ -41,14 +41,16 @@ export default {
   computed: {
     badgeColor() {
       const mappings = {
-        Design: "purple",
-        "Feature Request": "primary",
-        Backend: "blue",
-        QA: "green",
+        Design: "green",
+        Feature: "grey",
+        Backend: "success",
+        QA: "purple",
         default: "primary",
-        Backlog: "danger"
+        Backlog: "danger",
+        Bugs:"red",
+        Error:"warning"
       };
-      return mappings[this.task.type] || mappings.default;
+      return mappings[this.task.issue_type_name] || mappings.default;
     }
   },
   methods:{

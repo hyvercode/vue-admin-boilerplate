@@ -159,17 +159,6 @@ export default {
           dateFormat: "DD MMMM YYYY",
           hidden: true,
         },
-        // {
-        //   label: "published",
-        //   field: "published",
-        //   numeric: false,
-        //   html: false,
-        //   hidden: false,
-        //   buttonToggle: true,
-        //   buttonToggleDesc: [
-        //     "Published", "Draft"
-        //   ]
-        // },
         {
           label: "Update At",
           field: "updated_at",
