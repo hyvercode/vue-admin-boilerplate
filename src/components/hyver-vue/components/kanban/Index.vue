@@ -18,7 +18,7 @@
                 :key="task.id"
                 :task="task"
                 class="mt-3 cursor-move"
-                @click="onClick(task)"
+                @onClick="onClick(task)"
             ></task-card>
           </draggable>
         </div>
@@ -97,8 +97,8 @@ export default {
      * On Click
      */
     onClick(props) {
-      alert('Click');
-      // this.$emit("onClick", props)
+      // alert('Click');
+      this.$emit("onClick", props)
     },
 
     groupBy(array) {

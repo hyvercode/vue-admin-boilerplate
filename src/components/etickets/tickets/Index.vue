@@ -1,6 +1,17 @@
 <template>
   <div class="container-fluid">
-    <DataTable v-if="pagination" :key="pagination.currentPage"
+    <div class="row mb-2">
+      <div class="col-6 d-flex justify-content-start">
+        <h4 class="px-3 mt-3">List Ticket</h4>
+      </div>
+      <div class="col-6">
+        <div class="px-3 mt-3 btn-group" style="float: right">
+          <button type="button" class="btn btn-secondary" @click="doKanban('list')">List</button>
+          <button type="button" class="btn btn-secondary" @click="doKanban('kanban')">Kanban</button>
+        </div>
+      </div>
+    </div>
+    <DataTable v-show="view" v-if="pagination" :key="pagination.currentPage"
                title="E-Ticket"
                :columns="columns"
                :rows="records"
@@ -61,6 +72,7 @@
         </td>
       </template>
     </DataTable>
+    <Kanban v-show="!view" v-if="records" @onClick="handleUpdate" :records="records"></Kanban>
   </div>
 </template>
 
@@ -70,10 +82,14 @@ import BlogPostService from "../../../services/blogPost.service";
 import router from "../../../router";
 import Pages from "../../../helpers/ETicket";
 import EticketService from "@/services/eticket.service";
+import Kanban from "../../hyver-vue/components/kanban/Index"
 
 export default {
   name: "Index",
-  components: {DataTable},
+  components: {
+    DataTable,
+    Kanban
+  },
   data() {
     return {
       columns: [
@@ -139,7 +155,6 @@ export default {
           field: "created_at",
           numeric: false,
           html: false,
-          hidden: false,
           date: true,
           dateFormat: "DD MMMM YYYY",
           hidden: true,
@@ -160,7 +175,6 @@ export default {
           field: "updated_at",
           numeric: false,
           html: false,
-          hidden: false,
           date: true,
           dateFormat: "DD MMMM YYYY",
           hidden: true,
@@ -188,7 +202,8 @@ export default {
       },
       idUpdate: true,
       menuList: [],
-      menus: []
+      menus: [],
+      view: true
     }
   },
   computed: {
@@ -403,6 +418,9 @@ export default {
     },
     async handleHistory(props) {
       await router.push(`/eticket/history/${props.id}`);
+    },
+    doKanban(mode) {
+      this.view = mode === 'list';
     }
   }
 }

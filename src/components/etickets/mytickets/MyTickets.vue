@@ -71,7 +71,7 @@
         </td>
       </template>
     </DataTable>
-    <Kanban v-show="!view" v-if="records" :records="records"></Kanban>
+    <Kanban v-show="!view" v-if="records" @onClick="handleUpdate" :records="records"></Kanban>
   </div>
 </template>
 

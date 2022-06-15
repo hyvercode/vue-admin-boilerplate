@@ -5,6 +5,7 @@
       <div class="row">
         <div class="col-8">
           <div class="card px-3 py-3 mb-3">
+            <h3>{{ eticket.ticket }}</h3>
             <h5 class="card-title">{{ eticket.status }} - {{ eticket.approve_status }}</h5>
             <div class="row">
               <div class="col-12 mb-3">

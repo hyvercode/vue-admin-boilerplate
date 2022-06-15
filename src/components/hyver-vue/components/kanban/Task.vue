@@ -56,8 +56,8 @@ export default {
      * On Click
      */
     onClick(props) {
-      alert('Click');
-      // this.$emit("onClick", props)
+      // alert('Click');
+      this.$emit("onClick", props)
     },
   }
 };
