@@ -24,10 +24,16 @@ import Blog from "../views/Blog";
 import Pages from "../helpers/Pages";
 import PublicPages from "../theme/PublicPages";
 import PublicRoute from "../theme/PublicRoute";
-//E-Ticket
+
+//** E-Ticket **//
 import PagesETicket from "../helpers/ETicket";
 import RouteETicket from "./eticket";
 import ETicket from "../views/ETicket";
+
+//** EVENT **//
+import PagesEvent from "../helpers/Event"
+import Event from "../views/Event";
+import RouteEvent from "./event";
 
 
 Vue.use(VueRouter);
@@ -122,6 +128,12 @@ const routes = [
                 name: "ETicket",
                 component: ETicket,
                 children: RouteETicket
+            },
+            {
+                path: PagesEvent.MEETING,
+                name: "Event",
+                component: Event,
+                children: RouteEvent
             }
         ]
     },

@@ -2,7 +2,7 @@ import Host from '@/api/host'
 import Api from "../api/Api";
 
 
-class ETicketService {
+class DashboardService {
     getAll() {
         return Api.doGet(Host.API_V1 + "/eticket/");
     }
@@ -27,17 +27,9 @@ class ETicketService {
         return Api.doDelete(Host.API_V1 + `/eticket/delete/${id}`);
     }
 
-    getMyTicketPaginate(params) {
-        return Api.doGet(Host.API_V1 + "/eticket/my/pagination?", params);
-    }
-
-    getMyKanban() {
-        return Api.doGet(Host.API_V1 + "/eticket/my/kanban");
-    }
-
-    getKanbanAdmin(){
-        return Api.doGet(Host.API_V1 + "/eticket/kanban");
+    getEticketOverview(){
+        return Api.doGet(Host.API_V1 + "/dashboard/eticket");
     }
 }
 
-export default new ETicketService();
+export default new DashboardService();

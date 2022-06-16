@@ -71,7 +71,7 @@
         </td>
       </template>
     </DataTable>
-    <Kanban v-show="!view" v-if="records" @onClick="handleUpdate" :records="records"></Kanban>
+    <Kanban v-show="!view" v-if="myKanban" @onClick="handleUpdate" @onCreate="handleCreate" @onRefresh="doRefresh" :records="myKanban"></Kanban>
   </div>
 </template>
 
@@ -191,6 +191,7 @@ export default {
       idUpdate: true,
       menuList: [],
       menus: [],
+      myKanban: [],
       view: true
     }
   },
@@ -208,6 +209,7 @@ export default {
         this.pagination.perPage,
         this.pagination.currentPage
     )
+    this.getMyKanban()
   },
   methods: {
 
@@ -404,6 +406,18 @@ export default {
     },
     doKanban(mode) {
       this.view = mode === 'list';
+    },
+    getMyKanban(){
+      let loading = this.$loading.show();
+      EticketService.getMyKanban().then((response) => {
+        if (response.code === 200) {
+          this.myKanban = response.data;
+          loading.hide();
+        } else {
+          loading.hide();
+          this.$swal.fire("Error!", "Users" + response.message, "error");
+        }
+      });
     }
   }
 }

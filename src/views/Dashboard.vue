@@ -1,6 +1,5 @@
 <template>
   <div class="container-fluid">
-    <p>Grosir Motor Event Overview </p>
     <div class="row">
       <h2>Dashboard</h2>
       <div class="col-12 col-sm-6 col-xl-4 mb-4">
@@ -140,6 +139,7 @@
         </div>
       </div>
     </div>
+    <ticket-overview></ticket-overview>
     <div class="row">
       <div class="col-12 mb-4">
         <div class="card bg-yellow-100 border-0 shadow">
@@ -849,8 +849,9 @@
 
 <script>
 
+import TicketOverview from "@/components/dashboardOverview/ticketOverview";
 export default {
   name: "Dashboard",
-  components: {}
+  components: {TicketOverview}
 }
 </script>

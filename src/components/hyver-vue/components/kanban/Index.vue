@@ -1,6 +1,12 @@
 <template>
   <div id="app" class="div-scroll">
-    <div class="d-flex justify-center">
+    <div class="col-12">
+      <div class="px-3 mt-3 btn-group" style="float: right">
+        <button type="button" class="btn btn-primary btn-sm" @click="onClickRefresh">Refresh</button>
+        <button type="button" class="btn btn-primary btn-sm" @click="onClickCreate">Create</button>
+      </div>
+    </div>
+    <div class="d-flex justify-center mt-5">
       <div class="min-h-screen d-flex overflow-x-scroll py-4">
         <div
             v-for="(column,index) in columns"
@@ -30,6 +36,8 @@
 <script>
 import draggable from "vuedraggable";
 import TaskCard from "../kanban/Task";
+import router from "@/router";
+import Pages from "@/helpers/ETicket";
 
 export default {
   name: "App",
@@ -99,6 +107,14 @@ export default {
     onClick(props) {
       // alert('Click');
       this.$emit("onClick", props)
+    },
+
+    onClickCreate(){
+      this.$emit("onCreate")
+    },
+
+    onClickRefresh(){
+      this.$emit("onRefresh")
     },
 
     groupBy(array) {

@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid">
+  <div class="container-fluid scroll-kanban">
     <div class="row mb-2">
       <div class="col-6 d-flex justify-content-start">
         <h4 class="px-3 mt-3">List Ticket</h4>
@@ -14,6 +14,8 @@
     <DataTable v-show="view" v-if="pagination" :key="pagination.currentPage"
                title="E-Ticket"
                :columns="columns"
+               :arrow-back="false"
+               :title-show="false"
                :rows="records"
                :filter-record="filterRecord"
                :clickable="true"
@@ -72,7 +74,7 @@
         </td>
       </template>
     </DataTable>
-    <Kanban v-show="!view" v-if="records" @onClick="handleUpdate" :records="records"></Kanban>
+    <Kanban v-show="!view" v-if="kanbanAdmin" @onClick="handleUpdate" @onCreate="handleCreate" @onRefresh="doRefresh" :records="kanbanAdmin"></Kanban>
   </div>
 </template>
 
@@ -192,6 +194,7 @@ export default {
       idUpdate: true,
       menuList: [],
       menus: [],
+      kanbanAdmin: [],
       view: true
     }
   },
@@ -213,6 +216,7 @@ export default {
         this.pagination.perPage,
         this.pagination.currentPage
     )
+    this.getKanbanAdmin();
   },
   methods: {
 
@@ -410,7 +414,47 @@ export default {
     },
     doKanban(mode) {
       this.view = mode === 'list';
+    },
+    getKanbanAdmin() {
+      let loading = this.$loading.show();
+      EticketService.getKanbanAdmin().then((response) => {
+        if (response.code === 200) {
+          this.kanbanAdmin = response.data;
+          loading.hide();
+        } else {
+          loading.hide();
+          this.$swal.fire("Error!", "Ticket" + response.message, "error");
+        }
+      });
     }
   }
 }
 </script>
+
+<style>
+.scroll-kanban {
+  height: auto;
+  overflow: scroll;
+  /*scrollbar-width: thin;*/
+}
+
+/* width */
+.scroll-kanban::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+.scroll-kanban::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+.scroll-kanban::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+.scroll-kanban::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+</style>
