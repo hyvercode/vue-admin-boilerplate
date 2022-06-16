@@ -28,7 +28,15 @@ class ETicketService {
     }
 
     getMyTicketPaginate(params) {
-        return Api.doGet(Host.API_V1 + "/eticket/myTicketPagination?", params);
+        return Api.doGet(Host.API_V1 + "/eticket/my/pagination?", params);
+    }
+
+    getMyKanban() {
+        return Api.doGet(Host.API_V1 + "/eticket/my/kanban");
+    }
+
+    getKanbanAdmin(){
+        return Api.doGet(Host.API_V1 + "/eticket/kanban");
     }
 }
 
