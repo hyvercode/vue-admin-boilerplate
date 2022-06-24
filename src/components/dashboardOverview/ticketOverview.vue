@@ -1,6 +1,6 @@
 <template>
   <div class="row">
-    <h2>Eticket Preview</h2>
+    <h2>Eticket Overview</h2>
     <div class="col-12 col-sm-6 col-xl-3 mb-4">
       <div class="card border-0 shadow">
         <div class="card-body">

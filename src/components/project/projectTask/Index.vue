@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid">
     <MyDataTable
-        title="Meeting Rooms List"
+        title="Task List"
         :columns="columns"
         :rows="records"
         :clickable="true"
@@ -28,10 +28,14 @@
         :exportable="true"
         :printable="true"
         :create-button="true"
+        :mode="true"
+        :kanban="true"
+        :columnsKanban="columnsKanban"
         v-on:onCreate="handleCreate"
         :refreshable="true"
         v-on:onRefresh="doRefresh"
         @onCheckToggle="doCheckToggle"
+        :commandContact="true"
     >
       <th
           id="delete"
@@ -47,51 +51,36 @@
               @click="(e) => handleUpdate(props.row, e)"
           >
             <i class="material-icons white-text">edit</i>
-          </button>
-          <button
-              class="btn btn-flat nopadding"
-              @click="(e) => handleDelete(props.row, e)"
-          >
-            <i class="material-icons white-text">delete</i>
-          </button>
+          </button><button
+            class="btn btn-flat nopadding"
+            @click="(e) => handleTask(props.row, e)"
+        >
+          <i class="material-icons white-text">task</i>
+        </button>
+          <!--          <button-->
+          <!--              class="btn btn-flat nopadding"-->
+          <!--              @click="(e) => handleDelete(props.row, e)"-->
+          <!--          >-->
+          <!--            <i class="material-icons white-text">delete</i>-->
+          <!--          </button>-->
         </td>
       </template>
     </MyDataTable>
-    <b-modal id="m-jobposition" :title="isUpdate?'Update Meeting Room':'Create Meeting Room'" hide-footer>
+    <b-modal id="m-jobposition" :title="isUpdate?'Update Project':'Create Project'" hide-footer>
       <form @submit.prevent="submit($event)">
         <div class="form-group mb-3">
-          <label>Room Name <span class="mandatory">*</span></label>
+          <label>Category Name <span class="mandatory">*</span></label>
           <input
               type="text"
               class="form-control"
               placeholder="Please input text"
-              v-model="meetingRoom.room_name"
-              required
-          />
-        </div>
-        <div class="form-group mb-3">
-          <label>Description <span class="mandatory">*</span></label>
-          <textarea
-              class="form-control"
-              placeholder="Please input text"
-              v-model="meetingRoom.descriptions"
-              required
-          ></textarea>
-        </div>
-        <div class="form-group mb-3">
-          <label for="inputEmail3" class="col-sm-4 col-form-label">Floor</label>
-          <input
-              type="number"
-              min="1"
-              class="form-control"
-              placeholder="Please input text"
-              v-model="meetingRoom.floor"
+              v-model="eticketcategories.category_name"
               required
           />
         </div>
         <div class="col-lg-12 mb-3">
           <label for="NIK" style="text-align: left">Active <span class="mandatory">*</span></label>
-          <select class="form-control form-select" v-model="meetingRoom.active" required>
+          <select class="form-control form-select" v-model="eticketcategories.active" required>
             <option value="null" disabled>Choose...</option>
             <option
                 v-for="item in status"
@@ -112,10 +101,14 @@
 </template>
 
 <script>
+import ETicketCategoriesService from "../../../services/eticketcategories.service";
 import MyDataTable from "../../hyver-vue/components/table/DataTable";
 import Utils from "../../../helpers/Utils";
-import MeetingService from "@/services/meeting.service";
-import RequestMeetingRoom from "@/payloads/request/RequestMeetingRoom";
+import RequestEticketCategories from "@/payloads/request/RequestEticketCategories";
+import ProjectService from "@/services/project.service";
+import router from "@/router";
+import Pages from "@/helpers/Project";
+import ProjecttaskService from "@/services/projecttask.service";
 
 export default {
   name: "IndexCategories",
@@ -124,7 +117,7 @@ export default {
   },
   data() {
     return {
-      meetingRoom: new RequestMeetingRoom(),
+      eticketcategories: new RequestEticketCategories(),
       searchBy: "id",
       searchParam: "",
       dateFrom: "",
@@ -139,14 +132,70 @@ export default {
           hidden: true,
         },
         {
-          label: "Room Name",
-          field: "room_name",
+          label: "task_number",
+          field: "task_number",
           numeric: true,
           html: false,
         },
         {
-          label: "Descriptions",
-          field: "descriptions",
+          label: "task_name",
+          field: "task_name",
+          numeric: true,
+          html: false,
+        },
+        {
+          label: "start_date Status",
+          field: "start_date",
+          numeric: true,
+          html: false,
+        },
+        {
+          label: "due_date Status",
+          field: "due_date",
+          numeric: true,
+          html: false,
+        },
+        {
+          label: "Status",
+          field: "active",
+          numeric: false,
+          html: false,
+          hidden: false,
+          buttonToggle: true,
+          buttonToggleDesc: [
+            "Active", "Inactive"
+          ]
+        },
+      ],
+      columnsKanban: [
+        {
+          label: "ID",
+          field: "id",
+          numeric: true,
+          html: false,
+          hidden: true,
+        },
+        {
+          label: "task_number",
+          field: "task_number",
+          numeric: true,
+          html: false,
+        },
+        {
+          label: "task_name",
+          field: "task_name",
+          numeric: true,
+          html: false,
+        },
+        {
+          label: "start_date Status",
+          field: "start_date",
+          numeric: true,
+          html: false,
+        },
+        {
+          label: "due_date Status",
+          field: "due_date",
           numeric: true,
           html: false,
         },
@@ -202,14 +251,14 @@ export default {
       event.preventDefault();
       let loading = this.$loading.show();
       if (!this.isUpdate) {
-        MeetingService.postCreate(this.meetingRoom).then((response) => {
+        ETicketCategoriesService.postCreate(this.eticketcategories).then((response) => {
           if (response.code === 200) {
-            this.coverage = new RequestMeetingRoom();
+            this.coverage = new RequestEticketCategories();
             loading.hide();
             this.$swal.fire({
               icon: "success",
               title: "Success",
-              text: "Meeting Room has been created",
+              text: "ETicket Category has been created",
             });
             this.doRefresh();
             this.$bvModal.hide('m-jobposition');
@@ -220,9 +269,9 @@ export default {
           }
         });
       } else {
-        MeetingService.postUpdate(this.meetingRoom.id, this.meetingRoom).then((response) => {
+        ETicketCategoriesService.postUpdate(this.eticketcategories.id, this.eticketcategories).then((response) => {
           if (response.code === 200) {
-            this.coverage = new RequestMeetingRoom();
+            this.coverage = new RequestEticketCategories();
             loading.hide();
             this.$swal.fire({
               icon: "success",
@@ -251,14 +300,20 @@ export default {
     },
 
     handleCreate() {
-      this.isUpdate = false;
-      this.$bvModal.show('m-jobposition');
+      // this.isUpdate = false;
+      // this.$bvModal.show('m-jobposition');
+      router.push(Pages.PROJECT_TASK_CREATE);
     },
 
-    handleUpdate(prop) {
-      this.isUpdate = true;
-      this.meetingRoom = prop;
-      this.$bvModal.show('m-jobposition');
+    async handleUpdate(prop) {
+      // this.isUpdate = true;
+      // this.eticketcategories = prop;
+      // this.$bvModal.show('m-jobposition');
+      await router.push(`/project/task/update/${prop.id}`);
+    },
+
+    async handleTask(prop) {
+      await router.push(`/project/task/update/${prop.id}`);
     },
 
     handleDelete(prop) {
@@ -273,7 +328,7 @@ export default {
       }).then((result) => {
         if (result.value) {
           // <-- if confirmed
-          MeetingService.delete(prop.id)
+          ETicketCategoriesService.delete(prop.id)
               .then(() => {
                 this.$swal({
                   position: "bottom-end",
@@ -330,7 +385,7 @@ export default {
       let payload = props;
       payload.active = !props.active
       let loading = this.$loading.show();
-      MeetingService.postUpdate(props.id, payload).then((response) => {
+      ETicketCategoriesService.postUpdate(props.id, payload).then((response) => {
         if (response.code === 200) {
           this.doRefresh();
           loading.hide();
@@ -351,7 +406,7 @@ export default {
         page: page,
       };
       let loading = this.$loading.show();
-      MeetingService.getPaginate(params).then((response) => {
+      ProjecttaskService.getPaginate(params).then((response) => {
         if (response.code === 200) {
           this.records = response.data.data;
           this.pagination = {

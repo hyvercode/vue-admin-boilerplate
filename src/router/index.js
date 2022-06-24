@@ -35,6 +35,11 @@ import PagesEvent from "../helpers/Event"
 import Event from "../views/Event";
 import RouteEvent from "./event";
 
+//** PROJECT **//
+import PagesProject from "../helpers/Project"
+import Project from "../views/Project"
+import RouterProject from "./project"
+
 
 Vue.use(VueRouter);
 const routes = [
@@ -134,6 +139,12 @@ const routes = [
                 name: "Event",
                 component: Event,
                 children: RouteEvent
+            },
+            {
+                path: PagesProject.PROJECT,
+                name: "Project",
+                component: Project,
+                children: RouterProject
             }
         ]
     },
