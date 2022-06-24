@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid">
     <MyDataTable
-        title="Meeting Rooms List"
+        title="Project Target"
         :columns="columns"
         :rows="records"
         :clickable="true"
@@ -57,50 +57,134 @@
         </td>
       </template>
     </MyDataTable>
-    <b-modal id="m-jobposition" :title="isUpdate?'Update Meeting Room':'Create Meeting Room'" hide-footer>
+    <b-modal id="m-jobposition" :title="isUpdate?'Update Project Target':'Create Project Target'" hide-footer>
       <form @submit.prevent="submit($event)">
-        <div class="form-group mb-3">
-          <label>Room Name <span class="mandatory">*</span></label>
-          <input
-              type="text"
-              class="form-control"
-              placeholder="Please input text"
-              v-model="meetingRoom.room_name"
-              required
-          />
+        <div class="col-12 mb-3">
+          <div class="form-group row">
+            <label for="inputEmail3" class="col-sm-5 col-form-label">Title<span class="mandatory">*</span></label>
+            <div class="col-sm-7">
+              <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Please input text"
+                  v-model="projectTarget.title"
+                  required
+              />
+            </div>
+          </div>
         </div>
-        <div class="form-group mb-3">
-          <label>Description <span class="mandatory">*</span></label>
-          <textarea
-              class="form-control"
-              placeholder="Please input text"
-              v-model="meetingRoom.descriptions"
-              required
-          ></textarea>
+        <div class="col-12 mb-3">
+          <div class="form-group row">
+            <label for="inputEmail3" class="col-sm-5 col-form-label">Year<span class="mandatory">*</span></label>
+            <div class="col-sm-7">
+              <Calendar class="form-control" v-model="projectTarget.year" view="year" dateFormat="yy"/>
+            </div>
+          </div>
         </div>
-        <div class="form-group mb-3">
-          <label for="inputEmail3" class="col-sm-4 col-form-label">Floor</label>
-          <input
-              type="number"
-              min="1"
-              class="form-control"
-              placeholder="Please input text"
-              v-model="meetingRoom.floor"
-              required
-          />
+        <div class="col-12 mb-3">
+          <div class="form-group row">
+            <label for="inputEmail3" class="col-sm-5 col-form-label">Description<span class="mandatory">*</span></label>
+            <div class="col-sm-7">
+              <textarea
+                  class="form-control"
+                  placeholder="Please input text"
+                  v-model="projectTarget.descriptions"
+                  required
+              ></textarea>
+            </div>
+          </div>
         </div>
-        <div class="col-lg-12 mb-3">
-          <label for="NIK" style="text-align: left">Active <span class="mandatory">*</span></label>
-          <select class="form-control form-select" v-model="meetingRoom.active" required>
-            <option value="null" disabled>Choose...</option>
-            <option
-                v-for="item in status"
-                :key="item.id"
-                :value="item.id"
-            >
-              {{ item.desc }}
-            </option>
-          </select>
+        <div class="col-12 mb-3">
+          <div class="form-group row">
+            <label for="inputEmail3" class="col-sm-5 col-form-label">Amount Target<span class="mandatory">*</span></label>
+            <div class="col-sm-7">
+              <input
+                  type="number"
+                  class="form-control"
+                  placeholder="Please input text"
+                  v-model="projectTarget.amount_target"
+                  required
+              />
+            </div>
+
+          </div>
+        </div>
+        <div class="col-12 mb-3">
+          <div class="form-group row">
+            <label for="inputEmail3" class="col-sm-5 col-form-label">Amount Revenue<span class="mandatory">*</span></label>
+            <div class="col-sm-7">
+              <input
+                  type="number"
+                  class="form-control"
+                  placeholder="Please input text"
+                  v-model="projectTarget.amount_revenue"
+                  required
+              />
+            </div>
+
+          </div>
+        </div>
+        <div class="col-12 mb-3">
+          <div class="form-group row">
+            <label for="inputEmail3" class="col-sm-5 col-form-label">Quarter<span class="mandatory">*</span></label>
+            <div class="col-sm-7">
+              <input
+                  type="number"
+                  class="form-control"
+                  placeholder="Please input value"
+                  v-model="projectTarget.quarter"
+                  required
+              />
+            </div>
+
+          </div>
+        </div>
+        <div class="col-12 mb-3">
+          <div class="form-group row">
+            <label for="inputEmail3" class="col-sm-5 col-form-label">Project Due Date<span class="mandatory">*</span></label>
+            <div class="col-sm-7">
+              <input
+                  type="date"
+                  placeholder="Please input date"
+                  id="request_date"
+                  name="birth_place"
+                  class="form-control"
+                  v-model="projectTarget.year_quarter"
+                  maxlength="20"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="col-12 mb-3">
+          <div class="form-group row">
+            <label for="inputEmail3" class="col-sm-5 col-form-label">{{ projectTarget.attachments ? 'Attachment' : 'Upload Image' }}<span class="mandatory">*</span></label>
+            <div class="col-sm-7">
+              <input v-if="projectTarget.attachments" type="text" class="form-control" v-model="projectTarget.attachments"
+                     placeholder="Example: user_circle">
+              <input v-if="!projectTarget.attachments"
+                     type="file"
+                     accept="image/*"
+                     @change="onFileChange"
+                     class="form-control">
+            </div>
+          </div>
+        </div>
+        <div class="col-12 mb-3">
+          <div class="form-group row">
+            <label for="inputEmail3" class="col-sm-5 col-form-label">Active<span class="mandatory">*</span></label>
+            <div class="col-sm-7">
+              <select class="form-control form-select" v-model="projectTarget.active" required>
+                <option value="null" disabled>Choose...</option>
+                <option
+                    v-for="item in status"
+                    :key="item.id"
+                    :value="item.id"
+                >
+                  {{ item.desc }}
+                </option>
+              </select>
+            </div>
+          </div>
         </div>
         <div class="d-flex mt-4 float-end">
           <button class="btn btn-primary" style="margin-right: 5px" @click.prevent="doClose">Cancel</button>
@@ -114,17 +198,20 @@
 <script>
 import MyDataTable from "../../hyver-vue/components/table/DataTable";
 import Utils from "../../../helpers/Utils";
-import MeetingService from "@/services/meeting.service";
-import RequestMeetingRoom from "@/payloads/request/RequestMeetingRoom";
+import RequestEticketCategories from "@/payloads/request/RequestEticketCategories";
+import ProjecttargetService from "@/services/projecttarget.service";
+import RequestProjectTarget from "@/payloads/request/RequestProjectTarget";
+import Calendar from "primevue/calendar";
 
 export default {
   name: "IndexCategories",
   components: {
     MyDataTable,
+    Calendar
   },
   data() {
     return {
-      meetingRoom: new RequestMeetingRoom(),
+      projectTarget: new RequestProjectTarget(),
       searchBy: "id",
       searchParam: "",
       dateFrom: "",
@@ -139,15 +226,27 @@ export default {
           hidden: true,
         },
         {
-          label: "Room Name",
-          field: "room_name",
+          label: "Title",
+          field: "title",
           numeric: true,
           html: false,
         },
         {
-          label: "Descriptions",
-          field: "descriptions",
+          label: "Year",
+          field: "year",
           numeric: true,
+          html: false,
+        },
+        {
+          label: "Target",
+          field: "amount_target",
+          numeric: true,
+          html: false,
+        },
+        {
+          label: "Revenue",
+          field: "amount_revenue",
+          numeric: false,
           html: false,
         },
         {
@@ -164,8 +263,8 @@ export default {
       ],
       records: [],
       filterRecord: [
-        {id: 'id', desc: "Category ID"},
-        {id: 'category_name', desc: "Category Name"},
+        {id: 'id', desc: "Project Target ID"},
+        {id: 'title', desc: "Title"},
         {id: 'active', desc: "Active"}],
       pagination: {
         recordsPerPage: [5, 10, 50, 100, 500, 1000],
@@ -193,6 +292,8 @@ export default {
         this.pagination.perPage,
         this.pagination.currentPage
     );
+    this.projectTarget.year_quarter = new Date().toISOString().substr(0, 10);
+    this.projectTarget.year = new Date().toISOString().substr(0, 4);
   },
   methods: {
     doClose() {
@@ -202,14 +303,14 @@ export default {
       event.preventDefault();
       let loading = this.$loading.show();
       if (!this.isUpdate) {
-        MeetingService.postCreate(this.meetingRoom).then((response) => {
+        ProjecttargetService.postCreateTarget(this.projectTarget).then((response) => {
           if (response.code === 200) {
-            this.coverage = new RequestMeetingRoom();
+            this.coverage = new RequestProjectTarget();
             loading.hide();
             this.$swal.fire({
               icon: "success",
               title: "Success",
-              text: "Meeting Room has been created",
+              text: "Project Target has been created",
             });
             this.doRefresh();
             this.$bvModal.hide('m-jobposition');
@@ -220,14 +321,14 @@ export default {
           }
         });
       } else {
-        MeetingService.postUpdate(this.meetingRoom.id, this.meetingRoom).then((response) => {
+        ProjecttargetService.postUpdate(this.projectTarget.id, this.projectTarget).then((response) => {
           if (response.code === 200) {
-            this.coverage = new RequestMeetingRoom();
+            this.coverage = new RequestEticketCategories();
             loading.hide();
             this.$swal.fire({
               icon: "success",
               title: "Success",
-              text: "ETicket Category has been updated",
+              text: "Project Target has been updated",
             });
             this.doRefresh();
             this.$bvModal.hide('m-jobposition');
@@ -257,7 +358,7 @@ export default {
 
     handleUpdate(prop) {
       this.isUpdate = true;
-      this.meetingRoom = prop;
+      this.projectTarget = prop;
       this.$bvModal.show('m-jobposition');
     },
 
@@ -273,7 +374,7 @@ export default {
       }).then((result) => {
         if (result.value) {
           // <-- if confirmed
-          MeetingService.delete(prop.id)
+          ProjecttargetService.delete(prop.id)
               .then(() => {
                 this.$swal({
                   position: "bottom-end",
@@ -330,7 +431,7 @@ export default {
       let payload = props;
       payload.active = !props.active
       let loading = this.$loading.show();
-      MeetingService.postUpdate(props.id, payload).then((response) => {
+      ProjecttargetService.postUpdate(props.id, payload).then((response) => {
         if (response.code === 200) {
           this.doRefresh();
           loading.hide();
@@ -351,7 +452,7 @@ export default {
         page: page,
       };
       let loading = this.$loading.show();
-      MeetingService.getPaginate(params).then((response) => {
+      ProjecttargetService.getPaginate(params).then((response) => {
         if (response.code === 200) {
           this.records = response.data.data;
           this.pagination = {
@@ -406,6 +507,28 @@ export default {
           limit[0],
           limit[1]
       );
+    },
+
+    /**
+     * Image Change
+     * @param e
+     */
+    onFileChange(e) {
+      let files = e.target.files || e.dataTransfer.files;
+      if (!files.length) return;
+      this.createImage(files[0]);
+    },
+
+    /**
+     * Convert image to bas64
+     * @param file
+     */
+    createImage(file) {
+      let reader = new FileReader();
+      reader.onload = (e) => {
+        this.projectTarget.attachments = e.target.result;
+      };
+      reader.readAsDataURL(file);
     },
   },
 };
