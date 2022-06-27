@@ -6,12 +6,12 @@
       </div>
       <div class="col-6">
         <div class="px-3 mt-3 btn-group" style="float: right">
-          <button type="button" class="btn btn-secondary" @click="doKanban('list')">List</button>
           <button type="button" class="btn btn-secondary" @click="doKanban('kanban')">Kanban</button>
+          <button type="button" class="btn btn-secondary" @click="doKanban('list')">Grid</button>
         </div>
       </div>
     </div>
-    <DataTable v-show="view" v-if="pagination" :key="pagination.currentPage"
+    <DataTable v-show="!view" v-if="pagination" :key="pagination.currentPage"
                title="E-Ticket"
                :columns="columns"
                :arrow-back="false"
@@ -74,7 +74,7 @@
         </td>
       </template>
     </DataTable>
-    <Kanban v-show="!view" v-if="kanbanAdmin" @onClick="handleUpdate" @onCreate="handleCreate" @onRefresh="doRefresh" :records="kanbanAdmin"></Kanban>
+    <Kanban v-show="view" v-if="kanbanAdmin" @onClick="handleUpdate" @onCreate="handleCreate" @onRefresh="doRefresh" :records="kanbanAdmin"></Kanban>
   </div>
 </template>
 
@@ -413,7 +413,7 @@ export default {
       await router.push(`/eticket/history/${props.id}`);
     },
     doKanban(mode) {
-      this.view = mode === 'list';
+      this.view = mode === 'kanban';
     },
     getKanbanAdmin() {
       let loading = this.$loading.show();

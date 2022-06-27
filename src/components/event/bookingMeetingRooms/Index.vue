@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid">
     <MyDataTable
-        title="Meeting Rooms List"
+        title="Booking Rooms List"
         :columns="columns"
         :rows="records"
         :clickable="true"
@@ -32,6 +32,7 @@
         :refreshable="true"
         v-on:onRefresh="doRefresh"
         @onCheckToggle="doCheckToggle"
+        @onRowClick="handleViewParticipant"
     >
       <th
           id="delete"
@@ -57,54 +58,145 @@
         </td>
       </template>
     </MyDataTable>
-    <b-modal id="m-jobposition" :title="isUpdate?'Update Meeting Room':'Create Meeting Room'" hide-footer>
-      <form @submit.prevent="submit($event)">
-        <div class="form-group mb-3">
-          <label>Room Name <span class="mandatory">*</span></label>
-          <input
-              type="text"
-              class="form-control"
-              placeholder="Please input text"
-              v-model="meetingRoom.room_name"
-              required
-          />
-        </div>
-        <div class="form-group mb-3">
-          <label>Description <span class="mandatory">*</span></label>
-          <textarea
-              class="form-control"
-              placeholder="Please input text"
-              v-model="meetingRoom.descriptions"
-              required
-          ></textarea>
-        </div>
-        <div class="form-group mb-3">
-          <label for="inputEmail3" class="col-sm-4 col-form-label">Floor</label>
-          <input
-              type="number"
-              min="1"
-              class="form-control"
-              placeholder="Please input text"
-              v-model="meetingRoom.floor"
-              required
-          />
+    <b-modal id="m-jobposition" :title="isUpdate?'Update Booking Room':'Create Booking Room'" hide-footer>
+      <form>
+        <div class="col-lg-12 mb-3">
+          <div class="form-group row">
+            <label for="NIK" style="text-align: left" class="col-sm-4 col-form-label">Room <span
+                class="mandatory">*</span></label>
+            <div class="col-sm-8">
+              <select class="form-control form-select" v-model="bookingRoom.meeting_room_id" required>
+                <option value="null" disabled>Choose...</option>
+                <option
+                    v-for="item in listMeeting"
+                    :key="item.id"
+                    :value="item.id"
+                >
+                  {{ item.room_name }}
+                </option>
+              </select>
+            </div>
+          </div>
         </div>
         <div class="col-lg-12 mb-3">
-          <label for="NIK" style="text-align: left">Active <span class="mandatory">*</span></label>
-          <select class="form-control form-select" v-model="meetingRoom.active" required>
-            <option value="null" disabled>Choose...</option>
-            <option
-                v-for="item in status"
-                :key="item.id"
-                :value="item.id"
-            >
-              {{ item.desc }}
-            </option>
-          </select>
+          <div class="form-group row">
+            <label for="NIK" style="text-align: left" class="col-sm-4 col-form-label">Title <span
+                class="mandatory">*</span></label>
+            <div class="col-sm-8">
+              <input
+                  class="form-control"
+                  placeholder="Please input title"
+                  v-model="bookingRoom.title"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="col-12 mb-3">
+          <div class="form-group row">
+            <label for="inputEmail3" class="col-sm-4 col-form-label">Start Meet</label>
+            <div class="col-sm-8">
+              <input
+                  type="date"
+                  placeholder="Please input date"
+                  id="start_meet"
+                  name="birth_place"
+                  class="form-control"
+                  v-model="bookingRoom.start_meet"
+                  maxlength="20"
+              />
+            </div>
+
+          </div>
+        </div>
+        <div class="col-12 mb-3">
+          <div class="form-group row">
+            <label for="inputEmail3" class="col-sm-4 col-form-label">End Meet</label>
+            <div class="col-sm-8">
+              <input
+                  type="date"
+                  placeholder="Please input date"
+                  id="end_meet"
+                  name="birth_place"
+                  class="form-control"
+                  v-model="bookingRoom.end_meet"
+                  maxlength="20"
+              />
+            </div>
+
+          </div>
+        </div>
+        <div class="col-lg-12 mb-3">
+          <div class="form-group row">
+            <label for="NIK" style="text-align: left" class="col-sm-4 col-form-label">Link <span
+                class="mandatory">*</span></label>
+            <div class="col-sm-8">
+              <input
+                  type="text"
+                  name="birth_place"
+                  class="form-control"
+                  v-model="bookingRoom.link"
+                  maxlength="20"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-12 mb-3">
+          <div class="form-group row">
+            <label for="NIK" style="text-align: left" class="col-sm-4 col-form-label">Description <span
+                class="mandatory">*</span></label>
+            <div class="col-sm-8">
+              <textarea
+                  class="form-control"
+                  placeholder="Please input description"
+                  v-model="bookingRoom.description"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-12 mb-3">
+          <div class="form-group row">
+            <label for="NIK" style="text-align: left" class="col-sm-4 col-form-label">Internal Participant <span
+                class="mandatory">*</span></label>
+            <div class="col-sm-8">
+              <select class="form-control form-select" v-model="participant" @change="handleParticipant" required>
+                <option value="null" disabled>Choose...</option>
+                <option value="aldiansyah@gmail.com">aldiansyah</option>
+                <option value="wahyu@gmail.com">wahyu</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-12 mb-3">
+          <div class="form-group row">
+            <label for="NIK" style="text-align: left" class="col-sm-4 col-form-label">Internal Participant <span
+                class="mandatory">*</span></label>
+            <div class="col-sm-8">
+              <div class="input-group mb-3">
+                <input type="email" class="form-control" v-model="externalParticipant" />
+                <div class="input-group-append">
+                  <span class="input-group-text" id="basic-addon2" @click="handleExternalParticipant">Invite</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-12 mb-3">
+          <div class="form-group row">
+            <label for="NIK" style="text-align: left" class="col-sm-4 col-form-label">External Participant <span
+                class="mandatory">*</span></label>
+            <div class="col-sm-8">
+              <textarea
+                  class="form-control"
+                  placeholder="Please input description"
+                  v-model="invites"
+                  readonly
+              ></textarea>
+            </div>
+          </div>
         </div>
         <div class="d-flex mt-4 float-end">
           <button class="btn btn-primary" style="margin-right: 5px" @click.prevent="doClose">Cancel</button>
-          <input type="submit" class="btn btn-primary" value="Submit">
+          <button type="submit" class="btn btn-primary" @click="submit">Submit</button>
         </div>
       </form>
     </b-modal>
@@ -115,16 +207,18 @@
 import MyDataTable from "../../hyver-vue/components/table/DataTable";
 import Utils from "../../../helpers/Utils";
 import MeetingService from "@/services/meeting.service";
-import RequestMeetingRoom from "@/payloads/request/RequestMeetingRoom";
+import RequestBookingRoom from "@/payloads/request/RequestBookingRoom";
+import BookingRoomService from "@/services/booking-room.service";
+import router from "@/router";
 
 export default {
-  name: "IndexCategories",
+  name: "Index",
   components: {
     MyDataTable,
   },
   data() {
     return {
-      meetingRoom: new RequestMeetingRoom(),
+      bookingRoom: new RequestBookingRoom(),
       searchBy: "id",
       searchParam: "",
       dateFrom: "",
@@ -145,28 +239,38 @@ export default {
           html: false,
         },
         {
-          label: "Descriptions",
-          field: "descriptions",
+          label: "Title",
+          field: "title",
           numeric: true,
           html: false,
         },
         {
-          label: "Status",
-          field: "active",
-          numeric: false,
+          label: "Floor",
+          field: "floor",
+          numeric: true,
           html: false,
-          hidden: false,
-          buttonToggle: true,
-          buttonToggleDesc: [
-            "Active", "Inactive"
-          ]
+        },
+        {
+          label: "Start Meeting",
+          field: "start_meet",
+          numeric: true,
+          html: false,
+        },
+        {
+          label: "End Meeting",
+          field: "end_meet",
+          numeric: true,
+          html: false,
         },
       ],
       records: [],
+      listMeeting: [],
+      listParticipant: [],
+      externalParticipant: [],
+      participant: [],
       filterRecord: [
-        {id: 'id', desc: "Category ID"},
-        {id: 'category_name', desc: "Category Name"},
-        {id: 'active', desc: "Active"}],
+        {id: 'id', desc: "Booking Room ID"},
+        {id: 'title', desc: "Title"}],
       pagination: {
         recordsPerPage: [5, 10, 50, 100, 500, 1000],
         perPage: 10,
@@ -183,6 +287,9 @@ export default {
     paginate() {
       return this.pagination;
     },
+    invites(){
+      return this.listParticipant
+    }
   },
   mounted() {
     this.getPaginate(
@@ -193,6 +300,7 @@ export default {
         this.pagination.perPage,
         this.pagination.currentPage
     );
+    this.getListMeeting()
   },
   methods: {
     doClose() {
@@ -201,18 +309,21 @@ export default {
     submit(event) {
       event.preventDefault();
       let loading = this.$loading.show();
+      this.bookingRoom.participant = this.invites
       if (!this.isUpdate) {
-        MeetingService.postCreate(this.meetingRoom).then((response) => {
+        BookingRoomService.postCreate(this.bookingRoom).then((response) => {
           if (response.code === 200) {
-            this.coverage = new RequestMeetingRoom();
+            this.coverage = new RequestBookingRoom();
             loading.hide();
             this.$swal.fire({
               icon: "success",
               title: "Success",
-              text: "Meeting Room has been created",
+              text: "Booking Room has been created",
             });
             this.doRefresh();
             this.$bvModal.hide('m-jobposition');
+            this.listParticipant = []
+            this.bookingRoom = new RequestBookingRoom();
           } else {
             loading.hide();
             this.$bvModal.hide('m-jobposition');
@@ -220,17 +331,18 @@ export default {
           }
         });
       } else {
-        MeetingService.postUpdate(this.meetingRoom.id, this.meetingRoom).then((response) => {
+        MeetingService.postUpdate(this.bookingRoom.id, this.bookingRoom).then((response) => {
           if (response.code === 200) {
-            this.coverage = new RequestMeetingRoom();
+            this.coverage = new RequestBookingRoom();
             loading.hide();
             this.$swal.fire({
               icon: "success",
               title: "Success",
-              text: "ETicket Category has been updated",
+              text: "Booking Room has been updated",
             });
             this.doRefresh();
             this.$bvModal.hide('m-jobposition');
+            this.bookingRoom = new RequestBookingRoom();
           } else {
             loading.hide();
             this.$bvModal.hide('m-jobposition');
@@ -252,6 +364,7 @@ export default {
 
     handleCreate() {
       this.isUpdate = false;
+      this.bookingRoom = new RequestBookingRoom();
       this.$bvModal.show('m-jobposition');
     },
 
@@ -273,7 +386,7 @@ export default {
       }).then((result) => {
         if (result.value) {
           // <-- if confirmed
-          MeetingService.delete(prop.id)
+          BookingRoomService.delete(prop.id)
               .then(() => {
                 this.$swal({
                   position: "bottom-end",
@@ -330,7 +443,7 @@ export default {
       let payload = props;
       payload.active = !props.active
       let loading = this.$loading.show();
-      MeetingService.postUpdate(props.id, payload).then((response) => {
+      BookingRoomService.postUpdate(props.id, payload).then((response) => {
         if (response.code === 200) {
           this.doRefresh();
           loading.hide();
@@ -351,7 +464,7 @@ export default {
         page: page,
       };
       let loading = this.$loading.show();
-      MeetingService.getPaginate(params).then((response) => {
+      BookingRoomService.getPaginate(params).then((response) => {
         if (response.code === 200) {
           this.records = response.data.data;
           this.pagination = {
@@ -406,6 +519,28 @@ export default {
           limit[0],
           limit[1]
       );
+    },
+    getListMeeting() {
+      let loading = this.$loading.show();
+      MeetingService.getAll().then((response) => {
+        if (response.code === 200) {
+          this.listMeeting = response.data;
+          loading.hide();
+        } else {
+          loading.hide();
+          this.$swal.fire("Error!", "Priority" + response.message, "error");
+        }
+      });
+    },
+    handleParticipant(){
+      this.listParticipant.push(this.participant)
+    },
+    handleExternalParticipant(){
+      this.listParticipant.push(this.externalParticipant)
+      this.externalParticipant = null
+    },
+    async handleViewParticipant(props) {
+      await router.push(`/events/booking/participant/${props.id}`);
     },
   },
 };

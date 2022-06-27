@@ -29,6 +29,19 @@ import VueGoogleCharts from 'vue-google-charts';
 import 'viewerjs/dist/viewer.css'
 import Viewer from 'v-viewer';
 import VModal from 'vue-js-modal'
+import PrimeVue from 'primevue/config';
+import 'primevue/resources/themes/saga-blue/theme.css';
+import 'primevue/resources/primevue.min.css';
+import 'primeicons/primeicons.css';
+
+Vue.use(PrimeVue, {
+    zIndex: {
+        modal: 1100,        //dialog, sidebar
+        overlay: 1000,      //dropdown, overlaypanel
+        menu: 1000,         //overlay menus
+        tooltip: 1100       //tooltip
+    }
+});
 
 Vue.use(BootstrapVue);
 Vue.use(VModal)
