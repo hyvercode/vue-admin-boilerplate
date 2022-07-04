@@ -26,6 +26,10 @@ class ProjectTaskService {
     delete(id) {
         return Api.doDelete(Host.API_V1 + `/projects/task/delete/${id}`);
     }
+
+    findAllTaskById(id) {
+        return Api.doGet(Host.API_V1 + `/projects/task/findAllTaskById/${id}`);
+    }
 }
 
 export default new ProjectTaskService();
