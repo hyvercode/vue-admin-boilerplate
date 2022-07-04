@@ -41,6 +41,11 @@ export default [
                 path: Pages.PROJECT_TASK_CREATE,
                 name: "Index",
                 component: () => import("../components/project/projectTask/Create")
+            },
+            {
+                path: Pages.PROJECT_TASK_LIST_BY_ID,
+                name: "Index",
+                component: () => import("../components/project/projectTask/listTaskByProject")
             }
         ],
     },
