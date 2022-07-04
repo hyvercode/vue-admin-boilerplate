@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid">
     <MyDataTable
-        title="Project List"
+        title="Task By Project List"
         :columns="columns"
         :rows="records"
         :clickable="true"
@@ -52,17 +52,17 @@
           >
             <i class="material-icons white-text">edit</i>
           </button><button
-              class="btn btn-flat nopadding"
-              @click="(e) => handleTask(props.row, e)"
-          >
-            <i class="material-icons white-text">task</i>
-          </button>
-<!--          <button-->
-<!--              class="btn btn-flat nopadding"-->
-<!--              @click="(e) => handleDelete(props.row, e)"-->
-<!--          >-->
-<!--            <i class="material-icons white-text">delete</i>-->
-<!--          </button>-->
+            class="btn btn-flat nopadding"
+            @click="(e) => handleTask(props.row, e)"
+        >
+          <i class="material-icons white-text">task</i>
+        </button>
+          <!--          <button-->
+          <!--              class="btn btn-flat nopadding"-->
+          <!--              @click="(e) => handleDelete(props.row, e)"-->
+          <!--          >-->
+          <!--            <i class="material-icons white-text">delete</i>-->
+          <!--          </button>-->
         </td>
       </template>
     </MyDataTable>
@@ -108,9 +108,10 @@ import RequestEticketCategories from "@/payloads/request/RequestEticketCategorie
 import ProjectService from "@/services/project.service";
 import router from "@/router";
 import Pages from "@/helpers/Project";
+import ProjecttaskService from "@/services/projecttask.service";
 
 export default {
-  name: "IndexCategories",
+  name: "ListTaskByProject",
   components: {
     MyDataTable,
   },
@@ -131,20 +132,14 @@ export default {
           hidden: true,
         },
         {
-          label: "Title",
-          field: "title",
+          label: "task_number",
+          field: "task_number",
           numeric: true,
           html: false,
         },
         {
-          label: "Year",
-          field: "year",
-          numeric: true,
-          html: false,
-        },
-        {
-          label: "Project Status",
-          field: "project_status",
+          label: "task_name",
+          field: "task_name",
           numeric: true,
           html: false,
         },
@@ -300,7 +295,7 @@ export default {
     },
 
     async handleTask(prop) {
-      await router.push(`/project/task/list/${prop.id}`);
+      await router.push(`/project/task/update/${prop.id}`);
     },
 
     handleDelete(prop) {
@@ -393,7 +388,7 @@ export default {
         page: page,
       };
       let loading = this.$loading.show();
-      ProjectService.getPaginate(params).then((response) => {
+      ProjecttaskService.findAllTaskById(params).then((response) => {
         if (response.code === 200) {
           this.records = response.data.data;
           this.pagination = {
