@@ -214,9 +214,7 @@
                       required
                   >
                     <option disabled value="">Choose...</option>
-                    <option v-for="item in user" :key="item.id" :value="item.id">{{ item.first_name }} {{
-                        item.last_name
-                      }}
+                    <option v-for="item in user" :key="item.id" :value="item.id">{{ item.contact_name }}
                     </option>
                   </select>
                 </div>
@@ -318,6 +316,7 @@ import EticketissuetypeService from "@/services/eticketissuetype.service";
 import Pages from "@/helpers/Project";
 import EticketmilestoneService from "@/services/eticketmilestone.service";
 import Calendar from "primevue/calendar";
+import ContactService from "@/services/contact.service";
 
 export default {
   components: {
@@ -375,13 +374,13 @@ export default {
     },
     getListUser() {
       let loading = this.$loading.show();
-      UserService.getAllUsers().then((response) => {
+      ContactService.getAll().then((response) => {
         if (response.code === 200) {
           this.user = response.data;
           loading.hide();
         } else {
           loading.hide();
-          this.$swal.fire("Error!", "Users" + response.message, "error");
+          this.$swal.fire("Error!", "Client Contact" + response.message, "error");
         }
       });
     },

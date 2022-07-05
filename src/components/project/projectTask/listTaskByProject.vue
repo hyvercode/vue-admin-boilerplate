@@ -1,449 +1,100 @@
 <template>
   <div class="container-fluid">
-    <MyDataTable
-        title="Task By Project List"
-        :columns="columns"
-        :rows="records"
-        :clickable="true"
-        :sortable="true"
-        :paginate="true"
-        :total-records="paginate.total"
-        :rows-per-page="paginate.recordsPerPage"
-        :current-page="paginate.currentPage"
-        :last-page="paginate.lastPage"
-        :default-per-page="paginate.perPage"
-        :next-page-url="paginate.nextPageUrl"
-        :prev-page-url="paginate.prevPageUrl"
-        v-on:onChangeRowPage="handleChangeRecords"
-        v-on:onPreviousPage="prevPage"
-        v-on:onNextPage="nextPage"
-        :searching="true"
-        v-on:onChangeSearch="doSearch"
-        v-on:onEnterSearch="doSearch"
-        :filter="true"
-        :filterRecord="filterRecord"
-        v-on:onChangeFilter="doFilterSelected"
-        :filterDate="false"
-        v-on:onChangeDate="doFilterDate"
-        :exportable="true"
-        :printable="true"
-        :create-button="true"
-        :mode="true"
-        :kanban="true"
-        :columnsKanban="columnsKanban"
-        v-on:onCreate="handleCreate"
-        :refreshable="true"
-        v-on:onRefresh="doRefresh"
-        @onCheckToggle="doCheckToggle"
-        :commandContact="true"
-    >
-      <th
-          id="delete"
-          slot="thead-tr"
-          class="text-center tbl-action-button"
-      >
-        Actions
-      </th>
-      <template slot="tbody-tr" slot-scope="props">
-        <td class="text-center">
-          <button
-              class="btn btn-flat nopadding"
-              @click="(e) => handleUpdate(props.row, e)"
-          >
-            <i class="material-icons white-text">edit</i>
-          </button><button
-            class="btn btn-flat nopadding"
-            @click="(e) => handleTask(props.row, e)"
-        >
-          <i class="material-icons white-text">task</i>
-        </button>
-          <!--          <button-->
-          <!--              class="btn btn-flat nopadding"-->
-          <!--              @click="(e) => handleDelete(props.row, e)"-->
-          <!--          >-->
-          <!--            <i class="material-icons white-text">delete</i>-->
-          <!--          </button>-->
-        </td>
-      </template>
-    </MyDataTable>
-    <b-modal id="m-jobposition" :title="isUpdate?'Update Project':'Create Project'" hide-footer>
-      <form @submit.prevent="submit($event)">
-        <div class="form-group mb-3">
-          <label>Category Name <span class="mandatory">*</span></label>
-          <input
-              type="text"
-              class="form-control"
-              placeholder="Please input text"
-              v-model="eticketcategories.category_name"
-              required
-          />
+    <h2>List Task</h2>
+    <br>
+    <div class="row">
+      <div class="col-3" v-for="item in listtask" :key="item.id">
+        <div class="bg-white shadow rounded px-3 pt-3 pb-3 border" style="min-width: 300px;"  @click="onClickTask(item.id)">
+          <div class="row">
+            <div class="col-10">
+              <p class="text-gray-700 font-semibold font-sans tracking-wide text-sm">{{ item.task_number }}</p>
+              <p class="text-gray-700 font-semibold font-sans tracking-wide text-sm">{{ item.task_name }}</p>
+            </div>
+            <div class="col-2">
+              <img
+                    style="border-radius: 50%;width: 30px;height: 30px;margin-left: 5px;"
+                    v-if="item.avatar"
+                    :src="item.avatar"
+                    alt="avatar"
+              >
+              <img
+                  style="border-radius: 50%;width: 30px;height: 30px;margin-left: 5px;"
+                  v-else
+                  src="https://static.remove.bg/remove-bg-web/5c20d2ecc9ddb1b6c85540a333ec65e2c616dbbd/assets/start-1abfb4fe2980eabfbbaaa4365a0692539f7cd2725f324f904565a9a744f8e214.jpg"
+                  alt="avatar"
+              >
+            </div>
+          </div>
+          <div class="d-flex mt-4 justify-content-between items-center">
+            <span class="text-sm text-gray-600">{{ format_date(item.created_at)}}</span>
+            <badge :color="badgeColor">{{ item.status }}</badge>
+          </div>
         </div>
-        <div class="col-lg-12 mb-3">
-          <label for="NIK" style="text-align: left">Active <span class="mandatory">*</span></label>
-          <select class="form-control form-select" v-model="eticketcategories.active" required>
-            <option value="null" disabled>Choose...</option>
-            <option
-                v-for="item in status"
-                :key="item.id"
-                :value="item.id"
-            >
-              {{ item.desc }}
-            </option>
-          </select>
-        </div>
-        <div class="d-flex mt-4 float-end">
-          <button class="btn btn-primary" style="margin-right: 5px" @click.prevent="doClose">Cancel</button>
-          <input type="submit" class="btn btn-primary" value="Submit">
-        </div>
-      </form>
-    </b-modal>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import ETicketCategoriesService from "../../../services/eticketcategories.service";
-import MyDataTable from "../../hyver-vue/components/table/DataTable";
-import Utils from "../../../helpers/Utils";
-import RequestEticketCategories from "@/payloads/request/RequestEticketCategories";
-import ProjectService from "@/services/project.service";
 import router from "@/router";
-import Pages from "@/helpers/Project";
-import ProjecttaskService from "@/services/projecttask.service";
+import ProjectTaskService from "@/services/projecttask.service";
+import moment from 'moment';
+import RequestProjectTask from "@/payloads/request/RequestProjectTask";
+import Badge from "@/components/hyver-vue/components/kanban/Badge";
 
 export default {
   name: "ListTaskByProject",
   components: {
-    MyDataTable,
+    Badge
   },
   data() {
     return {
-      eticketcategories: new RequestEticketCategories(),
-      searchBy: "id",
-      searchParam: "",
-      dateFrom: "",
-      dateTo: "",
-      status: Utils.status(),
-      columns: [
-        {
-          label: "ID",
-          field: "id",
-          numeric: true,
-          html: false,
-          hidden: true,
-        },
-        {
-          label: "task_number",
-          field: "task_number",
-          numeric: true,
-          html: false,
-        },
-        {
-          label: "task_name",
-          field: "task_name",
-          numeric: true,
-          html: false,
-        },
-        {
-          label: "Status",
-          field: "active",
-          numeric: false,
-          html: false,
-          hidden: false,
-          buttonToggle: true,
-          buttonToggleDesc: [
-            "Active", "Inactive"
-          ]
-        },
-      ],
-      columnsKanban: [
-        {
-          label: "ID",
-          field: "id",
-          numeric: true,
-          html: false,
-          hidden: true,
-        },
-        {
-          label: "Title",
-          field: "title",
-          numeric: true,
-          html: false,
-        },
-        {
-          label: "Year",
-          field: "year",
-          numeric: true,
-          html: false,
-        },
-        {
-          label: "Project Status",
-          field: "project_status",
-          numeric: true,
-          html: false,
-        },
-        {
-          label: "Status",
-          field: "active",
-          numeric: false,
-          html: false,
-          hidden: false,
-          buttonToggle: true,
-          buttonToggleDesc: [
-            "Active", "Inactive"
-          ]
-        },
-      ],
+      listtask: new RequestProjectTask(),
       records: [],
-      filterRecord: [
-        {id: 'id', desc: "Category ID"},
-        {id: 'category_name', desc: "Category Name"},
-        {id: 'active', desc: "Active"}],
-      pagination: {
-        recordsPerPage: [5, 10, 50, 100, 500, 1000],
-        perPage: 10,
-        currentPage: 1,
-        lastPage: 1,
-        nextPageUrl: "",
-        prevPageUrl: "",
-        total: 0
-      },
-      isUpdate: false
     };
   },
   computed: {
-    paginate() {
-      return this.pagination;
-    },
+    badgeColor() {
+      const mappings = {
+        Design: "green",
+        Feature: "grey",
+        Backend: "success",
+        QA: "purple",
+        default: "primary",
+        Backlog: "danger",
+        Bugs:"red",
+        Error:"warning"
+      };
+      return mappings[this.listtask.status] || mappings.default;
+    }
   },
   mounted() {
-    this.getPaginate(
-        this.dateFrom,
-        this.dateTo,
-        this.searchBy,
-        this.searchParam,
-        this.pagination.perPage,
-        this.pagination.currentPage
-    );
+    this.getTaskDetail();
   },
   methods: {
-    doClose() {
-      this.$bvModal.hide('m-jobposition');
-    },
-    submit(event) {
-      event.preventDefault();
-      let loading = this.$loading.show();
-      if (!this.isUpdate) {
-        ETicketCategoriesService.postCreate(this.eticketcategories).then((response) => {
-          if (response.code === 200) {
-            this.coverage = new RequestEticketCategories();
-            loading.hide();
-            this.$swal.fire({
-              icon: "success",
-              title: "Success",
-              text: "ETicket Category has been created",
-            });
-            this.doRefresh();
-            this.$bvModal.hide('m-jobposition');
-          } else {
-            loading.hide();
-            this.$bvModal.hide('m-jobposition');
-            this.$swal.fire("Error!", response.message, "error");
-          }
-        });
-      } else {
-        ETicketCategoriesService.postUpdate(this.eticketcategories.id, this.eticketcategories).then((response) => {
-          if (response.code === 200) {
-            this.coverage = new RequestEticketCategories();
-            loading.hide();
-            this.$swal.fire({
-              icon: "success",
-              title: "Success",
-              text: "ETicket Category has been updated",
-            });
-            this.doRefresh();
-            this.$bvModal.hide('m-jobposition');
-          } else {
-            loading.hide();
-            this.$bvModal.hide('m-jobposition');
-            this.$swal.fire("Error!", response.message, "error");
-          }
-        });
-      }
-    },
-    doRefresh() {
-      this.getPaginate(
-          this.dateFrom,
-          this.dateTo,
-          this.searchBy,
-          this.searchParam,
-          this.pagination.perPage,
-          this.pagination.currentPage
-      );
-    },
-
-    handleCreate() {
-      // this.isUpdate = false;
-      // this.$bvModal.show('m-jobposition');
-      router.push(Pages.PROJECT_CREATE);
-    },
-
-    async handleUpdate(prop) {
-      // this.isUpdate = true;
-      // this.eticketcategories = prop;
-      // this.$bvModal.show('m-jobposition');
-      await router.push(`/project/update/${prop.id}`);
-    },
-
-    async handleTask(prop) {
-      await router.push(`/project/task/update/${prop.id}`);
-    },
-
-    handleDelete(prop) {
-      this.$swal({
-        title: "Hapus data ini?",
-        text: "Data ini akan terhapus selamanya",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Hapus",
-        cancelButtonText: "Batal",
-        timer: 8200,
-      }).then((result) => {
-        if (result.value) {
-          // <-- if confirmed
-          ETicketCategoriesService.delete(prop.id)
-              .then(() => {
-                this.$swal({
-                  position: "bottom-end",
-                  toast: true,
-                  timer: 3000,
-                  showConfirmButton: false,
-                  timerProgressBar: true,
-                  icon: "success",
-                  title: "Success",
-                  text: "Hapus Berhasil",
-                });
-                this.doRefresh();
-              })
-              .catch((error) => {
-                console.log("Gagal Terhapus", error.response);
-              });
-        }
-      });
-    },
-    doFilterSelected(pagination) {
-      this.searchBy = pagination[0];
-      if (this.searchBy === "All") {
-        this.searchBy = "id";
-        this.searchParam = "";
-        this.getPaginate(
-            this.dateFrom,
-            this.dateTo,
-            this.searchBy,
-            this.searchParam,
-            pagination[1],
-            pagination[2]
-        );
+    format_date(value){
+      if (value) {
+        return moment(String(value)).format('YYYY-MM-DD')
       }
     },
 
-    doFilterDate(selectedDate) {
-      this.dateFrom = selectedDate[0];
-      this.dateFrom = selectedDate[1];
+    async onClickTask(id) {
+      await router.push(`/project/task/update/${id}`);
     },
 
-    doSearch(props) {
-      this.searchParam = props[0];
-      this.getPaginate(
-          this.dateFrom,
-          this.dateTo,
-          this.searchBy,
-          props[0],
-          props[1],
-          props[2]
-      );
-    },
-
-    doCheckToggle(props) {
-      let payload = props;
-      payload.active = !props.active
+    getTaskDetail() {
       let loading = this.$loading.show();
-      ETicketCategoriesService.postUpdate(props.id, payload).then((response) => {
+      ProjectTaskService.findAllTaskById(this.$route.params.id).then((response) => {
         if (response.code === 200) {
-          this.doRefresh();
+          this.listtask = response.data;
           loading.hide();
         } else {
           loading.hide();
-          this.$swal.fire("Error!", response.message, "error");
+          this.$swal.fire("Error!", "Task " + response.message, "error");
         }
       });
     },
 
-    getPaginate(dateFrom, dateTo, searchBy, searchParam, limit, page) {
-      let params = {
-        dateFrom: dateFrom,
-        dateTo: dateTo,
-        searchBy: searchBy,
-        searchParam: searchParam,
-        limit: limit,
-        page: page,
-      };
-      let loading = this.$loading.show();
-      ProjecttaskService.findAllTaskById(params).then((response) => {
-        if (response.code === 200) {
-          this.records = response.data.data;
-          this.pagination = {
-            currentPage: response.data.current_page,
-            perPage: response.data.per_page,
-            lastPage: response.data.last_page,
-            prevPageUrl: response.data.prev_page_url,
-            nextPageUrl: response.data.next_page_url,
-            total: response.data.total
-          };
-          loading.hide();
-        } else {
-          loading.hide();
-          this.$swal.fire("Error!", response.message, "error");
-        }
-      });
-    },
-    //Prev Pagination
-    prevPage(limit) {
-      this.getPaginate(
-          this.dateFrom,
-          this.dateTo,
-          this.searchBy,
-          this.searchParam,
-          limit[0],
-          limit[1]
-      );
-    },
-    //Next Pagination
-    nextPage(limit) {
-      this.getPaginate(
-          this.dateFrom,
-          this.dateTo,
-          this.searchBy,
-          this.searchParam,
-          limit[0],
-          limit[1]
-      );
-    },
-
-    //Search Record
-    handleSearch(limit) {
-      this.getPaginate(this.searchBy, this.searchParam, limit[0], limit[1]);
-    },
-
-    handleChangeRecords(limit) {
-      this.getPaginate(
-          this.dateFrom,
-          this.dateTo,
-          this.searchBy,
-          this.searchParam,
-          limit[0],
-          limit[1]
-      );
-    },
   },
 };
 </script>
