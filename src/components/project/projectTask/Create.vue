@@ -1,11 +1,11 @@
 <template xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
   <div class="container-fluid">
     <h2>Create Task</h2>
-    <br>
     <!--    <form-header title="Project Header"/>-->
     <form @submit.prevent="submit($event)">
       <div class="row">
-        <div class="col-6">
+        <div class="col-5">
+          <br>
           <h5 style="font-weight: bold">Task Header</h5>
           <hr>
           <div class="col-12 mb-3">
@@ -153,8 +153,9 @@
             </div>
           </div>
         </div>
+        <div class="col-1"></div>
         <div class="col-6">
-          <div class="row">
+          <br>
             <h5 style="font-weight: bold">Task Details</h5>
             <hr>
             <div class="col-12 mb-3">
@@ -290,7 +291,6 @@
                 </button>
               </div>
             </div>
-          </div>
         </div>
         </div>
     </form>
