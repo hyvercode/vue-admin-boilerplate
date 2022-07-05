@@ -229,7 +229,7 @@
                           <div class="comment-text" v-html="item.body">
                           </div>
                           <div class="action">
-                            <a :href="item.attachments" target="_blank"><i class="material-icons mt-2">attachment</i><span
+                            <a :href="item.attachments" v-if="item.attachments" target="_blank"><i class="material-icons mt-2">attachment</i><span
                                 class="text-info"></span></a>
                           </div>
                         </div>

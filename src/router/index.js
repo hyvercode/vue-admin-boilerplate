@@ -40,6 +40,11 @@ import PagesProject from "../helpers/Project"
 import Project from "../views/Project"
 import RouterProject from "./project"
 
+//** CONTACT **//
+import PagesContact from "../helpers/Contact"
+import Contact from "../views/Contact"
+import RouterContact from "./contact"
+
 
 Vue.use(VueRouter);
 const routes = [
@@ -145,6 +150,12 @@ const routes = [
                 name: "Project",
                 component: Project,
                 children: RouterProject
+            },
+            {
+                path: PagesContact.CONTACT,
+                name: "Contact",
+                component: Contact,
+                children: RouterContact
             }
         ]
     },
