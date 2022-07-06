@@ -28,7 +28,7 @@ class ProjectTaskService {
     }
 
     findAllTaskById(id) {
-        return Api.doGet(Host.API_V1 + `/projects/task/findAllTaskById/${id}`);
+        return Api.doGet(Host.API_V1 + `/projects/task/project-task/${id}`);
     }
 }
 

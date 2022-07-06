@@ -1,159 +1,161 @@
 <template xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
   <div class="container-fluid">
     <h2>Create Task</h2>
-    <br>
     <!--    <form-header title="Project Header"/>-->
     <form @submit.prevent="submit($event)">
       <div class="row">
-        <div class="col-3"></div>
+        <div class="col-5">
+          <br>
+          <h5 style="font-weight: bold">Task Header</h5>
+          <hr>
+          <div class="col-12 mb-3">
+            <div class="form-group row">
+              <label for="inputEmail3" class="col-sm-2 col-form-label">Project</label>
+              <div class="col-sm-10">
+                <select
+                    type="text"
+                    class="form-select"
+                    v-model="projectTask.project_id"
+                    required
+                >
+                  <option disabled value="">Choose...</option>
+                  <option v-for="item in projectList" :key="item.id" :value="item.id">{{ item.title }} {{
+                      item.last_name
+                    }}
+                  </option>
+                </select>
+              </div>
+
+            </div>
+          </div>
+          <div class="col-12 mb-3">
+            <div class="form-group row">
+              <label for="Name" class="col-sm-2 col-form-label">Task Number</label>
+              <div class="col-sm-10">
+                <input
+                    type="text"
+                    class="form-control"
+                    v-model="projectTask.task_number"
+                    placeholder="Please input text"
+                    required
+                />
+              </div>
+            </div>
+          </div>
+          <div class="col-12 mb-3">
+            <div class="form-group row">
+              <label for="Name" class="col-sm-2 col-form-label">Task Name</label>
+              <div class="col-sm-10">
+                <input
+                    type="text"
+                    class="form-control"
+                    v-model="projectTask.task_name"
+                    placeholder="Please input text"
+                    required
+                />
+              </div>
+            </div>
+          </div>
+          <div class="col-12 mb-3">
+            <div class="form-group row">
+              <label for="inputEmail3" class="col-sm-2 col-form-label">Start Date</label>
+              <div class="col-sm-10">
+                <input
+                    type="date"
+                    placeholder="Please input date"
+                    id="request_date"
+                    name="birth_place"
+                    class="form-control"
+                    v-model="projectTask.start_date"
+                    maxlength="20"
+                />
+              </div>
+
+            </div>
+          </div>
+          <div class="col-12 mb-3">
+            <div class="form-group row">
+              <label for="inputEmail3" class="col-sm-2 col-form-label">Due Date</label>
+              <div class="col-sm-10">
+                <input
+                    type="date"
+                    placeholder="Please input date"
+                    id="request_date"
+                    name="birth_place"
+                    class="form-control"
+                    v-model="projectTask.due_date"
+                    maxlength="20"
+                />
+              </div>
+
+            </div>
+          </div>
+          <h5 style="font-weight: bold">Task Participant</h5>
+          <hr>
+          <div class="col-12 mb-3">
+            <div class="form-group row">
+              <label for="inputEmail3" class="col-sm-2 col-form-label">Reviewer</label>
+              <div class="col-sm-10">
+                <select
+                    type="text"
+                    class="form-select"
+                    v-model="projectTask.reviewer_id"
+                    required
+                >
+                  <option disabled value="">Choose...</option>
+                  <option v-for="item in user" :key="item.id" :value="item.id">{{ item.first_name }} {{
+                      item.last_name
+                    }}
+                  </option>
+                </select>
+              </div>
+
+            </div>
+          </div>
+          <div class="col-12 mb-3">
+            <div class="form-group row">
+              <label for="inputEmail3" class="col-sm-2 col-form-label">Assignee</label>
+              <div class="col-sm-10">
+                <select
+                    type="text"
+                    class="form-select"
+                    v-model="projectTask.assignee_id"
+                    required
+                >
+                  <option disabled value="">Choose...</option>
+                  <option v-for="item in user" :key="item.id" :value="item.id">{{ item.first_name }} {{
+                      item.last_name
+                    }}
+                  </option>
+                </select>
+              </div>
+
+            </div>
+          </div>
+          <div class="col-12 mb-3">
+            <div class="form-group row">
+              <label for="inputEmail3" class="col-sm-2 col-form-label">CC</label>
+              <div class="col-sm-10">
+                <select
+                    type="text"
+                    class="form-select"
+                    v-model="projectTask.assignee_cc_id"
+                    required
+                >
+                  <option disabled value="">Choose...</option>
+                  <option v-for="item in user" :key="item.id" :value="item.id">{{ item.first_name }} {{
+                      item.last_name
+                    }}
+                  </option>
+                </select>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <div class="col-1"></div>
         <div class="col-6">
-          <div class="row">
-            <h5 style="font-weight: bold">Task Header</h5>
-            <hr>
-            <div class="col-12 mb-3">
-              <div class="form-group row">
-                <label for="inputEmail3" class="col-sm-2 col-form-label">Project</label>
-                <div class="col-sm-10">
-                  <select
-                      type="text"
-                      class="form-select"
-                      v-model="projectTask.project_id"
-                      required
-                  >
-                    <option disabled value="">Choose...</option>
-                    <option v-for="item in projectList" :key="item.id" :value="item.id">{{ item.title }} {{
-                        item.last_name
-                      }}
-                    </option>
-                  </select>
-                </div>
-
-              </div>
-            </div>
-            <div class="col-12 mb-3">
-              <div class="form-group row">
-                <label for="Name" class="col-sm-2 col-form-label">Task Number</label>
-                <div class="col-sm-10">
-                  <input
-                      type="text"
-                      class="form-control"
-                      v-model="projectTask.task_number"
-                      placeholder="Please input text"
-                      required
-                  />
-                </div>
-              </div>
-            </div>
-            <div class="col-12 mb-3">
-              <div class="form-group row">
-                <label for="Name" class="col-sm-2 col-form-label">Task Name</label>
-                <div class="col-sm-10">
-                  <input
-                      type="text"
-                      class="form-control"
-                      v-model="projectTask.task_name"
-                      placeholder="Please input text"
-                      required
-                  />
-                </div>
-              </div>
-            </div>
-            <div class="col-12 mb-3">
-              <div class="form-group row">
-                <label for="inputEmail3" class="col-sm-2 col-form-label">Start Date</label>
-                <div class="col-sm-10">
-                  <input
-                      type="date"
-                      placeholder="Please input date"
-                      id="request_date"
-                      name="birth_place"
-                      class="form-control"
-                      v-model="projectTask.start_date"
-                      maxlength="20"
-                  />
-                </div>
-
-              </div>
-            </div>
-            <div class="col-12 mb-3">
-              <div class="form-group row">
-                <label for="inputEmail3" class="col-sm-2 col-form-label">Due Date</label>
-                <div class="col-sm-10">
-                  <input
-                      type="date"
-                      placeholder="Please input date"
-                      id="request_date"
-                      name="birth_place"
-                      class="form-control"
-                      v-model="projectTask.due_date"
-                      maxlength="20"
-                  />
-                </div>
-
-              </div>
-            </div>
-            <h5 style="font-weight: bold">Task Participant</h5>
-            <hr>
-            <div class="col-12 mb-3">
-              <div class="form-group row">
-                <label for="inputEmail3" class="col-sm-2 col-form-label">Reviewer</label>
-                <div class="col-sm-10">
-                  <select
-                      type="text"
-                      class="form-select"
-                      v-model="projectTask.reviewer_id"
-                      required
-                  >
-                    <option disabled value="">Choose...</option>
-                    <option v-for="item in user" :key="item.id" :value="item.id">{{ item.first_name }} {{
-                        item.last_name
-                      }}
-                    </option>
-                  </select>
-                </div>
-
-              </div>
-            </div>
-            <div class="col-12 mb-3">
-              <div class="form-group row">
-                <label for="inputEmail3" class="col-sm-2 col-form-label">Assignee</label>
-                <div class="col-sm-10">
-                  <select
-                      type="text"
-                      class="form-select"
-                      v-model="projectTask.assignee_id"
-                      required
-                  >
-                    <option disabled value="">Choose...</option>
-                    <option v-for="item in user" :key="item.id" :value="item.id">{{ item.first_name }} {{
-                        item.last_name
-                      }}
-                    </option>
-                  </select>
-                </div>
-
-              </div>
-            </div>
-            <div class="col-12 mb-3">
-              <div class="form-group row">
-                <label for="inputEmail3" class="col-sm-2 col-form-label">CC</label>
-                <div class="col-sm-10">
-                  <select
-                      type="text"
-                      class="form-select"
-                      v-model="projectTask.assignee_cc_id"
-                      required
-                  >
-                    <option disabled value="">Choose...</option>
-                    <option v-for="item in user" :key="item.id" :value="item.id">{{ item.first_name }} {{
-                        item.last_name
-                      }}
-                    </option>
-                  </select>
-                </div>
-
-              </div>
-            </div>
+          <br>
             <h5 style="font-weight: bold">Task Details</h5>
             <hr>
             <div class="col-12 mb-3">
@@ -289,9 +291,7 @@
                 </button>
               </div>
             </div>
-          </div>
         </div>
-        <div class="col-3"></div>
         </div>
     </form>
   </div>
