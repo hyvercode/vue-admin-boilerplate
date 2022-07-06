@@ -214,7 +214,7 @@
                       required
                   >
                     <option disabled value="">Choose...</option>
-                    <option v-for="item in user" :key="item.id" :value="item.id">{{ item.contact_name }}
+                    <option v-for="item in contact" :key="item.id" :value="item.id">{{ item.contact_name }}
                     </option>
                   </select>
                 </div>
@@ -330,6 +330,7 @@ export default {
       project: new RequestProject(),
       ticket: [],
       user: [],
+      contact: [],
       ticketCategories: [],
       ticketPriority: [],
       ticketIssueType: [],
@@ -342,6 +343,7 @@ export default {
   },
   created() {
     this.getListUser();
+    this.getListContact();
     this.getTicketCategories();
     this.getTicketPriority();
     this.getTicketIssueType();
@@ -372,9 +374,21 @@ export default {
         }
       });
     },
-    getListUser() {
+    getListContact() {
       let loading = this.$loading.show();
       ContactService.getAll().then((response) => {
+        if (response.code === 200) {
+          this.contact = response.data;
+          loading.hide();
+        } else {
+          loading.hide();
+          this.$swal.fire("Error!", "Client Contact" + response.message, "error");
+        }
+      });
+    },
+    getListUser() {
+      let loading = this.$loading.show();
+      UserService.getAllUsers().then((response) => {
         if (response.code === 200) {
           this.user = response.data;
           loading.hide();
