@@ -144,7 +144,7 @@ export default {
           (response) => {
             loading.hide();
             sessionStorage.setItem("session_id", response.data.id);
-            router.push(pages.PASSWORD_RESET);
+            router.push(publicPages.PASSWORD_RESET);
           },
           () => {
             loading.hide();

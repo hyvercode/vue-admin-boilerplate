@@ -73,7 +73,7 @@
                         required
                     >
                       <option disabled value="">Choose...</option>
-                      <option v-for="item in user" :key="item.id" :value="item.id">{{ item.username }}
+                      <option v-for="item in user" :key="item.id" :value="item.id">{{ item.first_name }} {{ item.last_name }}
                       </option>
                     </select>
                   </div>
@@ -91,7 +91,7 @@
                         required
                     >
                       <option disabled value="">Choose...</option>
-                      <option v-for="item in user" :key="item.id" :value="item.id">{{ item.username }}
+                      <option v-for="item in user" :key="item.id" :value="item.id">{{ item.first_name }} {{ item.last_name }}
                       </option>
                     </select>
                   </div>
@@ -110,7 +110,7 @@
                         disabled
                     >
                       <option disabled value="">Choose...</option>
-                      <option v-for="item in user" :key="item.id" :value="item.id">{{ item.username }}
+                      <option v-for="item in user" :key="item.id" :value="item.id">{{ item.first_name }} {{ item.last_name }}
                       </option>
                     </select>
                   </div>
@@ -368,7 +368,7 @@ export default {
     },
     getListUser() {
       let loading = this.$loading.show();
-      UserService.getAll().then((response) => {
+      UserService.getAllUsers().then((response) => {
         if (response.code === 200) {
           this.user = response.data;
           loading.hide();

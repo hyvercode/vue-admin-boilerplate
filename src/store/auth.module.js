@@ -46,7 +46,7 @@ export const auth = {
         otp({ commit }, username) {
             return AuthService.postVerifikaiOtp(username).then(
                 (username) => {
-                    commit("loginSuccess", username);
+                    // commit("loginSuccess", username);
                     return Promise.resolve(username);
                 },
                 (error) => {

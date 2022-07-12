@@ -76,6 +76,7 @@
 import AuthService from "@/services/auth.service";
 import Pages from "../../helpers/Pages";
 import Autor from "../navigation/Autor";
+import VueCookies from "vue-cookies";
 
 export default {
   name: "ResetPassword",
@@ -108,6 +109,8 @@ export default {
                 })
                 .then((result) => {
                   if (result.isConfirmed) {
+                    sessionStorage.removeItem("session_id")
+                    sessionStorage.removeItem("session_username")
                     this.$router.push(Pages.LOGIN);
                   }
                 });
