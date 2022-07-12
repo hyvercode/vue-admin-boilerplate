@@ -72,7 +72,7 @@ export default {
             loading.hide();
             sessionStorage.setItem("session_id", response.data.id);
             sessionStorage.setItem("session_username", this.username);
-            router.push(pages.PASSWORD_OTP);
+            router.push(publicPages.PASSWORD_OTP);
           },
           (error) => {
             loading.hide();
