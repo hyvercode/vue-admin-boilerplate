@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid">
     <MyDataTable
-        title="Unit List"
+        title="Units"
         :columns="columns"
         :rows="records"
         :filter-record="filterRecord"
