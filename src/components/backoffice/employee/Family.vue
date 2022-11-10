@@ -1,13 +1,12 @@
 <template>
   <div class="container-fluid">
     <MyDataTable
-        title="Job Title"
+        title="Families"
         :columns="columns"
         :rows="records"
         :clickable="true"
         :sortable="true"
         :paginate="true"
-        :total-records="paginate.total"
         :rows-per-page="paginate.recordsPerPage"
         :current-page="paginate.currentPage"
         :last-page="paginate.lastPage"
@@ -29,6 +28,7 @@
         :printable="true"
         :create-button="true"
         v-on:onCreate="handleCreate"
+        create-button-title="Add Family"
         :refreshable="true"
         v-on:onRefresh="doRefresh"
         :loadingAnimation="false"
@@ -44,45 +44,183 @@
         <td class="text-center">
           <button
               class="btn btn-flat nopadding"
-              @click="(e) => handleUpdate(props.row, e)"
+              @click.prevent="(e) => handleUpdate(props.row, e)"
           >
-            <i class="material-icons white-text">edit</i>
+            <i class="material-icons tbl-material-icons text-info">edit</i>
           </button>
           <button
               class="btn btn-flat nopadding"
-              @click="(e) => handleDelete(props.row, e)"
+              @click.prevent="(e) => handleDelete(props.row, e)"
           >
-            <i class="material-icons white-text">delete</i>
+            <i class="material-icons tbl-material-icons text-danger">delete</i>
           </button>
         </td>
       </template>
     </MyDataTable>
-
-    <b-modal id="m-jobtitle" :title="isUpdate?'Update Job Title':'Create Job Title'" hide-footer>
+    <b-modal id="m-unit" :title="isUpdate?'Update Family Member':'Create Family Member'" hide-footer>
       <form @submit.prevent="submit($event)">
-        <div class="form-group mb-3">
-          <label>Job Title Name <span class="mandatory">*</span></label>
-          <input
-              type="text"
-              class="form-control"
-              placeholder="Please input text"
-              v-model="jobtitle.job_title_name"
-              required
-          />
+        <div class="mb-3">
+          <div class="form-group mt-1 mb-3">
+            <label>First Name</label>
+            <input
+                type="text"
+                class="form-control"
+                placeholder="Please input text"
+                v-model="family.first_name"
+                required
+            />
+          </div>
         </div>
-        <div class="col-lg-12 mb-3">
-          <label for="NIK" style="text-align: left">Active <span class="mandatory">*</span></label>
-          <select class="form-control form-select" v-model="jobtitle.active" required>
-            <option value="null" disabled>Choose...</option>
-            <option
-                v-for="item in status"
-                :key="item.id"
-                :value="item.id"
+        <div class="mb-3">
+          <div class="form-group mt-1 mb-3">
+            <label>Last Name</label>
+            <input
+                type="text"
+                class="form-control"
+                placeholder="Please input text"
+                v-model="family.last_name"
+                required
+            />
+          </div>
+        </div>
+        <div class="mb-3">
+          <div class="form-group">
+            <label for="phone"
+            >Maritial Status <span class="mandatory">*</span></label
             >
-              {{ item.desc }}
-            </option>
-          </select>
+            <select
+                class="form-control"
+                id="maritial_status"
+                name="maritial_status"
+                v-model="family.maritial_status"
+            >
+              <option value="Single">Single</option>
+              <option value="Married">Married</option>
+              <option value="Widowed">Widowed</option>
+              <option value="Widower">Widower</option>
+              <option value="Divorced">Divorced</option>
+            </select>
+          </div>
         </div>
+        <div class="mb-3">
+          <div class="form-group">
+            <label>Religion</label>
+            <input
+                type="text"
+                class="form-control"
+                placeholder="Please input text"
+                v-model="family.religion"
+                required
+            />
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <div class="form-group">
+            <label for="phone"
+            >Identity Type <span class="mandatory">*</span></label
+            >
+            <select
+                class="form-control"
+                id="identity_type"
+                name="identity_type"
+                v-model="family.identity_type"
+            >
+              <option value="KTP">KTP</option>
+              <option value="SIM">SIM</option>
+              <option value="PASSPORT">PASSPORT</option>
+              <option value="QTAS">QTAS</option>
+            </select>
+          </div>
+        </div>
+        <div class="mb-3">
+          <div class="form-group">
+            <label for="phone"
+            >Identity Number <span class="mandatory">*</span></label
+            >
+            <input
+                type="text"
+                placeholder="Please input number"
+                id="identity_number"
+                name="identity_number"
+                @keypress="isNumber($event)"
+                class="form-control"
+                v-model="family.identity_number"
+                maxlength="20"
+                required
+            />
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <div class="form-group">
+            <label for="name"
+            >Blood Type <span class="mandatory">*</span></label
+            >
+            <input
+                type="text"
+                placeholder="Please input text"
+                id="blood_type"
+                name="blood_type"
+                maxlength="40"
+                class="form-control"
+                v-model="family.blood_type"
+                required
+            />
+          </div>
+        </div>
+        <div class="mb-3">
+          <div class="form-group">
+            <label for="birth_place"
+            >Birth Place <span class="mandatory">*</span></label
+            >
+            <input
+                type="text"
+                placeholder="Please input text"
+                id="birth_place"
+                name="birth_place"
+                class="form-control"
+                v-model="family.birth_place"
+                maxlength="50"
+                required
+            />
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <div class="form-group">
+            <label for="birth_date"
+            >Birth Date <span class="mandatory">*</span></label
+            >
+            <input
+                type="date"
+                placeholder="Please input date"
+                id="birth_date"
+                name="birth_place"
+                class="form-control"
+                v-model="family.birth_date"
+                maxlength="20"
+                required
+            />
+          </div>
+        </div>
+        <div class="mb-3">
+          <div class="form-group">
+            <label for="Name"
+            >Gender <span class="mandatory">*</span></label
+            >
+            <select
+                class="form-control"
+                id="gender"
+                name="gender"
+                v-model="family.gender"
+            >
+              <option value="M">Male</option>
+              <option value="F">Female</option>
+            </select>
+          </div>
+        </div>
+
         <div class="d-flex mt-4 float-end">
           <button class="btn btn-primary" style="margin-right: 5px" @click.prevent="doClose">Cancel</button>
           <input type="submit" class="btn btn-primary" value="Submit">
@@ -93,19 +231,19 @@
 </template>
 
 <script>
-import RequestJobTitle from "../../payloads/request/RequestJobTitle";
-import JobtitleService from "../../services/jobtitle.service";
-import MyDataTable from "../hyver-vue/components/table/DataTable";
-import Utils from "../../helpers/Utils";
+import RequestFamily from "../../../payloads/request/RequestFamily";
+import FamilyService from "../../../services/family.service";
+import MyDataTable from "../../hyver-vue/components/table/DataTable";
+import Utils from "../../../helpers/Utils";
 
 export default {
-  name: "Index",
+  name: "EmployeeFamily",
   components: {
     MyDataTable,
   },
   data() {
     return {
-      jobtitle: new RequestJobTitle(),
+      family: new RequestFamily(),
       searchBy: "id",
       searchParam: "",
       dateFrom: "",
@@ -117,25 +255,42 @@ export default {
           field: "id",
           numeric: true,
           html: false,
-          hidden: true,
         },
         {
-          label: "Job Title Name",
-          field: "job_title_name",
+          label: "First Name",
+          field: "first_name",
           numeric: true,
           html: false,
         },
         {
-          label: "Status",
-          field: "active",
-          numeric: false,
+          label: "Last Name",
+          field: "last_name",
+          numeric: true,
+          html: false,
+        },
+        {
+          label: "Maritial Status",
+          field: "maritial_status",
+          numeric: true,
+          html: false,
+        },
+        {
+          label: "Gender",
+          field: "gender",
+          numeric: true,
+          html: false,
+        },
+        {
+          label: "Religion",
+          field: "religion",
+          numeric: true,
           html: false,
         },
       ],
       records: [],
       filterRecord: [
-        {id: 'id', desc: "Job Title ID"},
-        {id: 'job_title_name', desc: "Job Title Name"},
+        {id: 'id', desc: "Family ID"},
+        {id: 'first_name', desc: "Family Name"},
         {id: 'active', desc: "Active"}],
       pagination: {
         recordsPerPage: [5, 10, 50, 100, 500, 1000],
@@ -144,7 +299,6 @@ export default {
         lastPage: 1,
         nextPageUrl: "",
         prevPageUrl: "",
-        total: 0
       },
       isUpdate: false
     };
@@ -152,7 +306,7 @@ export default {
   computed: {
     paginate() {
       return this.pagination;
-    },
+    }
   },
   mounted() {
     this.getPaginate(
@@ -166,44 +320,45 @@ export default {
   },
   methods: {
     doClose() {
-      this.$bvModal.hide('m-jobtitle');
+      this.$bvModal.hide('m-unit');
     },
     submit(event) {
       event.preventDefault();
       let loading = this.$loading.show();
       if (!this.isUpdate) {
-        JobtitleService.postCreate(this.jobtitle).then((response) => {
+        this.family.employee_id = Utils.decrypt(this.$route.query.id)
+        FamilyService.postCreate(this.family).then((response) => {
           if (response.code === 200) {
-            this.coverage = new RequestJobTitle();
+            this.coverage = new RequestFamily();
             loading.hide();
             this.$swal.fire({
               icon: "success",
               title: "Success",
-              text: "Jobtitle  has been created",
+              text: "Family has been created",
             });
             this.doRefresh();
-            this.$bvModal.hide('m-jobtitle');
+            this.$bvModal.hide('m-unit');
           } else {
             loading.hide();
-            this.$bvModal.hide('m-jobtitle');
+            this.$bvModal.hide('m-unit');
             this.$swal.fire("Error!", response.message, "error");
           }
         });
       } else {
-        JobtitleService.postUpdate(this.jobtitle.id, this.jobtitle).then((response) => {
+        FamilyService.postUpdate(this.family.id, this.family).then((response) => {
           if (response.code === 200) {
-            this.coverage = new RequestJobTitle();
+            this.coverage = new RequestFamily();
             loading.hide();
             this.$swal.fire({
               icon: "success",
               title: "Success",
-              text: "Job Title  has been updated",
+              text: "Family has been updated",
             });
             this.doRefresh();
-            this.$bvModal.hide('m-jobtitle');
+            this.$bvModal.hide('m-unit');
           } else {
             loading.hide();
-            this.$bvModal.hide('m-jobtitle');
+            this.$bvModal.hide('m-unit');
             this.$swal.fire("Error!", response.message, "error");
           }
         });
@@ -221,14 +376,21 @@ export default {
     },
 
     handleCreate() {
+      this.family = new RequestFamily();
       this.isUpdate = false;
-      this.$bvModal.show('m-jobtitle');
+      this.$bvModal.show('m-unit');
+    },
+
+    handleAddMember() {
+      this.unit = new RequestFamily();
+      this.isUpdate = false;
+      this.$bvModal.show('m-addmember');
     },
 
     handleUpdate(prop) {
       this.isUpdate = true;
-      this.jobtitle = prop;
-      this.$bvModal.show('m-jobtitle');
+      this.family = prop;
+      this.$bvModal.show('m-unit');
     },
 
     handleDelete(prop) {
@@ -243,7 +405,7 @@ export default {
       }).then((result) => {
         if (result.value) {
           // <-- if confirmed
-          JobtitleService.delete(prop.id)
+          FamilyService.delete(prop.id)
               .then(() => {
                 this.$swal({
                   position: "bottom-end",
@@ -303,9 +465,10 @@ export default {
         searchParam: searchParam,
         limit: limit,
         page: page,
+        employee_id: Utils.decrypt(this.$route.query.id)
       };
       let loading = this.$loading.show();
-      JobtitleService.getPaginate(params).then((response) => {
+      FamilyService.getPaginate(params).then((response) => {
         if (response.code === 200) {
           this.records = response.data.data;
           this.pagination = {
@@ -314,7 +477,6 @@ export default {
             lastPage: response.data.last_page,
             prevPageUrl: response.data.prev_page_url,
             nextPageUrl: response.data.next_page_url,
-            total: response.data.total
           };
           loading.hide();
         } else {
@@ -361,8 +523,10 @@ export default {
           limit[1]
       );
     },
-  },
-};
+  }
+}
 </script>
 
-<style scoped></style>
+<style scoped>
+
+</style>

@@ -16,17 +16,17 @@ export default [
             {
                 path: "",
                 name: "Index Company",
-                component: () => import("../components/company/Index.vue"),
+                component: () => import("../components/backoffice/company/Index.vue"),
             },
             {
                 path: Pages.COMPANY_CREATE,
                 name: "Create Company",
-                component: () => import("../components/company/Create.vue"),
+                component: () => import("../components/backoffice/company/Create.vue"),
             },
             {
                 path: Pages.COMPANY_UPDATE,
                 name: "Update Company",
-                component: () => import("../components/company/Update.vue"),
+                component: () => import("../components/backoffice/company/Update.vue"),
             },
         ],
     },
@@ -38,22 +38,22 @@ export default [
             {
                 path: "",
                 name: "Index Employee",
-                component: () => import("../components/employee/Index.vue"),
+                component: () => import("../components/backoffice/employee/Index.vue"),
             },
             {
                 path: Pages.EMPLOYEE_CREATE,
                 name: "Create Employee",
-                component: () => import("../components/employee/Create.vue"),
+                component: () => import("../components/backoffice/employee/Create.vue"),
             },
             {
                 path: Pages.EMPLOYEE_UPDATE,
                 name: "Update Employee",
-                component: () => import("../components/employee/Update.vue"),
+                component: () => import("../components/backoffice/employee/Update.vue"),
             },
             {
                 path: Pages.EMPLOYEES_FAMILY,
                 name: "Family Employee",
-                component: () => import("../components/employee/Family.vue"),
+                component: () => import("../components/backoffice/employee/Family.vue"),
             },
         ],
     },
@@ -65,17 +65,17 @@ export default [
             {
                 path: "",
                 name: "Index Branch",
-                component: () => import("../components/branch/Index.vue"),
+                component: () => import("../components/backoffice/branch/Index.vue"),
             },
             {
                 path: Pages.BRANCH_CREATE,
                 name: "Create Branch",
-                component: () => import("../components/branch/Create.vue"),
+                component: () => import("../components/backoffice/branch/Create.vue"),
             },
             {
                 path: Pages.BRANCH_UPDATE,
                 name: "Create Branch",
-                component: () => import("../components/branch/Update.vue"),
+                component: () => import("../components/backoffice/branch/Update.vue"),
             },
         ],
     },
@@ -87,12 +87,12 @@ export default [
             {
                 path: "",
                 name: "Index",
-                component: () => import("../components/unit/Index.vue"),
+                component: () => import("../components/backoffice/unit/Index.vue"),
             },
             {
                 path: Pages.UNIT_MEMBER,
                 name: "UnitMember",
-                component: () => import("../components/unit/UnitMember.vue"),
+                component: () => import("../components/backoffice/unit/UnitMember.vue"),
             },
         ],
     },
@@ -104,7 +104,7 @@ export default [
             {
                 path: "",
                 name: "Index",
-                component: () => import("../components/jobposition/Index.vue"),
+                component: () => import("../components/backoffice/jobposition/Index.vue"),
             },
         ],
     },
@@ -116,7 +116,7 @@ export default [
             {
                 path: "",
                 name: "Index",
-                component: () => import("../components/jobtitle/Index.vue"),
+                component: () => import("../components/backoffice/jobtitle/Index.vue"),
             },
         ],
     },
@@ -128,12 +128,12 @@ export default [
             {
                 path: Pages.ATTENDANCES,
                 name: "Attendances",
-                component: () => import("../components/attendances/Index.vue"),
+                component: () => import("../components/backoffice/attendances/Index.vue"),
             },
             {
                 path: Pages.ATTENDANCE_TMP,
                 name: "AttendancesTmp",
-                component: () => import("../components/attendances/Tmp.vue"),
+                component: () => import("../components/backoffice/attendances/Tmp.vue"),
             },
         ],
     },

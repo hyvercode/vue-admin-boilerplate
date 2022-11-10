@@ -122,7 +122,7 @@ export default [
             {
                 path: "",
                 name: "Index",
-                component: () => import("../components/education/EducationIndex"),
+                component: () => import("../components/backoffice/education/EducationIndex"),
             },
         ],
     },

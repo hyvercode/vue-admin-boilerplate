@@ -250,7 +250,7 @@
           >
             <div class="box-part">
               <div class="row">
-                <div class="col-md-3 col-sm-12" @click.prevent="onRowClick(row)">
+                <div class="col-md-12 col-sm-12" @click.prevent="onRowClick(row)">
                   <div v-for="(column, columnIndex) in columnsKanban"
                        :key="columnIndex"
                        :class="{ numeric : column.numeric }">
@@ -265,7 +265,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="col-md-9 col-sm-12">
+                <div class="col-md-12 col-sm-12 px-1">
                   <table>
                     <tbody>
                     <tr v-for="(column, index) in columnsKanban"
@@ -275,8 +275,7 @@
                           (sortType === 'desc' ? 'sorting-desc' : 'sorting-asc')
                           : '')
                         + (column.numeric ? ' numeric' : '')"
-                        :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none':''}"
-                        @click="sort(index)">
+                        :style="{width: column.width ? column.width : 'auto',display:column.hidden?'none':''}">
                       <th><span v-if="!column.hidden">{{ column.label }}</span></th>
                       <th>:
                         <!--                        Normal Content-->
@@ -384,6 +383,7 @@
             >
               {{ option === -1 ? lang['10'] : option }}
             </option>
+            <option :value="totalRecords">All</option>
           </select>
         </label>
       </div>

@@ -219,18 +219,18 @@
 </template>
 
 <script>
-import RequestCompanies from "../../payloads/request/RequestCompanies";
-import ProvinceService from "../../services/province.service";
-import CitiesService from "../../services/cities.service";
-import DistrictService from "../../services/district.service";
-import VillageService from "../../services/village.service";
-import BusinessService from "../../services/business.service";
-import Utils from "../../helpers/Utils";
-import CompaniesService from "../../services/companies.service";
-import router from "../../router";
-import utils from "../../helpers/Utils";
-import EmployeeService from "../../services/employee.service";
-import FormHeader from "../navigation/FormHeader";
+import RequestCompanies from "../../../payloads/request/RequestCompanies";
+import ProvinceService from "../../../services/province.service";
+import CitiesService from "../../../services/cities.service";
+import DistrictService from "../../../services/district.service";
+import VillageService from "../../../services/village.service";
+import BusinessService from "../../../services/business.service";
+import Utils from "../../../helpers/Utils";
+import CompaniesService from "../../../services/companies.service";
+import router from "../../../router";
+import utils from "../../../helpers/Utils";
+import EmployeeService from "../../../services/employee.service";
+import FormHeader from "../../navigation/FormHeader";
 
 export default {
   name: "Update",

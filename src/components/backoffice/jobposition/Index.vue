@@ -92,10 +92,10 @@
 </template>
 
 <script>
-import RequestJobPosition from "../../payloads/request/RequestJobPosition";
-import JobPositionService from "../../services/jobposition.service";
-import MyDataTable from "../hyver-vue/components/table/DataTable";
-import Utils from "../../helpers/Utils";
+import RequestJobPosition from "../../../payloads/request/RequestJobPosition";
+import JobPositionService from "../../../services/jobposition.service";
+import MyDataTable from "../../hyver-vue/components/table/DataTable";
+import Utils from "../../../helpers/Utils";
 
 export default {
   name: "Index",

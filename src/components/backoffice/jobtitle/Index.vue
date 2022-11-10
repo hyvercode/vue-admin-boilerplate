@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid">
     <MyDataTable
-        title="Branches"
+        title="Job Title"
         :columns="columns"
         :rows="records"
         :clickable="true"
@@ -23,15 +23,14 @@
         :filter="true"
         :filterRecord="filterRecord"
         v-on:onChangeFilter="doFilterSelected"
-        :filter-date="true"
+        :filterDate="false"
         v-on:onChangeDate="doFilterDate"
         :exportable="true"
-        :printable="false"
+        :printable="true"
         :create-button="true"
         v-on:onCreate="handleCreate"
         :refreshable="true"
         v-on:onRefresh="doRefresh"
-        @onCheckToggle="doCheckToggle"
         :loadingAnimation="false"
     >
       <th
@@ -47,27 +46,57 @@
               class="btn btn-flat nopadding"
               @click="(e) => handleUpdate(props.row, e)"
           >
-            <i class="material-icons tbl-material-icons text-info">edit</i>
+            <i class="material-icons white-text">edit</i>
           </button>
           <button
               class="btn btn-flat nopadding"
               @click="(e) => handleDelete(props.row, e)"
           >
-            <i class="material-icons tbl-material-icons text-danger">delete</i>
+            <i class="material-icons white-text">delete</i>
           </button>
         </td>
       </template>
     </MyDataTable>
+
+    <b-modal id="m-jobtitle" :title="isUpdate?'Update Job Title':'Create Job Title'" hide-footer>
+      <form @submit.prevent="submit($event)">
+        <div class="form-group mb-3">
+          <label>Job Title Name <span class="mandatory">*</span></label>
+          <input
+              type="text"
+              class="form-control"
+              placeholder="Please input text"
+              v-model="jobtitle.job_title_name"
+              required
+          />
+        </div>
+        <div class="col-lg-12 mb-3">
+          <label for="NIK" style="text-align: left">Active <span class="mandatory">*</span></label>
+          <select class="form-control form-select" v-model="jobtitle.active" required>
+            <option value="null" disabled>Choose...</option>
+            <option
+                v-for="item in status"
+                :key="item.id"
+                :value="item.id"
+            >
+              {{ item.desc }}
+            </option>
+          </select>
+        </div>
+        <div class="d-flex mt-4 float-end">
+          <button class="btn btn-primary" style="margin-right: 5px" @click.prevent="doClose">Cancel</button>
+          <input type="submit" class="btn btn-primary" value="Submit">
+        </div>
+      </form>
+    </b-modal>
   </div>
 </template>
 
 <script>
-import BranchService from "../../services/branch.service";
-import MyDataTable from "../hyver-vue/components/table/DataTable";
-import router from "../../router";
-import Utils from "../../helpers/Utils";
-import Pages from "../../helpers/HR";
-import EmployeeService from "../../services/employee.service";
+import RequestJobTitle from "../../../payloads/request/RequestJobTitle";
+import JobtitleService from "../../../services/jobtitle.service";
+import MyDataTable from "../../hyver-vue/components/table/DataTable";
+import Utils from "../../../helpers/Utils";
 
 export default {
   name: "Index",
@@ -76,75 +105,38 @@ export default {
   },
   data() {
     return {
+      jobtitle: new RequestJobTitle(),
       searchBy: "id",
       searchParam: "",
       dateFrom: "",
       dateTo: "",
-      filterRecord: [
-        {id: "id", desc: "Branch ID"},
-        {id: "branch_code", desc: "Branch Code"},
-        {id: "branch_name", desc: "Branch Name"},
-        {id: "phone_number", desc: "Phone Number"},
-        {id: "contact_person", desc: "contact_person"},
-        {id: "contact_number", desc: "Contact Number"},
-        {id: "email", desc: "email"},
-        {id: "active", desc: "Status"},
-      ],
+      status: Utils.status(),
       columns: [
         {
-          label: "Branch Name",
-          field: "branch_name",
+          label: "ID",
+          field: "id",
+          numeric: true,
+          html: false,
+          hidden: true,
+        },
+        {
+          label: "Job Title Name",
+          field: "job_title_name",
           numeric: true,
           html: false,
         },
         {
-          label: "Address",
-          field: "address",
-          numeric: false,
-          html: false,
-        },
-        {
-          label: "Phone Number",
-          field: "phone_number",
-          numeric: false,
-          html: false,
-        },
-        {
-          label: "email",
-          field: "email",
-          numeric: false,
-          html: false,
-        },
-        {
-          label: "Contact Person",
-          field: "contact_person",
-          numeric: false,
-          html: false,
-        },
-        {
-          label: "Contact Number",
-          field: "contact_number",
-          numeric: false,
-          html: false,
-        },
-        {
-          label: "status",
+          label: "Status",
           field: "active",
           numeric: false,
           html: false,
-          hidden: false,
-          buttonToggle: true,
-          buttonToggleDesc: [
-            "Active", "Inactive"
-          ]
-        },
-        {
-          label: "ID",
-          field: "id",
-          hidden: true
         },
       ],
       records: [],
+      filterRecord: [
+        {id: 'id', desc: "Job Title ID"},
+        {id: 'job_title_name', desc: "Job Title Name"},
+        {id: 'active', desc: "Active"}],
       pagination: {
         recordsPerPage: [5, 10, 50, 100, 500, 1000],
         perPage: 10,
@@ -154,6 +146,7 @@ export default {
         prevPageUrl: "",
         total: 0
       },
+      isUpdate: false
     };
   },
   computed: {
@@ -172,6 +165,50 @@ export default {
     );
   },
   methods: {
+    doClose() {
+      this.$bvModal.hide('m-jobtitle');
+    },
+    submit(event) {
+      event.preventDefault();
+      let loading = this.$loading.show();
+      if (!this.isUpdate) {
+        JobtitleService.postCreate(this.jobtitle).then((response) => {
+          if (response.code === 200) {
+            this.coverage = new RequestJobTitle();
+            loading.hide();
+            this.$swal.fire({
+              icon: "success",
+              title: "Success",
+              text: "Jobtitle  has been created",
+            });
+            this.doRefresh();
+            this.$bvModal.hide('m-jobtitle');
+          } else {
+            loading.hide();
+            this.$bvModal.hide('m-jobtitle');
+            this.$swal.fire("Error!", response.message, "error");
+          }
+        });
+      } else {
+        JobtitleService.postUpdate(this.jobtitle.id, this.jobtitle).then((response) => {
+          if (response.code === 200) {
+            this.coverage = new RequestJobTitle();
+            loading.hide();
+            this.$swal.fire({
+              icon: "success",
+              title: "Success",
+              text: "Job Title  has been updated",
+            });
+            this.doRefresh();
+            this.$bvModal.hide('m-jobtitle');
+          } else {
+            loading.hide();
+            this.$bvModal.hide('m-jobtitle');
+            this.$swal.fire("Error!", response.message, "error");
+          }
+        });
+      }
+    },
     doRefresh() {
       this.getPaginate(
           this.dateFrom,
@@ -184,14 +221,14 @@ export default {
     },
 
     handleCreate() {
-      router.push(Pages.BRANCH_CREATE);
+      this.isUpdate = false;
+      this.$bvModal.show('m-jobtitle');
     },
 
-    async handleUpdate(prop) {
-      await router.push({
-        path: Pages.BRANCH_UPDATE,
-        query: {id: Utils.encrypt(prop.id)},
-      });
+    handleUpdate(prop) {
+      this.isUpdate = true;
+      this.jobtitle = prop;
+      this.$bvModal.show('m-jobtitle');
     },
 
     handleDelete(prop) {
@@ -204,10 +241,9 @@ export default {
         cancelButtonText: "Batal",
         timer: 8200,
       }).then((result) => {
-        // <--
         if (result.value) {
           // <-- if confirmed
-          BranchService.delete(prop.id)
+          JobtitleService.delete(prop.id)
               .then(() => {
                 this.$swal({
                   position: "bottom-end",
@@ -219,8 +255,7 @@ export default {
                   title: "Success",
                   text: "Hapus Berhasil",
                 });
-
-                router.go();
+                this.doRefresh();
               })
               .catch((error) => {
                 console.log("Gagal Terhapus", error.response);
@@ -260,7 +295,6 @@ export default {
           props[2]
       );
     },
-
     getPaginate(dateFrom, dateTo, searchBy, searchParam, limit, page) {
       let params = {
         dateFrom: dateFrom,
@@ -271,7 +305,7 @@ export default {
         page: page,
       };
       let loading = this.$loading.show();
-      BranchService.getPaginate(params).then((response) => {
+      JobtitleService.getPaginate(params).then((response) => {
         if (response.code === 200) {
           this.records = response.data.data;
           this.pagination = {
@@ -289,7 +323,6 @@ export default {
         }
       });
     },
-
     //Prev Pagination
     prevPage(limit) {
       this.getPaginate(
@@ -301,7 +334,6 @@ export default {
           limit[1]
       );
     },
-
     //Next Pagination
     nextPage(limit) {
       this.getPaginate(
@@ -329,26 +361,7 @@ export default {
           limit[1]
       );
     },
-
-    /**
-     * Button Toggle
-     * @param props
-     */
-    doCheckToggle(props) {
-      let payload = props;
-      payload.active = !props.active
-      let loading = this.$loading.show();
-      BranchService.postUpdate(props.id, payload).then((response) => {
-        if (response.code === 200) {
-          this.doRefresh();
-          loading.hide();
-        } else {
-          loading.hide();
-          this.$swal.fire("Error!", response.message, "error");
-        }
-      });
-    },
-  }
+  },
 };
 </script>
 

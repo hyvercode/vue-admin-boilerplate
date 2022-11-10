@@ -98,9 +98,9 @@
 </template>
 
 <script>
-import DataTable from "../hyver-vue/components/table/DataTable";
-import EducationsService from "../../services/education.service";
-import RequestEducation from "../../payloads/request/RequestEducation";
+import DataTable from "../../hyver-vue/components/table/DataTable";
+import EducationsService from "../../../services/education.service";
+import RequestEducation from "../../../payloads/request/RequestEducation";
 
 export default {
   name: "EducationIndex",

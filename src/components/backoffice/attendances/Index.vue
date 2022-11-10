@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid">
     <MyDataTable
-        title="Employees"
+        title="List Attendances"
         :columns="columns"
         :rows="records"
         :clickable="true"
@@ -14,7 +14,7 @@
         :default-per-page="paginate.perPage"
         :next-page-url="paginate.nextPageUrl"
         :prev-page-url="paginate.prevPageUrl"
-        v-on:onRowClick="handleClick"
+        v-on:onRowClick="onRowClick"
         v-on:onChangeRowPage="handleChangeRecords"
         v-on:onPreviousPage="prevPage"
         v-on:onNextPage="nextPage"
@@ -28,34 +28,21 @@
         v-on:onChangeDate="doFilterDate"
         :exportable="true"
         :printable="true"
-        :create-button="true"
-        v-on:onCreate="handleCreate"
         :refreshable="true"
         v-on:onRefresh="doRefresh"
         :loadingAnimation="false"
         :mode="true"
         :kanban="true"
-        :columnsKanban="columnsKanban"
-        :commandContact="true"
-        @onCheckToggle="doCheckToggle">
-
-      <th id="delete" slot="thead-tr" class="text-center tbl-action-button">
-        Actions
-      </th>
+        :command-contact="true"
+        :columnsKanban="columnsKanban">
+      <th id="delete" slot="thead-tr" class="text-center tbl-action-button">Actions</th>
       <template slot="tbody-tr" slot-scope="props">
         <td class="text-center">
-          <button class="btn btn-flat nopadding" data-bs-toggle="tooltip" data-bs-placement="top" title="Family"
-                  @click.prevent="(e) => handleViewEmployee(props.row, e)">
-            <i class="material-icons tbl-material-icons text-primary">family_restroom</i>
-          </button>
-          <button class="btn btn-flat nopadding" data-bs-toggle="tooltip" data-bs-placement="top"
-                  title="Edit /View"
-                  @click.prevent="(e) => handleUpdate(props.row, e)">
-            <i class="material-icons tbl-material-icons text-info">edit</i>
-          </button>
-          <button class="btn btn-flat nopadding" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"
-                  @click.prevent="(e) => handleDelete(props.row, e)">
-            <i class="material-icons tbl-material-icons text-danger">delete</i>
+          <button
+              class="btn btn-flat nopadding"
+              @click="(e) => onRowClick(props.row, e)"
+          >
+            <i class="material-icons tbl-material-icons ">article</i>
           </button>
         </td>
       </template>
@@ -65,12 +52,11 @@
 
 <script>
 
-import EmployeesService from "../../services/employee.service";
-import MyDataTable from "../hyver-vue/components/table/DataTable";
-import router from "../../router";
-import Pages from "../../helpers/HR";
-import Utils from "../../helpers/Utils";
-import EmployeeService from "../../services/employee.service";
+import MyDataTable from "../../hyver-vue/components/table/DataTable";
+import Pages from "../../../helpers/HR";
+import Utils from "../../../helpers/Utils";
+import router from "../../../router";
+import AttendanceService from "../../../services/attendance.service";
 
 export default {
   name: "Index",
@@ -84,22 +70,15 @@ export default {
       dateFrom: "",
       dateTo: "",
       filterRecord: [
-        {id: 'NIK', desc: "NIK"},
-        {id: 'first_name', desc: "First Name"},
-        {id: 'last_name', desc: "Last Name"},
-        {id: 'nick_name', desc: "Nick Name"},
-        {id: 'email', desc: "Email"},
-        {id: 'phone_number', desc: "Phone Number"},
-        {id: 'birth_date', desc: "Birth Date (YYYY-MM-DD)"},
-        {id: 'active', desc: "Status ( Active =true /Inactive = false )"},
-        {id: 'id', desc: "Employee ID"}
+        {id: 'id', desc: "Attendance ID"},
+        {id: 'employees.NIK', desc: "NIK"},
+        {id: 'employees.first_name', desc: 'Employee Name'},
+        {id: 'trx_attendances.status', desc: "Status"}
       ],
       columns: [
         {
           label: "Photo",
           field: "images",
-          name: "first_name",
-          size: 30,
           numeric: false,
           html: false,
           image: true
@@ -111,6 +90,13 @@ export default {
           html: false,
         },
         {
+          label: "ID",
+          field: "id",
+          numeric: false,
+          html: false,
+          hidden: true,
+        },
+        {
           label: "Employee Name",
           field: "first_name",
           numeric: false,
@@ -119,50 +105,50 @@ export default {
           concatWith: "last_name",
         },
         {
-          label: "Phone Number",
-          field: "phone_number",
+          label: "status",
+          field: "status",
+          numeric: false,
+          html: false,
+          badge: true
+        },
+        {
+          label: "check in",
+          field: "check_in",
+          numeric: false,
+          html: false,
+          badge: true,
+          badgeClass: 'badge bg-success'
+        },
+        {
+          label: "check out",
+          field: "check_out",
+          numeric: false,
+          html: false,
+          badge: true,
+          badgeClass: 'badge bg-danger'
+        },
+        {
+          label: "location in",
+          field: "location_in",
           numeric: false,
           html: false,
         },
         {
-          label: "email",
-          field: "email",
+          label: "location out",
+          field: "location_out",
           numeric: false,
           html: false,
-          email: true
-        },
-        {
-          label: "Employee Status",
-          field: "employee_status",
-          numeric: false,
-          html: false,
-        },
-        {
-          label: "Birth Date",
-          field: "birth_date",
-          numeric: false,
-          html: false,
-          date:true,
-          dateFormat:"DD MMMM YYYY"
-        },
-        {
-          label: "active",
-          field: "active",
-          numeric: false,
-          html: false,
-          hidden: false,
-          buttonToggle: true,
-          buttonToggleDesc: [
-            "Active", "Inactive"
-          ]
-        },
-        {
-          label: "ID",
-          field: "id",
-          hidden: true
-        },
+        }
       ],
       columnsKanban: [
+        {
+          label: "NIK",
+          field: "NIK",
+          numeric: true,
+          html: false,
+          badge: true,
+          badgeClass: 'badge bg-secondary'
+        },
         {
           label: "Photo",
           field: "images",
@@ -174,14 +160,6 @@ export default {
           hidden: true
         },
         {
-          label: "NIK",
-          field: "NIK",
-          numeric: true,
-          html: false,
-          badge: true,
-          badgeClass: 'badge bg-secondary'
-        },
-        {
           label: "Fullname",
           field: "first_name",
           numeric: false,
@@ -190,27 +168,27 @@ export default {
           concatWith: "last_name",
         },
         {
-          label: "Phone",
-          field: "phone_number",
+          label: "status",
+          field: "status",
           numeric: false,
           html: false,
+          badge: true
         },
         {
-          label: "Email",
-          field: "email",
+          label: "check in",
+          field: "check_in",
           numeric: false,
           html: false,
+          badge: true,
+          badgeClass: 'badge bg-success'
         },
         {
-          label: "Status",
-          field: "active",
+          label: "check out",
+          field: "check_out",
           numeric: false,
           html: false,
-          hidden: false,
-          buttonToggle: true,
-          buttonToggleDesc: [
-            "Active", "Inactive"
-          ]
+          badge: true,
+          badgeClass: 'badge bg-danger'
         },
         {
           label: "ID",
@@ -236,50 +214,24 @@ export default {
     }
   },
   mounted() {
+    let d = new Date(this.dateTo);
+    d.setDate(d.getDate() + 1);
+    this.dateTo = new Date(d).toISOString().substr(0, 10);
+    d.setDate(d.getDate() + 1);
+    this.dateFrom = new Date(d).toISOString().substr(0, 10);
+    this.month = new Date(d).toISOString().substr(0, 10);
     this.getPaginate(this.dateFrom, this.dateTo, this.searchBy, this.searchParam, this.pagination.perPage, this.pagination.currentPage);
   },
   methods: {
+    async onRowClick(prop) {
+      await router.push({
+        path: Pages.ATTENDANCE_TMP,
+        query: {id: Utils.encrypt(prop.id)}
+      });
+    },
     doRefresh() {
       this.getPaginate(this.dateFrom, this.dateTo, this.searchBy, this.searchParam, this.pagination.perPage, this.pagination.currentPage);
     },
-
-    handleCreate() {
-      router.push(Pages.EMPLOYEE_CREATE);
-    },
-    async handleViewEmployee(prop) {
-      await router.push({
-        path: Pages.EMPLOYEES_FAMILY,
-        query: {id: Utils.encrypt(prop.id)},
-      });
-    },
-    async handleClick(prop) {
-      await router.push({path: Pages.EMPLOYEE_UPDATE, query: {id: Utils.encrypt(prop.id)}});
-    },
-    async handleUpdate(prop) {
-      await router.push({path: Pages.EMPLOYEE_UPDATE, query: {id: Utils.encrypt(prop.id)}});
-    },
-    handleDelete(prop) {
-      let loading = this.$loading.show();
-      EmployeeService.delete(prop.id).then(response => {
-        if (response.code === 200) {
-          this.doRefresh();
-          loading.hide();
-          this.$swal.fire({
-            icon: "success",
-            title: "Success",
-            text: "Employee account has been deleted",
-          });
-        } else {
-          loading.hide();
-          this.$swal.fire(
-              'Error!',
-              response.message,
-              'error'
-          )
-        }
-      })
-    },
-
     doFilterSelected(pagination) {
       this.searchBy = pagination[0];
       if (this.searchBy === 'All') {
@@ -292,6 +244,7 @@ export default {
     doFilterDate(selectedDate) {
       this.dateFrom = selectedDate[0];
       this.dateTo = selectedDate[1];
+      this.doRefresh();
     },
 
     doSearch(props) {
@@ -307,11 +260,10 @@ export default {
         searchParam: searchParam,
         limit: limit,
         page: page,
-        dateFilter: 'created_at',
-        sortBy: 'DESC'
+        dateFilter: 'created_at'
       }
       let loading = this.$loading.show();
-      EmployeesService.getPaginate(params).then(response => {
+      AttendanceService.getPaginate(params).then(response => {
         if (response.code === 200) {
           this.records = response.data.data;
           this.pagination = {
@@ -351,25 +303,6 @@ export default {
 
     handleChangeRecords(limit) {
       this.getPaginate(this.dateFrom, this.dateTo, this.searchBy, this.searchParam, limit[0], limit[1])
-    },
-
-    /**
-     * Button Toggle
-     * @param props
-     */
-    doCheckToggle(props) {
-      let payload = props;
-      payload.active = !props.active
-      let loading = this.$loading.show();
-      EmployeeService.postUpdate(props.id, payload).then((response) => {
-        if (response.code === 200) {
-          this.doRefresh();
-          loading.hide();
-        } else {
-          loading.hide();
-          this.$swal.fire("Error!", response.message, "error");
-        }
-      });
     },
   }
 }

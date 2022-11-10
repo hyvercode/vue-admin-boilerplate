@@ -154,9 +154,9 @@
   </div>
 </template>
 <script>
-import RequestCompany from "../../payloads/request/RequestCompanies";
-import CompanyService from "../../services/companies.service";
-import FormHeader from "../navigation/FormHeader";
+import RequestCompany from "../../../payloads/request/RequestCompanies";
+import CompanyService from "../../../services/companies.service";
+import FormHeader from "../../navigation/FormHeader";
 import Utils from "@/helpers/Utils";
 import VueCookies from "vue-cookies";
 import avatar from 'vue-avatar';

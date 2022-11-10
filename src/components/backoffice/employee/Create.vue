@@ -785,12 +785,12 @@
   </div>
 </template>
 <script>
-import BranchService from "../../services/branch.service";
-import Utils from "../../helpers/Utils";
-import router from "../../router";
-import RequestEmployee from "../../payloads/request/RequestEmployee";
-import EmployeeService from "../../services/employee.service";
-import FormHeader from "../navigation/FormHeader";
+import BranchService from "../../../services/branch.service";
+import Utils from "../../../helpers/Utils";
+import router from "../../../router";
+import RequestEmployee from "../../../payloads/request/RequestEmployee";
+import EmployeeService from "../../../services/employee.service";
+import FormHeader from "../../navigation/FormHeader";
 import UnitService from "@/services/unit.service";
 import JobtitleService from "@/services/jobtitle.service";
 import JobpositionService from "@/services/jobposition.service";
