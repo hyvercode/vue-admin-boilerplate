@@ -1,37 +1,38 @@
 <template>
   <div class="container-fluid">
     <MyDataTable
-        title="Job Position"
+        title="Job Positions"
         :columns="columns"
         :rows="records"
+        :filter-record="filterRecord"
         :clickable="true"
         :sortable="true"
         :paginate="true"
-        :total-records="paginate.total"
+        :pagination="paginate"
         :rows-per-page="paginate.recordsPerPage"
         :current-page="paginate.currentPage"
         :last-page="paginate.lastPage"
+        :total-records="paginate.total"
         :default-per-page="paginate.perPage"
         :next-page-url="paginate.nextPageUrl"
         :prev-page-url="paginate.prevPageUrl"
-        v-on:onChangeRowPage="handleChangeRecords"
-        v-on:onPreviousPage="prevPage"
-        v-on:onNextPage="nextPage"
-        :searching="true"
-        v-on:onChangeSearch="doSearch"
-        v-on:onEnterSearch="doSearch"
-        :filter="true"
-        :filterRecord="filterRecord"
-        v-on:onChangeFilter="doFilterSelected"
-        :filterDate="false"
-        v-on:onChangeDate="doFilterDate"
-        :exportable="true"
-        :printable="true"
         :create-button="true"
-        v-on:onCreate="handleCreate"
+        create-button-title="Add New"
+        :printable="true"
+        :exportable="true"
+        :searchable="true"
+        :filter="true"
         :refreshable="true"
-        v-on:onRefresh="doRefresh"
-        :loadingAnimation="false"
+        :filter-date="true"
+        @onEnterSearch="doSearch"
+        @onRefresh="doRefresh"
+        @onPreviousPage="doPrevPage"
+        @onNextPage="doNextPage"
+        @onChangeRowPage="doChangePerPage"
+        @onCheckToggle="doCheckToggle"
+        @onCreate="handleCreate"
+        @onChangeFilter="doFilterSelected"
+        @onChangeSearch="doSearch"
     >
       <th
           id="delete"
@@ -83,8 +84,8 @@
           </select>
         </div>
         <div class="d-flex mt-4 float-end">
-          <button class="btn btn-primary" style="margin-right: 5px" @click.prevent="doClose">Cancel</button>
-          <input type="submit" class="btn btn-primary" value="Submit">
+          <button class="btn btn-secondary" style="margin-right: 5px" @click.prevent="doClose">Cancel</button>
+          <button type="submit" class="btn btn-primary">Submit</button>
         </div>
       </form>
     </b-modal>
@@ -125,17 +126,22 @@ export default {
           html: false,
         },
         {
-          label: "Status",
+          label: "status",
           field: "active",
           numeric: false,
           html: false,
+          hidden: false,
+          buttonToggle: true,
+          buttonToggleDesc: [
+            "Active", "Inactive"
+          ]
         },
       ],
       records: [],
       filterRecord: [
-        {id: 'id', desc: "Job Position Title ID"},
+        {id: 'id', desc: "Job Position ID"},
         {id: 'job_position_name', desc: "Job Position Name"},
-        {id: 'active', desc: "Active"}],
+        {id: 'active', desc: "Active=1 ,Inactive=0"}],
       pagination: {
         recordsPerPage: [5, 10, 50, 100, 500, 1000],
         perPage: 10,
@@ -154,7 +160,7 @@ export default {
     },
   },
   mounted() {
-    this.getPaginate(
+    this.getRecordPaginate(
         this.dateFrom,
         this.dateTo,
         this.searchBy,
@@ -208,17 +214,6 @@ export default {
         });
       }
     },
-    doRefresh() {
-      this.getPaginate(
-          this.dateFrom,
-          this.dateTo,
-          this.searchBy,
-          this.searchParam,
-          this.pagination.perPage,
-          this.pagination.currentPage
-      );
-    },
-
     handleCreate() {
       this.isUpdate = false;
       this.$bvModal.show('m-jobposition');
@@ -262,39 +257,9 @@ export default {
         }
       });
     },
-    doFilterSelected(pagination) {
-      this.searchBy = pagination[0];
-      if (this.searchBy === "All") {
-        this.searchBy = "id";
-        this.searchParam = "";
-        this.getPaginate(
-            this.dateFrom,
-            this.dateTo,
-            this.searchBy,
-            this.searchParam,
-            pagination[1],
-            pagination[2]
-        );
-      }
-    },
 
-    doFilterDate(selectedDate) {
-      this.dateFrom = selectedDate[0];
-      this.dateFrom = selectedDate[1];
-    },
 
-    doSearch(props) {
-      this.searchParam = props[0];
-      this.getPaginate(
-          this.dateFrom,
-          this.dateTo,
-          this.searchBy,
-          props[0],
-          props[1],
-          props[2]
-      );
-    },
-    getPaginate(dateFrom, dateTo, searchBy, searchParam, limit, page) {
+    getRecordPaginate(dateFrom, dateTo, searchBy, searchParam, limit, page) {
       let params = {
         dateFrom: dateFrom,
         dateTo: dateTo,
@@ -322,44 +287,73 @@ export default {
         }
       });
     },
+    //Refresh
+    doRefresh() {
+      this.getRecordPaginate(this.dateFrom, this.dateTo, this.searchBy, this.searchParam, this.pagination.perPage, this.pagination.currentPage, this.sortBy, this.sort)
+    },
+
+    doFilterSelected(pagination) {
+      this.searchBy = pagination[0];
+      if (this.searchBy === "All") {
+        this.searchBy = "id";
+        this.searchParam = "";
+        this.getRecordPaginate(
+            this.dateFrom,
+            this.dateTo,
+            this.searchBy,
+            this.searchParam,
+            pagination[1],
+            pagination[2]
+        );
+      }
+    },
+    doFilterDate(selectedDate) {
+      this.dateFrom = selectedDate[0];
+      this.dateFrom = selectedDate[1];
+      this.getRecordPaginate(this.dateFrom, this.dateTo, this.searchBy, this.searchParam, this.pagination.perPage, this.pagination.currentPage, this.sortBy, this.sort);
+    },
+
+    doSearch(props) {
+      this.searchParam = props[0];
+      this.getRecordPaginate(this.dateFrom, this.dateTo, this.searchBy, this.searchParam, props[1], props[2], this.sortBy, this.sort);
+    },
     //Prev Pagination
-    prevPage(limit) {
-      this.getPaginate(
-          this.dateFrom,
-          this.dateTo,
-          this.searchBy,
-          this.searchParam,
-          limit[0],
-          limit[1]
-      );
+    doPrevPage(props) {
+      this.getRecordPaginate(this.dateFrom, this.dateTo, this.searchBy, this.searchParam, props[0], props[1], this.sortBy, this.sort);
     },
     //Next Pagination
-    nextPage(limit) {
-      this.getPaginate(
-          this.dateFrom,
-          this.dateTo,
-          this.searchBy,
-          this.searchParam,
-          limit[0],
-          limit[1]
-      );
+    doNextPage(props) {
+      this.getRecordPaginate(this.dateFrom, this.dateTo, this.searchBy, this.searchParam, props[0], props[1], this.sortBy, this.sort);
     },
 
     //Search Record
     handleSearch(limit) {
-      this.getPaginate(this.searchBy, this.searchParam, limit[0], limit[1]);
+      this.getRecordPaginate(this.dateFrom, this.dateTo, this.searchBy, this.searchParam, props[0], props[1], this.sortBy, this.sort);
     },
 
-    handleChangeRecords(limit) {
-      this.getPaginate(
-          this.dateFrom,
-          this.dateTo,
-          this.searchBy,
-          this.searchParam,
-          limit[0],
-          limit[1]
-      );
+    doChangePerPage(props) {
+      this.getRecordPaginate(this.dateFrom, this.dateTo, this.searchBy, this.searchParam, props[0], props[1], this.sortBy, this.sort);
     },
+
+    /**
+     * Button Toggle
+     * @param props
+     */
+    doCheckToggle(props) {
+      let payload = props;
+      payload.active = !props.active
+      let loading = this.$loading.show();
+      JobPositionService.postUpdate(props.id, payload).then((response) => {
+        if (response.code === 200) {
+          this.doRefresh();
+          loading.hide();
+        } else {
+          loading.hide();
+          this.$swal.fire("Error!", response.message, "error");
+        }
+      });
+    },
+    //hyver-vue Table function end
   },
 };
 </script>

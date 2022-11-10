@@ -103,7 +103,7 @@
           </select>
         </div>
         <div class="d-flex mt-4 float-end">
-          <button class="btn btn-primary" style="margin-right: 5px" @click.prevent="doClose">Cancel</button>
+          <button class="btn btn-secondary" style="margin-right: 5px" @click.prevent="doClose">Cancel</button>
           <button type="submit" class="btn btn-primary">Submit</button>
         </div>
       </form>
@@ -360,7 +360,8 @@ export default {
         }
       });
     },
-    //Prev Pagination
+
+    //Refresh
     doRefresh() {
       this.getRecordPaginate(this.dateFrom, this.dateTo, this.searchBy, this.searchParam, this.pagination.perPage, this.pagination.currentPage, this.sortBy, this.sort)
     },

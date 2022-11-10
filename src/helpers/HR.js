@@ -12,8 +12,8 @@ const HR={
     EMPLOYEE_UPDATE: "/HR/employee/update",
     UNIT: "/HR/units",
     UNIT_MEMBER: "/HR/units/member",
-    JOB_POSITION: "/HR/job/position",
-    JOB_TITLE: "/HR/job/title",
+    JOB_POSITION: "/HR/job/positions",
+    JOB_TITLE: "/HR/job/titles",
     ATTENDANCES: "/HR/attendances",
     ATTENDANCE_TMP: "/HR/attendance/tmp",
 }
