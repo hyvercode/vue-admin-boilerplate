@@ -245,6 +245,12 @@ export default {
           html: false,
         },
         {
+          label: "Description",
+          field: "description",
+          numeric: true,
+          html: false,
+        },
+        {
           label: "Floor",
           field: "floor",
           numeric: true,

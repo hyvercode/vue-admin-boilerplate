@@ -113,7 +113,7 @@ export default {
   },
   created() {
     if (this.isLogin) {
-      // this.$router.push(Pages.DASHBOARD);
+      this.$router.push(Pages.DASHBOARD);
     }
   },
   methods: {

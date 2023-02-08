@@ -1,56 +1,53 @@
 <template>
   <div class="container-fluid">
     <MyDataTable
-        title="Job Title"
-        :columns="columns"
-        :rows="records"
-        :clickable="true"
-        :sortable="true"
-        :paginate="true"
-        :total-records="paginate.total"
-        :rows-per-page="paginate.recordsPerPage"
-        :current-page="paginate.currentPage"
-        :last-page="paginate.lastPage"
-        :default-per-page="paginate.perPage"
-        :next-page-url="paginate.nextPageUrl"
-        :prev-page-url="paginate.prevPageUrl"
-        v-on:onChangeRowPage="handleChangeRecords"
-        v-on:onPreviousPage="prevPage"
-        v-on:onNextPage="nextPage"
-        :searching="true"
-        v-on:onChangeSearch="doSearch"
-        v-on:onEnterSearch="doSearch"
-        :filter="true"
-        :filterRecord="filterRecord"
-        v-on:onChangeFilter="doFilterSelected"
-        :filterDate="false"
-        v-on:onChangeDate="doFilterDate"
-        :exportable="true"
-        :printable="true"
-        :create-button="true"
-        v-on:onCreate="handleCreate"
-        :refreshable="true"
-        v-on:onRefresh="doRefresh"
-        :loadingAnimation="false"
+      title="Job Title"
+      :columns="columns"
+      :rows="records"
+      :filter-record="filterRecord"
+      :clickable="true"
+      :sortable="true"
+      :paginate="true"
+      :pagination="paginate"
+      :rows-per-page="paginate.recordsPerPage"
+      :current-page="paginate.currentPage"
+      :last-page="paginate.lastPage"
+      :total-records="paginate.total"
+      :default-per-page="paginate.perPage"
+      :next-page-url="paginate.nextPageUrl"
+      :prev-page-url="paginate.prevPageUrl"
+      :create-button="true"
+      create-button-title="Add New"
+      :printable="true"
+      :exportable="true"
+      :searchable="true"
+      :filter="true"
+      :refreshable="true"
+      :filter-date="true"
+      @onEnterSearch="doSearch"
+      @onRefresh="doRefresh"
+      @onPreviousPage="doPrevPage"
+      @onNextPage="doNextPage"
+      @onChangeRowPage="doChangePerPage"
+      @onCheckToggle="doCheckToggle"
+      @onCreate="handleCreate"
+      @onChangeFilter="doFilterSelected"
+      @onChangeSearch="doSearch"
     >
-      <th
-          id="delete"
-          slot="thead-tr"
-          class="text-center tbl-action-button"
-      >
+      <th id="delete" slot="thead-tr" class="text-center tbl-action-button">
         Actions
       </th>
       <template slot="tbody-tr" slot-scope="props">
         <td class="text-center">
           <button
-              class="btn btn-flat nopadding"
-              @click="(e) => handleUpdate(props.row, e)"
+            class="btn btn-flat nopadding"
+            @click="(e) => handleUpdate(props.row, e)"
           >
             <i class="material-icons white-text">edit</i>
           </button>
           <button
-              class="btn btn-flat nopadding"
-              @click="(e) => handleDelete(props.row, e)"
+            class="btn btn-flat nopadding"
+            @click="(e) => handleDelete(props.row, e)"
           >
             <i class="material-icons white-text">delete</i>
           </button>
@@ -58,34 +55,46 @@
       </template>
     </MyDataTable>
 
-    <b-modal id="m-jobtitle" :title="isUpdate?'Update Job Title':'Create Job Title'" hide-footer>
+    <b-modal
+      id="m-jobtitle"
+      :title="isUpdate ? 'Update Job Title' : 'Create Job Title'"
+      hide-footer
+    >
       <form @submit.prevent="submit($event)">
         <div class="form-group mb-3">
           <label>Job Title Name <span class="mandatory">*</span></label>
           <input
-              type="text"
-              class="form-control"
-              placeholder="Please input text"
-              v-model="jobtitle.job_title_name"
-              required
+            type="text"
+            class="form-control"
+            placeholder="Please input text"
+            v-model="jobtitle.job_title_name"
+            required
           />
         </div>
         <div class="col-lg-12 mb-3">
-          <label for="NIK" style="text-align: left">Active <span class="mandatory">*</span></label>
-          <select class="form-control form-select" v-model="jobtitle.active" required>
+          <label for="NIK" style="text-align: left"
+            >Active <span class="mandatory">*</span></label
+          >
+          <select
+            class="form-control form-select"
+            v-model="jobtitle.active"
+            required
+          >
             <option value="null" disabled>Choose...</option>
-            <option
-                v-for="item in status"
-                :key="item.id"
-                :value="item.id"
-            >
+            <option v-for="item in status" :key="item.id" :value="item.id">
               {{ item.desc }}
             </option>
           </select>
         </div>
         <div class="d-flex mt-4 float-end">
-          <button class="btn btn-primary" style="margin-right: 5px" @click.prevent="doClose">Cancel</button>
-          <input type="submit" class="btn btn-primary" value="Submit">
+          <button
+            class="btn btn-primary"
+            style="margin-right: 5px"
+            @click.prevent="doClose"
+          >
+            Cancel
+          </button>
+          <input type="submit" class="btn btn-primary" value="Submit" />
         </div>
       </form>
     </b-modal>
@@ -97,6 +106,7 @@ import RequestJobTitle from "../../../payloads/request/RequestJobTitle";
 import JobtitleService from "../../../services/jobtitle.service";
 import MyDataTable from "../../hyver-vue/components/table/DataTable";
 import Utils from "../../../helpers/Utils";
+import jobtitleService from "../../../services/jobtitle.service";
 
 export default {
   name: "Index",
@@ -126,17 +136,21 @@ export default {
           html: false,
         },
         {
-          label: "Status",
+          label: "status",
           field: "active",
           numeric: false,
           html: false,
+          hidden: false,
+          buttonToggle: true,
+          buttonToggleDesc: ["Active", "Inactive"],
         },
       ],
       records: [],
       filterRecord: [
-        {id: 'id', desc: "Job Title ID"},
-        {id: 'job_title_name', desc: "Job Title Name"},
-        {id: 'active', desc: "Active"}],
+        { id: "id", desc: "Job Title ID" },
+        { id: "job_title_name", desc: "Job Title Name" },
+        { id: "active", desc: "Active" },
+      ],
       pagination: {
         recordsPerPage: [5, 10, 50, 100, 500, 1000],
         perPage: 10,
@@ -144,9 +158,9 @@ export default {
         lastPage: 1,
         nextPageUrl: "",
         prevPageUrl: "",
-        total: 0
+        total: 0,
       },
-      isUpdate: false
+      isUpdate: false,
     };
   },
   computed: {
@@ -156,17 +170,17 @@ export default {
   },
   mounted() {
     this.getPaginate(
-        this.dateFrom,
-        this.dateTo,
-        this.searchBy,
-        this.searchParam,
-        this.pagination.perPage,
-        this.pagination.currentPage
+      this.dateFrom,
+      this.dateTo,
+      this.searchBy,
+      this.searchParam,
+      this.pagination.perPage,
+      this.pagination.currentPage
     );
   },
   methods: {
     doClose() {
-      this.$bvModal.hide('m-jobtitle');
+      this.$bvModal.hide("m-jobtitle");
     },
     submit(event) {
       event.preventDefault();
@@ -182,53 +196,55 @@ export default {
               text: "Jobtitle  has been created",
             });
             this.doRefresh();
-            this.$bvModal.hide('m-jobtitle');
+            this.$bvModal.hide("m-jobtitle");
           } else {
             loading.hide();
-            this.$bvModal.hide('m-jobtitle');
+            this.$bvModal.hide("m-jobtitle");
             this.$swal.fire("Error!", response.message, "error");
           }
         });
       } else {
-        JobtitleService.postUpdate(this.jobtitle.id, this.jobtitle).then((response) => {
-          if (response.code === 200) {
-            this.coverage = new RequestJobTitle();
-            loading.hide();
-            this.$swal.fire({
-              icon: "success",
-              title: "Success",
-              text: "Job Title  has been updated",
-            });
-            this.doRefresh();
-            this.$bvModal.hide('m-jobtitle');
-          } else {
-            loading.hide();
-            this.$bvModal.hide('m-jobtitle');
-            this.$swal.fire("Error!", response.message, "error");
+        JobtitleService.postUpdate(this.jobtitle.id, this.jobtitle).then(
+          (response) => {
+            if (response.code === 200) {
+              this.coverage = new RequestJobTitle();
+              loading.hide();
+              this.$swal.fire({
+                icon: "success",
+                title: "Success",
+                text: "Job Title  has been updated",
+              });
+              this.doRefresh();
+              this.$bvModal.hide("m-jobtitle");
+            } else {
+              loading.hide();
+              this.$bvModal.hide("m-jobtitle");
+              this.$swal.fire("Error!", response.message, "error");
+            }
           }
-        });
+        );
       }
     },
     doRefresh() {
       this.getPaginate(
-          this.dateFrom,
-          this.dateTo,
-          this.searchBy,
-          this.searchParam,
-          this.pagination.perPage,
-          this.pagination.currentPage
+        this.dateFrom,
+        this.dateTo,
+        this.searchBy,
+        this.searchParam,
+        this.pagination.perPage,
+        this.pagination.currentPage
       );
     },
 
     handleCreate() {
       this.isUpdate = false;
-      this.$bvModal.show('m-jobtitle');
+      this.$bvModal.show("m-jobtitle");
     },
 
     handleUpdate(prop) {
       this.isUpdate = true;
       this.jobtitle = prop;
-      this.$bvModal.show('m-jobtitle');
+      this.$bvModal.show("m-jobtitle");
     },
 
     handleDelete(prop) {
@@ -244,22 +260,22 @@ export default {
         if (result.value) {
           // <-- if confirmed
           JobtitleService.delete(prop.id)
-              .then(() => {
-                this.$swal({
-                  position: "bottom-end",
-                  toast: true,
-                  timer: 3000,
-                  showConfirmButton: false,
-                  timerProgressBar: true,
-                  icon: "success",
-                  title: "Success",
-                  text: "Hapus Berhasil",
-                });
-                this.doRefresh();
-              })
-              .catch((error) => {
-                console.log("Gagal Terhapus", error.response);
+            .then(() => {
+              this.$swal({
+                position: "bottom-end",
+                toast: true,
+                timer: 3000,
+                showConfirmButton: false,
+                timerProgressBar: true,
+                icon: "success",
+                title: "Success",
+                text: "Hapus Berhasil",
               });
+              this.doRefresh();
+            })
+            .catch((error) => {
+              console.log("Gagal Terhapus", error.response);
+            });
         }
       });
     },
@@ -269,12 +285,12 @@ export default {
         this.searchBy = "id";
         this.searchParam = "";
         this.getPaginate(
-            this.dateFrom,
-            this.dateTo,
-            this.searchBy,
-            this.searchParam,
-            pagination[1],
-            pagination[2]
+          this.dateFrom,
+          this.dateTo,
+          this.searchBy,
+          this.searchParam,
+          pagination[1],
+          pagination[2]
         );
       }
     },
@@ -287,12 +303,12 @@ export default {
     doSearch(props) {
       this.searchParam = props[0];
       this.getPaginate(
-          this.dateFrom,
-          this.dateTo,
-          this.searchBy,
-          props[0],
-          props[1],
-          props[2]
+        this.dateFrom,
+        this.dateTo,
+        this.searchBy,
+        props[0],
+        props[1],
+        props[2]
       );
     },
     getPaginate(dateFrom, dateTo, searchBy, searchParam, limit, page) {
@@ -314,7 +330,7 @@ export default {
             lastPage: response.data.last_page,
             prevPageUrl: response.data.prev_page_url,
             nextPageUrl: response.data.next_page_url,
-            total: response.data.total
+            total: response.data.total,
           };
           loading.hide();
         } else {
@@ -326,23 +342,23 @@ export default {
     //Prev Pagination
     prevPage(limit) {
       this.getPaginate(
-          this.dateFrom,
-          this.dateTo,
-          this.searchBy,
-          this.searchParam,
-          limit[0],
-          limit[1]
+        this.dateFrom,
+        this.dateTo,
+        this.searchBy,
+        this.searchParam,
+        limit[0],
+        limit[1]
       );
     },
     //Next Pagination
     nextPage(limit) {
       this.getPaginate(
-          this.dateFrom,
-          this.dateTo,
-          this.searchBy,
-          this.searchParam,
-          limit[0],
-          limit[1]
+        this.dateFrom,
+        this.dateTo,
+        this.searchBy,
+        this.searchParam,
+        limit[0],
+        limit[1]
       );
     },
 
@@ -353,13 +369,32 @@ export default {
 
     handleChangeRecords(limit) {
       this.getPaginate(
-          this.dateFrom,
-          this.dateTo,
-          this.searchBy,
-          this.searchParam,
-          limit[0],
-          limit[1]
+        this.dateFrom,
+        this.dateTo,
+        this.searchBy,
+        this.searchParam,
+        limit[0],
+        limit[1]
       );
+    },
+    /**
+     * Button Toggle
+     * @param props
+     */
+    doCheckToggle(props) {
+      let payload = props;
+      payload.active = !props.active;
+      console.log(payload);
+      let loading = this.$loading.show();
+      jobtitleService.postUpdate(props.id, payload).then((response) => {
+        if (response.code === 200) {
+          this.doRefresh();
+          loading.hide();
+        } else {
+          loading.hide();
+          this.$swal.fire("Error!", response.message, "error");
+        }
+      });
     },
   },
 };

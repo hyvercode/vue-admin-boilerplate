@@ -71,7 +71,7 @@
           />
         </div>
         <div class="form-group mb-3">
-          <label>Deskription <span class="mandatory">*</span></label>
+          <label>Description <span class="mandatory">*</span></label>
           <input
               type="text"
               class="form-control"
@@ -122,18 +122,18 @@
         </div>
         <div class="form-group mb-3">
           <label>Address <span class="mandatory">*</span></label>
-          <input
+          <textarea
               type="text"
               class="form-control"
               placeholder="Please input text"
               v-model="contact.address"
               required
-          />
+          ></textarea>
         </div>
         <div class="form-group mb-3">
           <label>Tax Number <span class="mandatory">*</span></label>
           <input
-              type="number"
+              type="text"
               class="form-control"
               placeholder="Please input text"
               v-model="contact.tax_number"
@@ -154,7 +154,7 @@
           </select>
         </div>
         <div class="d-flex mt-4 float-end">
-          <button class="btn btn-primary" style="margin-right: 5px" @click.prevent="doClose">Cancel</button>
+          <button class="btn btn-secondary" style="margin-right: 5px" @click.prevent="doClose">Cancel</button>
           <input type="submit" class="btn btn-primary" value="Submit">
         </div>
       </form>

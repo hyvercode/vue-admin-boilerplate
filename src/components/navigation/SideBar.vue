@@ -67,7 +67,7 @@
                    <i v-if="items.isIcon" class="material-icons">{{ items.icon }}</i>
                   <img v-else :src="items.icon" :alt="index"/>
                 </span>
-                <span class="sidebar-text">{{ items.name }}</span>
+                <span class="sidebar-text" style="margin-top: -20px; !important">{{ items.name }}</span>
               </span>
               <span class="link-arrow">
                 <svg

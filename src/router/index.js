@@ -48,13 +48,13 @@ import RouterContact from "./contact"
 
 Vue.use(VueRouter);
 const routes = [
+    // {
+    //     path: "/",
+    //     name: 'Login',
+    //     component: Login
+    // },
     {
         path: "/",
-        name: 'Index',
-        component: Login
-    },
-    {
-        path: "/public",
         name: 'Index',
         component: Index,
         children: PublicRoute
