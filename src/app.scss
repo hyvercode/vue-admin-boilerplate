@@ -116,14 +116,15 @@ body {
 
 //Button
 .btn-primary {
-  background: linear-gradient(180deg, #4790d9 0%, #074887 100%) !important;
+  background: linear-gradient(180deg, #610083 10%, #610083 100%) !important;
   border: none;
 }
 
 .btn-primary:hover {
-  background: linear-gradient(180deg, #4790d9 100%, #074887 0%) !important;
+  background: linear-gradient(180deg, #845EC2 100%, #845EC2 0%) !important;
   border: none;
 }
+
 
 //form-control
 .form-control:disabled{
@@ -158,7 +159,7 @@ label.label input[type="file"] {
 }
 
 .label:hover {
-  background: linear-gradient(180deg, #4790d9 0%, #0f75bc 100%) !important;
+  background: linear-gradient(180deg, #845EC2 0%, #0f75bc 100%) !important;
   color: white;
 }
 
